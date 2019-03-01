@@ -1,7 +1,7 @@
 # 2bored2wait
 A proxy to wait out 2b2t.org's way too long queue.
 
-#how to use
+# how to use
 1. read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it.
 2. run "npm install minecraft-protocol"
 3. put your minecraft email address and password in secrets.json.
