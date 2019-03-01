@@ -12,6 +12,7 @@ var secrets = JSON.parse(fs.readFileSync('secrets.json'));
 webserver.createServer(80);
 
 var proxyClient;
+var finishedQueue = false;
 
 var client = mc.createClient({
   host: "2b2t.org",
@@ -24,13 +25,22 @@ var client = mc.createClient({
 webserver.username = client.username;
 
 client.on("packet", function(data,meta){
-    if(meta.name === "playerlist_header"){
+    if(!finishedQueue && meta.name === "playerlist_header"){
         var headermessage = JSON.parse(data.header);
         var positioninqueue = headermessage.text.split("\n")[5].substring(25);
         var ETA = headermessage.text.split("\n")[6].substring(27);
         webserver.queuePlace = positioninqueue;
         webserver.ETA = ETA;
     }
+    if (!finishedQueue && meta.name === "chat") {
+        var chatMessage = JSON.parse(data.message);
+        if(chatMessage.text && chatMessage.text === "Connecting to the server..."){
+            finishedQueue = true;
+            webserver.queuePlace = "FINISHED";
+            webserver.ETA = "NOW";
+        }
+    } 
+
     if (proxyClient) {
         filterPacketAndSend(data, meta, proxyClient);
     }
@@ -39,7 +49,6 @@ client.on("packet", function(data,meta){
 
 
 
-//client.on raw
 
 var server = mc.createServer({
     'online-mode':false,
