@@ -9,9 +9,13 @@ module.exports = {
                 res.writeHead(200, {'Content-type': 'text/html'});
                 res.write(fs.readFileSync('index.html'));
                 res.end();
-            }else if(req.url == "/update"){
+            }else if(req.url == "/index.css"){
+                res.writeHead(200, {'Content-type': 'text/css'});
+                res.write(fs.readFileSync('index.css'));
+                res.end();
+            }else if(req.url == "/update"){                
                 res.writeHead(200, {'Content-type': 'text/json'});
-                res.write("{\"username\": \""+ module.exports.username +"\",\"place\": \""+ module.exports.queuePlace +"\",\"ETA\": \""+ module.exports.ETA +"\",}")
+                res.write("{\"username\": \""+ module.exports.username +"\",\"place\": \""+ module.exports.queuePlace +"\",\"ETA\": \""+ module.exports.ETA +"\"}")
                 res.end();
             }else{
                 res.writeHead(404);

@@ -1,8 +1,31 @@
 <html>
     <head>
         <title>2Bored2Wait</title>
+        <link rel="stylesheet" href="index.css">
     </head>
     <body>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dignissimos quod perspiciatis tempore voluptate harum saepe eos accusamus. Dolor quod esse aperiam, amet modi repudiandae mollitia sed accusamus impedit magnam deleniti.
+        <div class="content">
+            <h1>Place in queue: <div class="place">None</div> </h1>
+            <h1>ETA: <div class="ETA">None</div> </h1>
+            <h1>Username: <div class="username">ERROR</div> </h1>
+        </div>
+        <script>
+            setInterval(function() {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/update", true);
+
+                xhr.onreadystatechange = function(){
+                    if (this.readyState == 4 && this.status == 200) {
+                        var response = JSON.parse(this.responseText);
+                        document.getElementsByClassName("place")[0].innerHTML = response.place;
+                        document.getElementsByClassName("username")[0].innerHTML = response.username;
+                        document.getElementsByClassName("ETA")[0].innerHTML = response.ETA;
+                    }
+                }
+                xhr.send();
+
+            }, 1000);
+
+        </script>
     </body>
 </html>
