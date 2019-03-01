@@ -17,14 +17,30 @@ module.exports = {
                 res.writeHead(200, {'Content-type': 'text/json'});
                 res.write("{\"username\": \""+ module.exports.username +"\",\"place\": \""+ module.exports.queuePlace +"\",\"ETA\": \""+ module.exports.ETA +"\"}")
                 res.end();
+            }else if(req.url == "/start"){
+                res.writeHead(200);
+                res.end();
+                module.exports.onstartcallback();
+            }else if(req.url == "/stop"){
+                res.writeHead(200);
+                res.end();
+                module.exports.onstopcallback();
             }else{
                 res.writeHead(404);
                 res.end();
             }
         }).listen(port);
     },
+    onstart:function(callback){
+        module.exports.onstartcallback = callback;
+    },
+    onstop:function(callback) {
+        module.exports.onstopcallback = callback;
+    },
     queuePlace : "None",
     ETA: "None",
-    username: "ERROR"
+    username: "ERROR",
+    onstartcallback: null,
+    onstopcallback: null
 };
 

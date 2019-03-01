@@ -7,7 +7,7 @@
         <div class="content">
             <h1>Place in queue: <div class="place">None</div> </h1>
             <h1>ETA: <div class="ETA">None</div> </h1>
-            <h1>Username: <div class="username">ERROR</div> </h1>
+            <button class="startbutton" onclick="start()">Start queuing</button>
         </div>
         <script>
             setInterval(function() {
@@ -18,13 +18,28 @@
                     if (this.readyState == 4 && this.status == 200) {
                         var response = JSON.parse(this.responseText);
                         document.getElementsByClassName("place")[0].innerHTML = response.place;
-                        document.getElementsByClassName("username")[0].innerHTML = response.username;
                         document.getElementsByClassName("ETA")[0].innerHTML = response.ETA;
                     }
                 }
                 xhr.send();
 
             }, 1000);
+
+            function start(){
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/start", true);
+                xhr.send();
+                document.getElementsByClassName('startbutton')[0].innerHTML = "Stop queuing";
+                document.getElementsByClassName('startbutton')[0].setAttribute('onclick', 'stop()');
+            }
+
+            function stop(){
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/stop", true);
+                xhr.send();
+                document.getElementsByClassName('startbutton')[0].innerHTML = "Start queuing";
+                document.getElementsByClassName('startbutton')[0].setAttribute('onclick', 'start()');
+            }
 
         </script>
     </body>
