@@ -5,9 +5,13 @@ var fs = require('fs');
 module.exports = {
     createServer : function(port) {
         http.createServer(function(req, res){
-            if (req.url == "/index.html") {
+            if (req.url == "/index.html" || req.url == "/") {
                 res.writeHead(200, {'Content-type': 'text/html'});
                 res.write(fs.readFileSync('index.html'));
+                res.end();
+            }else if(req.url == "/update"){
+                res.writeHead(200, {'Content-type': 'text/json'});
+                res.write("{\"username\": \""+ module.exports.username +"\",\"place\": \""+ module.exports.queuePlace +"\",\"ETA\": \""+ module.exports.ETA +"\",}")
                 res.end();
             }else{
                 res.writeHead(404);
@@ -16,5 +20,7 @@ module.exports = {
         }).listen(port);
     },
     queuePlace : "None",
-    ETA: "None"
+    ETA: "None",
+    username: "ERROR"
 };
+
