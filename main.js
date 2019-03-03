@@ -60,6 +60,7 @@ function startQueuing() {
             server.motd = "Place in queue: " +  positioninqueue; //set the MOTD because why not
         }
         if (!finishedQueue && meta.name === "chat") { //we can know if we're about to finish the queue by reading the chat message
+            //we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
             var chatMessage = JSON.parse(data.message);
             if(chatMessage.text && chatMessage.text === "Connecting to the server..."){
                 finishedQueue = true;
@@ -74,6 +75,22 @@ function startQueuing() {
         // console.log("packet  meta: " + JSON.stringify(meta) +"\n\tdata: "+JSON.stringify(data));
     });
     
+    //set up actions in case we get disconnected.
+    client.on('end', function(){
+        if (proxyClient) {
+            proxyClient.end("Connection reset by 2b2t server.\nReconnecting...");
+        }
+        stop();
+        setTimeout(startQueuing, 100); //reconnect after 100 ms
+    });
+
+    client.on('error', function(err){
+        if (proxyClient) {
+            proxyClient.end("Connection error by 2b2t server.\n Error message: " + err + "\nReconnecting...");
+        }        
+        stop();
+        setTimeout(startQueuing, 100); //reconnect after 100 ms
+    });
     
     
     
