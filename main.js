@@ -7,9 +7,11 @@ var webserver = require('./webserver.js'); //to serve the webserver
 
 
 var secrets = JSON.parse(fs.readFileSync('secrets.json'));
+var config = JSON.parse(fs.readFileSync('config.json'));
 
 
-webserver.createServer(80);
+
+webserver.createServer(config.ports.web);
 webserver.onstart(function() {
     startQueuing();
 });
@@ -69,7 +71,7 @@ function startQueuing() {
         'online-mode':false,
         encryption:true,
         host:'0.0.0.0',
-        port:25565,
+        port:config.ports.minecraft,
         version:'1.12.2',
         maxPlayers: 1
     })
