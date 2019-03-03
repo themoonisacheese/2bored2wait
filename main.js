@@ -29,6 +29,8 @@ var server; //the minecraft server to pass packets
 //function to disconnect from the server
 function stop(){
     webserver.isInQueue = false;
+    webserver.queuePlace = "None";
+    webserver.ETA = "None";
     client.end(); //disconnect
     if (proxyClient) {
         proxyClient.end("Stopped the proxy."); //boot the player from the server
