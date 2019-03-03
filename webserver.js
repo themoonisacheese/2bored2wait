@@ -15,7 +15,7 @@ module.exports = {
                 res.end();
             }else if(req.url == "/update"){                
                 res.writeHead(200, {'Content-type': 'text/json'});
-                res.write("{\"username\": \""+ module.exports.username +"\",\"place\": \""+ module.exports.queuePlace +"\",\"ETA\": \""+ module.exports.ETA +"\"}")
+                res.write("{\"username\": \""+ module.exports.username +"\",\"place\": \""+ module.exports.queuePlace +"\",\"ETA\": \""+ module.exports.ETA +"\", \"inQueue\": " + module.exports.isInQueue+"}")
                 res.end();
             }else if(req.url == "/start"){
                 res.writeHead(200);
@@ -40,6 +40,7 @@ module.exports = {
     queuePlace : "None",
     ETA: "None",
     username: "ERROR",
+    isInQueue: false,
     onstartcallback: null,
     onstopcallback: null
 };

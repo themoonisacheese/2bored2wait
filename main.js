@@ -24,6 +24,7 @@ var client;
 var server;
 
 function stop(){
+    webserver.isInQueue = false;
     client.end();
     if (proxyClient) {
         proxyClient.end("Stopped the proxy.");
@@ -32,6 +33,7 @@ function stop(){
 }
 
 function startQueuing() {
+    webserver.isInQueue = true;
     client = mc.createClient({
         host: "2b2t.org",
         port: 25565,

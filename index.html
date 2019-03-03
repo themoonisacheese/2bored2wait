@@ -19,6 +19,13 @@
                         var response = JSON.parse(this.responseText);
                         document.getElementsByClassName("place")[0].innerHTML = response.place;
                         document.getElementsByClassName("ETA")[0].innerHTML = response.ETA;
+                        if(response.inQueue){
+                            document.getElementsByClassName('startbutton')[0].innerHTML = "Stop queuing";
+                            document.getElementsByClassName('startbutton')[0].setAttribute('onclick', 'stop()');
+                        }else{
+                            document.getElementsByClassName('startbutton')[0].innerHTML = "Start queuing";
+                            document.getElementsByClassName('startbutton')[0].setAttribute('onclick', 'start()');
+                        }
                     }
                 }
                 xhr.send();
