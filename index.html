@@ -10,7 +10,7 @@
             <button class="startbutton" onclick="start()">Start queuing</button>
         </div>
         <script>
-            setInterval(function() {
+            setInterval(function() { //each second, update the info.
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "/update", true);
 
