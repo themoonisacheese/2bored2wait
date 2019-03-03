@@ -14,7 +14,6 @@ A proxy to wait out 2b2t.org's way too long queue.
 # Plans for the future
 - make the proxy disconnect when you log off
 - add some QOL features, such as anti-sign ban or anti-book ban
-- handle disconnects correctly. At the moment, if 2b2t's server crashes or disconnects you, the proxy will not attempt to reconnect until you restart it.
 
 # Known issues
 - starting the queue will revoke your minecraft token. this means that you will not be able to join normal minecraft servers until you restart the game
