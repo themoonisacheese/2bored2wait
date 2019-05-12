@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/GisliNielsen/2bored2wait#readme",
   "dependencies": {
-    "minecraft-protocol": "^1.8.3"
+    "minecraft-protocol": "^1.8.3",
+    "opn": "^6.0.0"
   }
 }

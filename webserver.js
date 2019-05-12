@@ -1,6 +1,7 @@
 //this module exposes functions and variables to control the HTTP server.
 const http = require('http'); //to serve the pages
 const fs = require('fs'); //to read the webpages from disk
+const opn = require('opn');
 
 module.exports = {
     createServer : (port) => {
@@ -32,6 +33,7 @@ module.exports = {
         }).listen(port);
     },
     onstart: (callback) => { //function to set the action to do when starting
+        opn('http://localhost');
         module.exports.onstartcallback = callback;
     },
     onstop: (callback) => { //same but to stop
