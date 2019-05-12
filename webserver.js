@@ -3,8 +3,8 @@ const http = require('http'); //to serve the pages
 const fs = require('fs'); //to read the webpages from disk
 
 module.exports = {
-    createServer : function(port) {
-        http.createServer(function(req, res) {
+    createServer : (port) => {
+        http.createServer((req, res) => {
             if (req.url === "/") { //main page of the web app
                 res.writeHead(200, {'Content-type': 'text/html'});
                 res.write(fs.readFileSync('index.html'));
@@ -31,12 +31,10 @@ module.exports = {
             }
         }).listen(port);
     },
-    onstart:function(callback) { //function to set the action to do when starting
-        console.log('Webserver is online');
+    onstart: (callback) => { //function to set the action to do when starting
         module.exports.onstartcallback = callback;
     },
-    onstop:function(callback) { //same but to stop
-        console.log('Webserver is offline');
+    onstop: (callback) => { //same but to stop
         module.exports.onstopcallback = callback;
     },
     queuePlace : "None", //our place in queue
