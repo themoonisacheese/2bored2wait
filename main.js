@@ -73,15 +73,16 @@ function startQueuing() {
 			proxyClient.end("Connection reset by 2b2t server.\nReconnecting...");
 		}
 		stop();
-		setTimeout(startQueuing, 100); // reconnect after 100 ms
+		// setTimeout(startQueuing, 100); // reconnect after 100 ms
 	});
 
 	client.on('error', (err) => {
 		if (proxyClient) {
 			proxyClient.end(`Connection error by 2b2t server.\n Error message: ${err}\nReconnecting...`);
 		}
+		alert('An error has occoured');
 		stop();
-		setTimeout(startQueuing, 100); // reconnect after 100 ms
+		// setTimeout(startQueuing, 100); // reconnect after 100 ms
 	});
 
 	server = mc.createServer({ // create a server for us to connect to
