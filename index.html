@@ -7,24 +7,27 @@
         <div class="content">
             <h1>Place in queue: <div class="place">None</div> </h1>
             <h1>ETA: <div class="ETA">None</div> </h1>
-            <button class="startbutton" onclick="start()">Start queuing</button>
+            <button id="queueButton" class="start" onclick="start()">Start queuing</button>
         </div>
         <script>
-            setInterval(function() { //each second, update the info.
-                var xhr = new XMLHttpRequest();
+            setInterval(() => { //each second, update the info.
+                const xhr = new XMLHttpRequest();
                 xhr.open("GET", "/update", true);
 
-                xhr.onreadystatechange = function(){
+                xhr.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
-                        var response = JSON.parse(this.responseText);
+                        const response = JSON.parse(this.responseText);
                         document.getElementsByClassName("place")[0].innerHTML = response.place;
                         document.getElementsByClassName("ETA")[0].innerHTML = response.ETA;
+                        const queueButton = document.getElementById('queueButton');
                         if(response.inQueue){
-                            document.getElementsByClassName('startbutton')[0].innerHTML = "Stop queuing";
-                            document.getElementsByClassName('startbutton')[0].setAttribute('onclick', 'stop()');
+                            queueButton.innerHTML = "Stop queuing";
+                            queueButton.setAttribute('onclick', 'stop()');
+                            queueButton.className = 'stop';
                         }else{
-                            document.getElementsByClassName('startbutton')[0].innerHTML = "Start queuing";
-                            document.getElementsByClassName('startbutton')[0].setAttribute('onclick', 'start()');
+                            queueButton.innerHTML = "Start queuing";
+                            queueButton.setAttribute('onclick', 'start()');
+                        queueButton.className = 'start';
                         }
                     }
                 }
@@ -32,22 +35,27 @@
 
             }, 1000);
 
-            function start(){
-                var xhr = new XMLHttpRequest();
+            function start() {
+                const xhr = new XMLHttpRequest();
                 xhr.open("GET", "/start", true);
                 xhr.send();
-                document.getElementsByClassName('startbutton')[0].innerHTML = "Stop queuing";
-                document.getElementsByClassName('startbutton')[0].setAttribute('onclick', 'stop()');
+                const queueButton = document.getElementById('queueButton');
+                queueButton.innerHTML = "Stop queuing";
+                queueButton.setAttribute('onclick', 'stop()');
+                queueButton.setAttribute('onclick', 'stop()');
+                queueButton.className = 'stop';
             }
 
-            function stop(){
-                var xhr = new XMLHttpRequest();
+            function stop() {
+                const xhr = new XMLHttpRequest();
                 xhr.open("GET", "/stop", true);
                 xhr.send();
-                document.getElementsByClassName('startbutton')[0].innerHTML = "Start queuing";
-                document.getElementsByClassName('startbutton')[0].setAttribute('onclick', 'start()');
-                document.getElementsByClassName("place")[0].innerHTML = None;
-                document.getElementsByClassName("ETA")[0].innerHTML = None;
+                const queueButton = document.getElementById('queueButton');
+                queueButton.innerHTML = "Start queuing";
+                queueButton.setAttribute('onclick', 'start()');
+                queueButton.className = 'start';
+                document.getElementsByClassName("place")[0].innerHTML = 'None';
+                document.getElementsByClassName("ETA")[0].innerHTML = 'None';
             }
 
         </script>

@@ -1,0 +1,24 @@
+{
+  "name": "2bored2wait",
+  "version": "1.0.0",
+  "description": "A proxy to wait out 2b2t.org's way too long queue.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GisliNielsen/2bored2wait.git"
+  },
+  "author": "",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/GisliNielsen/2bored2wait/issues"
+  },
+  "homepage": "https://github.com/GisliNielsen/2bored2wait#readme",
+  "dependencies": {
+    "minecraft-protocol": "^1.8.3",
+    "opn": "^6.0.0"
+  }
+}
