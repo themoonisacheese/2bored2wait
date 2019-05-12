@@ -68,11 +68,10 @@ function startQueuing() {
 	});
 
 	// set up actions in case we get disconnected.
-	client.on('end', (err) => {
+	client.on('end', () => {
 		if (proxyClient) {
 			proxyClient.end("Connection reset by 2b2t server.\nReconnecting...");
 		}
-		console.log('end', err)
 		stop();
 		// setTimeout(startQueuing, 100); // reconnect after 100 ms
 	});
