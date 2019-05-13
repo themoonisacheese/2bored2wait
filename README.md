@@ -6,9 +6,9 @@ A proxy to wait out 2b2t.org's way too long queue.
 2. run `npm install`
 3. Copy secrets.json.example and name it secrets.json. Fill out your minecraft information in the file.
 4. run `npm start`
-5. open a browser window and go to http://localhost (or the adress of the server if you're hosting it elsewhere. yes, this works. just ensure you opened ports 80 (web) and 25565 (minecraft) on your router)
+5. open a browser window and go to http://localhost (or the adress of the server if you're hosting it elsewhere. yes, this works. just ensure you opened ports 80 (web) and 25565 (minecraft) on your router).
 6. press the "Start queing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-7. once the queue reaches a low number, connect to the minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly.
+7. once the queue reaches a low number, connect to the minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
 8. after you log off, click the "stop queuing" button. this is really important, as you will not actually disconnect until you do that.
 
 # Plans for the future
@@ -17,5 +17,5 @@ A proxy to wait out 2b2t.org's way too long queue.
 
 # Known issues
 - starting the queue will revoke your minecraft token. this means that you will not be able to join normal minecraft servers until you restart the game
-- starting the queue too many times in a row can sometimes boot you out of your minecraft account (starting the queue or connecting in the minecraft client will tell you "wrong email or password"). to fix this, log in to you account at minecraft.net, then restart minecraft. both of these issues are limitations put in place by mojang to prevent account stealing, and are not fixable.
+- starting the queue too many times in a row can sometimes boot you out of your minecraft account (starting the queue or connecting in the minecraft client will tell you "wrong email or password"). to fix this, log in to your account at minecraft.net, then restart minecraft. both of these issues are limitations put in place by mojang to prevent account stealing, and are not fixable.
 
