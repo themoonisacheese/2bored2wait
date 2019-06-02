@@ -1,6 +1,6 @@
 2bored2wait is controlled through a small webserver, hosted on the port specified in config.json.
 
-this webserver, as well as serving the webpage and its css, exposes multiple "enpoints" for controlling the tool. these endpoints can be accessed by making an HTTP GET request at their url.
+this webserver, as well as serving the webpage and its css, exposes multiple "endpoints" for controlling the tool. these endpoints can be accessed by making an HTTP GET request at their url.
 
 note that the only content available without a password is the webpage and its css. If a password is specified in config.json, all other endpoints will respond with HTTP response code 403 (forbidden) unless the correct password is used.
 
