@@ -2,5 +2,8 @@
     "ports":{
         "minecraft":25565,
         "web":80
-    }
+    },
+    "openBrowserOnStart": true,
+    "password":"",
+    "MCversion":"1.12.2"
 }

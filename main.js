@@ -3,17 +3,25 @@
 const mc = require('minecraft-protocol'); // to handle minecraft login session
 const fs = require('fs'); // to read creds file
 const webserver = require('./webserver.js'); // to serve the webserver
+const opn = require('opn'); //to open a browser window
+
 
 const secrets = JSON.parse(fs.readFileSync('secrets.json')); // read the creds
 const config = JSON.parse(fs.readFileSync('config.json')); // read the config
 
 webserver.createServer(config.ports.web); // create the webserver
+webserver.password = config.password
 webserver.onstart(() => { // set up actions for the webserver
 	startQueuing();
 });
 webserver.onstop(() => {
 	stop();
 });
+
+if (config.openBrowserOnStart) {
+    opn('http://localhost:' + config.ports.web); //open a browser window
+}
+
 
 // lets
 let proxyClient; // a reference to the client that is the actual minecraft game
@@ -40,7 +48,7 @@ function startQueuing() {
 		port: 25565,
 		username: secrets.username,
 		password: secrets.password,
-		version: "1.12.2"
+		version: config.MCversion
 	});
 	let finishedQueue = false;
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
@@ -56,9 +64,14 @@ function startQueuing() {
 			// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 			let chatMessage = JSON.parse(data.message);
 			if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
-				finishedQueue = true;
-				webserver.queuePlace = "FINISHED";
-				webserver.ETA = "NOW";
+                if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
+                    stop();
+                    setTimeout(startQueuing, 100); // reconnect after 100 ms
+                } else {
+                    finishedQueue = true;
+                    webserver.queuePlace = "FINISHED";
+                    webserver.ETA = "NOW";  
+                }
 			}
 		}
 
@@ -70,7 +83,8 @@ function startQueuing() {
 	// set up actions in case we get disconnected.
 	client.on('end', () => {
 		if (proxyClient) {
-			proxyClient.end("Connection reset by 2b2t server.\nReconnecting...");
+            proxyClient.end("Connection reset by 2b2t server.\nReconnecting...");
+            proxyClient = null
 		}
 		stop();
 		// setTimeout(startQueuing, 100); // reconnect after 100 ms
@@ -78,7 +92,8 @@ function startQueuing() {
 
 	client.on('error', (err) => {
 		if (proxyClient) {
-			proxyClient.end(`Connection error by 2b2t server.\n Error message: ${err}\nReconnecting...`);
+            proxyClient.end(`Connection error by 2b2t server.\n Error message: ${err}\nReconnecting...`);
+            proxyClient = null
 		}
 		console.log('err', err);
 		stop();
@@ -90,7 +105,7 @@ function startQueuing() {
 		encryption: true,
 		host: '0.0.0.0',
 		port: config.ports.minecraft,
-		version: '1.12.2',
+		version: config.MCversion,
 		maxPlayers: 1
 	});
 

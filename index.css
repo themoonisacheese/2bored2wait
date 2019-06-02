@@ -8,7 +8,7 @@ body {
     background-color: rgb(16, 16, 26);
 }
 
-h1 {
+h1, .content {
     margin: 0;
     color: rgb(228, 228, 228);
     font-family: sans-serif;
