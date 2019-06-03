@@ -20,6 +20,8 @@ A proxy to wait out 2b2t.org's way too long queue.
 7. once the queue reaches a low number, connect to the minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
 8. after you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
+#Video guide
+Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
 
 # Known issues
 - starting the queue will revoke your minecraft token. this means that you will not be able to join normal minecraft servers until you restart the game
