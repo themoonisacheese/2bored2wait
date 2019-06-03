@@ -8,7 +8,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 3. Open a terminal and navigate to the folder you downloaded it
 4. Run `npm install`
 5. Copy secrets.json.example and name it secrets.json. Fill out your minecraft information in the file. Note that you must use your email adress and not your minecraft username.
-6. If you so wish, edit the configuration in config.json.
+6. If you so wish, edit the configuration in config.json. (On Linux ports below 1024, including port 80, require you to run the program with administrator rights.)
 7. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 
