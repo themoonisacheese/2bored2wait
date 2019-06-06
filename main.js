@@ -1,13 +1,10 @@
 
 // imports
 const mc = require('minecraft-protocol'); // to handle minecraft login session
-const fs = require('fs'); // to read creds file
 const webserver = require('./webserver.js'); // to serve the webserver
 const opn = require('opn'); //to open a browser window
-
-
-const secrets = JSON.parse(fs.readFileSync('secrets.json')); // read the creds
-const config = JSON.parse(fs.readFileSync('config.json')); // read the config
+const secrets = require('./secrets.json'); // read the creds
+const config = require('./config.json'); // read the config
 
 webserver.createServer(config.ports.web); // create the webserver
 webserver.password = config.password
