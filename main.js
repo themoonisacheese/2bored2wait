@@ -103,7 +103,7 @@ function startQueuing() {
 		host: '0.0.0.0',
 		port: config.ports.minecraft,
 		version: config.MCversion,
-		maxPlayers: 1
+		'max-players': maxPlayers = 1
 	});
 
 	server.on('login', (newProxyClient) => { // handle login
