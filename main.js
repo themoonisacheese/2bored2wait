@@ -98,7 +98,7 @@ function startQueuing() {
 	});
 
 	server = mc.createServer({ // create a server for us to connect to
-		'online-mode': false,
+		'online-mode': true,
 		encryption: true,
 		host: '0.0.0.0',
 		port: config.ports.minecraft,
@@ -107,6 +107,9 @@ function startQueuing() {
 	});
 
 	server.on('login', (newProxyClient) => { // handle login
+		if(newProxyClient.username !== client.username){
+			stop();
+		}
 		newProxyClient.write('login', {
 			entityId: newProxyClient.id,
 			levelType: 'default',
