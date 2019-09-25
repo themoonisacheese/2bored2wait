@@ -38,7 +38,7 @@ function stop(){
 }
 
 function sendAntiafkMessage(client) {
-	filterPacketAndSend("chat", { message: "Position in queue: 1337", position: 0 }, client);
+	filterPacketAndSend("chat", { message: "/msg RusherB0t !que", position: 0 }, client);
 }
 
 // function to start the whole thing
