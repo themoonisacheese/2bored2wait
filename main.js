@@ -24,7 +24,7 @@ if (config.openBrowserOnStart) {
 let proxyClient; // a reference to the client that is the actual minecraft game
 let client; // the client to connect to 2b2t
 let server; // the minecraft server to pass packets
-
+let antiafkIntervalObj; // self explanatory
 // function to disconnect from the server
 function stop(){
 	webserver.isInQueue = false;
