@@ -2,7 +2,7 @@
 A proxy to wait out 2b2t.org's way too long queue.
 
 
-# How to install
+# How to install - old tutorial
 1. Download node.js and install it. On non-windows platforms, you also need npm.
 2. Download this repository with the green button (top right of this page). If you downloaded it as zip, unzip it.
 3. Open a terminal and navigate to the folder you downloaded it
@@ -11,17 +11,32 @@ A proxy to wait out 2b2t.org's way too long queue.
 6. If you so wish, edit the configuration in config.json. (On Linux ports below 1024, including port 80, require you to run the program with administrator rights.)
 7. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
+# How to install - better way (`linux`/`debian`)
+0. Use a (preferably) 24/7 server enviroment. `ssh` into it.
+1. Install dependencies using your package manager (`apt` on `debian`): `npm`, `nodejs`, `git` and `screen` with `sudo apt install npm nodejs git screen -y`
+2. `git clone https://github.com/sijanec/2bored2wait && cd 2bored2wait`
+3. `npm install`
+4. `cp secrets.json.example secrets.json`
+5. edit file with your Minecraft credentials with your chosen editor. I use `nano secrets.json`. Input your Minecraft username and password. Use your email instead of your username if you have created your account after 2012 or have migrated it.
+6. `chmod 700 secrets.json` to prevent other users on the system from viewing your Minecraft password.
+7. edit file with configuration with your chosen editor. I use `nano config.json`. Change the password (for the web interface) and ports if you want to.
+note: some users have reported a problem where `lodash` was reported not installed. `npm install lodash` to force install it. 
 
 # How to use
-1. read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-4. run `npm start`
-5. a browser window should open. You can close it if you want at any moment, and you can access it again at adress http://localhost
-6. press the "Start queing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-7. once the queue reaches a low number, connect to the minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
-8. after you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+1. Read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
+2. Run `screen` to create a new persistent terminal. That way the proxy server won't die when you close the `ssh` session with your computer. To exit the virtual screen, hit Ctrl-a, Ctrl-d, to rejoin to the screen, execute `screen -r`
+3. In your `screen` session, while in the `2bored2wait` directory, run `npm start`. The program does not output any text to the terminal.
+4. Leave your `screen` session with Ctrl-a Ctrl-d. Execute `ip a` to show your IP address. You may want to set up port forwarding to access your host from the Internet.
+5. Open a browser on a device that can reach your host and type <your-IP>:8080 in the address bar, to show the web interface.
+6. Enter your password and press the "Start queing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
+7. once the queue reaches a low number, connect to the minecraft server at your IP address. Currently, you have to connect BEFORE reaching the end of the queue.
+8. To disconnect without having to requeue afterwards, just Disconnect from the game's pause menu.
+9. Reconnecting: reconnect to your IP address (with your MC client) and hit F3+A to reload chunks. This is important. Otherwise your will only see black.
+10. Disconnecting from 2b2t (you will have to requeue for your next connect) (I don't see the point in doing that). Use the Stop Queueing button in the web interface.
 
 # Video guide
 Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
+The video does not cover the new linux installation method and `sijanec`'s fork features.
 
 # Known issues
 - starting the queue will revoke your minecraft token. this means that you will not be able to join normal minecraft servers until you restart the game
