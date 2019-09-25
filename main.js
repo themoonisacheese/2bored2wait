@@ -78,11 +78,16 @@ function startQueuing() {
 
 		if (proxyClient) { // if we are connected to the proxy, forward the packet we recieved to our game.
 			filterPacketAndSend(data, meta, proxyClient);
-			clearInterval(antiafkIntervalObj);
+			if(antiafkIntervalObj != null) {
+				clearInterval(antiafkIntervalObj);
+				antiafkIntervalObj = null;
+			}
 		}
 		
 		if (!proxyClient) {
-		    setInterval(sendAntiafkMessage, 50000, client);
+			if(antiafkIntervalObj == null) {
+			    antiafkIntervalObj = setInterval(sendAntiafkMessage, 50000, client);
+			} // else timer already exists / is running. to prevent infinite timers being started...
 		}
 	});
 
