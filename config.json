@@ -3,7 +3,7 @@
         "minecraft":25565,
         "web":8080
     },
-    "openBrowserOnStart": true,
+    "openBrowserOnStart": false,
     "password":"2b2w",
     "MCversion":"1.12.2"
 }
