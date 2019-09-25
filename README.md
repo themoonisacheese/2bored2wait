@@ -29,3 +29,6 @@ Here's a video guide on how to install and use 2b2w: https://www.youtube.com/wat
 - Some people report not being able to ride animals using this proxy.
 - 2b2t sometimes bugs out and removes you from the queue without telling you. In this case, your queue position will no longer move. Reconnect to fix this.
 
+# Features added by `sijanec`'s fork
+- antiafk: every 50 seconds, if `proxyClient` is not connected and `finishedQueue` is `true`, `/r RusherB0t !que` will be sent as a `chat` to 2b2t to prevent getting AfkKicked. That way you can stay online forever.
+- - Note: after disconnecting from the proxy server, your Minecraft client's chunks of 2b2t world will obviously get purged. Since the proxy server does not store map data (too complicated to implement, and also not needed, read on), after reconnection, 2b2t will have no idea that you don't have the chunks and it will not resend them, that's why you will end up with a black screen. To mitigate this problem, after reconnection, press A whilst holding down F3, which will request new chunks from 2b2t.
