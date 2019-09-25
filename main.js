@@ -37,6 +37,10 @@ function stop(){
 	server.close(); // close the server
 }
 
+function sendAntiafkMessage(client) {
+	filterPacketAndSend("chat", { message: "Position in queue: 1337", position: 0 }, client);
+}
+
 // function to start the whole thing
 function startQueuing() {
 	webserver.isInQueue = true;
@@ -74,6 +78,11 @@ function startQueuing() {
 
 		if (proxyClient) { // if we are connected to the proxy, forward the packet we recieved to our game.
 			filterPacketAndSend(data, meta, proxyClient);
+			clearInterval(antiafkIntervalObj);
+		}
+		
+		if (!proxyClient) {
+		    setInterval(sendAntiafkMessage, 50000, client);
 		}
 	});
 
