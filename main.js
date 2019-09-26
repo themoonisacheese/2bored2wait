@@ -42,7 +42,7 @@ function startQueuing() {
 	webserver.isInQueue = true;
 	client = mc.createClient({ // connect to 2b2t
 		host: "2b2t.org",
-		port: 25565,
+		port: "25565",
 		username: secrets.username,
 		password: secrets.password,
 		version: config.MCversion
