@@ -12,7 +12,7 @@ A discord implementation of the popular proxy to wait out 2b2t.org's way too lon
 7. Copy secrets.json.example and name it secrets.json. Fill out your minecraft information in the file. Note that you must use your email adress and not your minecraft username.
 8. If you so wish, edit the configuration in config.json. (On Linux ports below 1024, including port 80, require you to run the program with administrator rights.)
 9. You need to create a discord bot. Follow this tutorial up until the programming part.
-10. Edit the file discord.json and replace BOT_TOKEN with your bots token
+10. Edit the file auth.json and replace BOT_TOKEN with your bots token
 11. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 
