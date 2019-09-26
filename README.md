@@ -9,16 +9,16 @@ A discord implementation of the popular proxy to wait out 2b2t.org's way too lon
 4. Run `npm install`
 5. Change directory to 2b2w/
 6. Run `npm install`
-7. Copy secrets.json.example and name it secrets.json. Fill out your minecraft information in the file. Note that you must use your email adress and not your minecraft username.
+7. Inside the directory 2b2w/ copy secrets.json.example and name it secrets.json. Fill out your minecraft information in the file. Note that you must use your email adress and not your minecraft username.
 8. If you so wish, edit the configuration in config.json. (On Linux ports below 1024, including port 80, require you to run the program with administrator rights.)
 9. You need to create a discord bot. Follow this tutorial up until the programming part.
-10. Edit the file auth.json and replace BOT_TOKEN with your bots token
+10. In the directory above edit the file auth.json and replace BOT_TOKEN with your bots token
 11. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 
 # How to use
 1. Read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-2. Run `node discordBot.js`
+2. Run `node discordBot.js` (you might need to run this as administrator/sudo)
 3. Your bot should be online now, in discord it should show up with "Queue stopped."
 4. See below for commands on how to start the queue.
 5. You can access the original 2bored2wait web interface from http://localhost
@@ -34,6 +34,9 @@ A discord implementation of the popular proxy to wait out 2b2t.org's way too lon
 Do not give your secrets.json file to anyone under any circumstances.
 My bot does not connect to anything except discord. Please check my source
 code to be **EXTRA** sure.
+
+I would recommend building this from scratch because if I were you I wouldn't trust me. Follow some tutorials for making a discord bot online and use 2b2w/documentation.mdAPI
+this isn't what I would do but it is what I would recommend.
 
 Do not repeatedly stop and start the queue, eventually it will not be able to log in.
 
