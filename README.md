@@ -35,10 +35,9 @@ Do not give your secrets.json file to anyone under any circumstances.
 My bot does not connect to anything except discord. Please check my source
 code to be **EXTRA** sure.
 
-I would recommend building this from scratch because if I were you I wouldn't trust me. Follow some tutorials for making a discord bot online and use 2b2w/documentation.mdAPI
-this isn't what I would do but it is what I would recommend.
+I would recommend building this from scratch because if I were you I wouldn't trust me. Follow some tutorials for making a discord bot online and use 2b2w/documentation.mdAPI as reference.
 
-Do not repeatedly stop and start the queue, eventually it will not be able to log in.
+Do not repeatedly stop and start the queue, eventually you will not be able to log in.
 
 # Video guide
 Coming soon
