@@ -31,7 +31,7 @@ note: some users have reported a problem where `lodash` was reported not install
 6. Enter your password and press the "Start queing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 7. once the queue reaches a low number, connect to the minecraft server at your IP address. Currently, you have to connect BEFORE reaching the end of the queue.
 8. To disconnect without having to requeue afterwards, just Disconnect from the game's pause menu.
-9. Reconnecting: reconnect to your IP address (with your MC client) and <del>hit F3+A to reload chunks. This is important. Otherwise </del> your will only see black. I don't know how to fix this. Somehow we have to force 2b2t to send us chunks again or something. I know that kiIIing yourself (!!! in game obviously !!!) and respawning will resend the chunks...
+9. Reconnecting: reconnect to your IP address (with your MC client) and <del>hit F3+A to reload chunks. This is important. Otherwise </del> you will only see black. I don't know how to fix this. Somehow we have to force 2b2t to send us chunks again or something. I know that kiIIing yourself (!!! in game obviously !!!) and respawning will resend the chunks...
 10. Disconnecting from 2b2t (you will have to requeue for your next connect) (I don't see the point in doing that). Use the Stop Queueing button in the web interface.
 
 # Video guide
