@@ -48,3 +48,5 @@ Coming soon
 - Some people report not being able to ride animals using this proxy.
 - 2b2t sometimes bugs out and removes you from the queue without telling you. In this case, your queue position will no longer move. Reconnect to fix this.
 
+# Info
+If you need to contect me for help my discord is 
