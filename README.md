@@ -27,9 +27,9 @@ A discord implementation of the popular proxy to wait out 2b2t.org's way too lon
 7. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
 # Commands
-- '/start' will start the queue. It takes between 15-30 seconds for the bot to update with the queue position.
-- '/update' will send an update to the current channel with your position and ETA.
-- '/stop' will stop the queue.
+- 'start' will start the queue. It takes between 15-30 seconds for the bot to update with the queue position.
+- 'update' will send an update to the current channel with your position and ETA.
+- 'stop' will stop the queue.
 
 # Forewarning
 Do not give your secrets.json file to anyone under any circumstances.
