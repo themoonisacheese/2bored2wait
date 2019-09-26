@@ -1,4 +1,4 @@
-# 2bored2wait
+# 2lazy2wait
 A discord implementation of the popular proxy to wait out 2b2t.org's way too long queue.
 
 
