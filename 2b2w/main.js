@@ -140,3 +140,15 @@ function filterPacketAndSend(data, meta, dest) {
 		dest.write(meta.name, data);
 	}
 }
+
+module.exports = {
+        startQueue: function () {
+                startQueuing();
+        },
+        filterPacketAndSend: function () {
+                filterPacketAndSend();
+        },
+        stop: function() {
+                stop();
+        }
+};
