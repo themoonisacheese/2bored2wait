@@ -32,7 +32,7 @@ A discord implementation of the popular proxy to wait out 2b2t.org's way too lon
 
 # Forewarning
 Do not give your secrets.json file to anyone under any circumstances.
-My bot does not connect to anything except discord. Please check my sourcd
+My bot does not connect to anything except discord. Please check my source
 code to be **EXTRA** sure.
 
 Do not repeatedly stop and start the queue, eventually it will not be able to log in.
