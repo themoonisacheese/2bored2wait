@@ -1,6 +1,7 @@
 # 2lazy2wait
 A discord implementation of the popular proxy to wait out 2b2t.org's way too long queue.
 
+![](https://i.imgur.com/65dvy5o.jpg)
 
 # How to install
 1. Download node.js and install it. On non-windows platforms, you also need npm.
