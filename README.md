@@ -1,6 +1,7 @@
 # 2bored2wait
 A proxy to wait out 2b2t.org's way too long queue.
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/themoonisacheese?locale.x=fr_FR)
 
 # How to install
 1. Download node.js and install it. On non-windows platforms, you also need npm.
@@ -28,4 +29,3 @@ Here's a video guide on how to install and use 2b2w: https://www.youtube.com/wat
 - starting the queue too many times in a row can sometimes boot you out of your minecraft account (starting the queue or connecting in the minecraft client will tell you "wrong email or password"). to fix this, log in to your account at minecraft.net, then restart minecraft. both of these issues are limitations put in place by mojang to prevent account stealing, and are not fixable.
 - Some people report not being able to ride animals using this proxy.
 - 2b2t sometimes bugs out and removes you from the queue without telling you. In this case, your queue position will no longer move. Reconnect to fix this.
-
