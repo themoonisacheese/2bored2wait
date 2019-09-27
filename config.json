@@ -5,7 +5,7 @@
     },
     "openBrowserOnStart": false,
     "password":"2b2w",
-    "MCversion":"1.12.2"
+    "MCversion":"1.12.2",
     "debug":{
         "serverip":"2b2t.org",
         "serverport":"25565",
