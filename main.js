@@ -65,7 +65,7 @@ function startQueuing() {
 			// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 			let chatMessage = JSON.parse(data.message);
 			if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
-                if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
+                if (webserver.restartQueue) { // ifwe should restart
                     stop();
                     setTimeout(startQueuing, 100); // reconnect after 100 ms
                 } else {
