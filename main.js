@@ -159,7 +159,7 @@ function startQueuing() {
 					}
 				}
 			} else {
-				filterPacketAndSend(data, meta, client);
+				filterPacketAndSend(data, meta, proxyClient);
 			}
 		});
 	});
