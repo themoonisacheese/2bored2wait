@@ -43,6 +43,7 @@ function sendAntiafkMessage(client) {
 
 // function to start the whole thing
 function startQueuing() {
+	var chunk = [];
 	webserver.isInQueue = true;
 	client = mc.createClient({ // connect to 2b2t
 		host: "2b2t.org",
@@ -61,7 +62,9 @@ function startQueuing() {
 			webserver.ETA = ETA;
 			server.motd = `Place in queue: ${positioninqueue}`; // set the MOTD because why not
 		}
-		
+		if (meta.name === "map_chunk") {
+			chunk.push([meta, data]);
+		}
 		if (finishedQueue === false && meta.name === "chat") { // we can know if we're about to finish the queue by reading the chat message
 			// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 			let chatMessage = JSON.parse(data.message);
@@ -140,11 +143,24 @@ function startQueuing() {
 			flags: 0x00
 		});
 
-		newProxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t
-			filterPacketAndSend(data, meta, client);
-		});
-
 		proxyClient = newProxyClient;
+		
+		proxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t (except internal commands)
+			if (meta.name === "chat") {
+				let chatMessage = JSON.parse(data.message);
+				if (chatMessage.text && chatMessage.text.startsWith === "/2b2w") {
+					if (chatMessage.text === "/2b2w chunks") {
+						chunks.forEach(function(element) {  
+							filterPacketAndSend(element[0], element[1], proxyClient);
+						});
+					} else {
+						filterPacketAndSend("chat", { message: "2b2w: to reload chunks, use: /2b2w chunks", position: 0 }, proxyClient);
+					}
+				}
+			} else {
+				filterPacketAndSend(data, meta, client);
+			}
+		});
 	});
 }
 
