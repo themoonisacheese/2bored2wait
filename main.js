@@ -145,7 +145,7 @@ function startQueuing() {
 
 		proxyClient = newProxyClient;
 		
-		proxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t (except internal commands)
+		newProxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t (except internal commands)
 			if (meta.name === "chat") {
 				let chatMessage = JSON.parse(data.message);
 				if (chatMessage.text && chatMessage.text.includes("/2b2w")) {
@@ -159,7 +159,7 @@ function startQueuing() {
 					}
 				}
 			} else {
-				filterPacketAndSend(data, meta, proxyClient);
+				filterPacketAndSend(data, meta, client);
 			}
 		});
 	});
