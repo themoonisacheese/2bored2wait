@@ -164,6 +164,8 @@ function startQueuing() {
 					} else {
 						filterPacketAndSend("chat", { message: "2b2w commands: chunks, forcefinishedqueue", position: 0 }, proxyClient);
 					}
+				} else {
+					filterPacketAndSend(data, meta, client);	
 				}
 			} else {
 				filterPacketAndSend(data, meta, client);
