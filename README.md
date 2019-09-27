@@ -14,7 +14,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 # How to install - better way (`linux`/`debian`)
 0. Use a (preferably) 24/7 server enviroment. `ssh` into it.
 1. Install dependencies using your package manager (`apt` on `debian`): `npm`, `nodejs`, `git` and `screen` with `sudo apt install npm nodejs git screen -y`
-2. `git clone https://github.com/sijanec/2bored2wait && cd 2bored2wait`
+2. `git clone https://github.com/sijanec/2bored2wait && cd 2bored2wait` or even better, download the latest release from <a href="https://github.com/sijanec/2bored2wait/releases">releases</a>.
 3. `npm install`
 4. `cp secrets.json.example secrets.json`
 5. edit file with your Minecraft credentials with your chosen editor. I use `nano secrets.json`. Input your Minecraft username and password. Use your email instead of your username if you have created your account after 2012 or have migrated it.
