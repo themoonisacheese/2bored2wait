@@ -63,7 +63,7 @@ function startQueuing() {
 			server.motd = `Place in queue: ${positioninqueue}`; // set the MOTD because why not
 		}
 		if (meta.name === "map_chunk") {
-			chunk.push([meta, data]);
+			chunk.push([data, meta]);
 		}
 		if (finishedQueue === false && meta.name === "chat") { // we can know if we're about to finish the queue by reading the chat message
 			// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
@@ -150,10 +150,17 @@ function startQueuing() {
 				let chatMessage = JSON.parse(data.message);
 				if (chatMessage.text && chatMessage.text.includes("/2b2w")) {
 					if (chatMessage.text.includes("/2b2w chunks")) {
-						chunks.forEach(function(element) {  
-							filterPacketAndSend(element[0], element[1], proxyClient);
-						});
-					} else if (chatMessage.tex.includes("/2b2w forcefinishedqueue")) {
+						if(chunks.sizeof >= 1) {
+							chunks.forEach(function(element) {  
+								filterPacketAndSend(element[0], element[1], proxyClient);
+								filterPacketAndSend("chat", { message: "2b2w: okily-dokily", position: 0 }, proxyClient);
+							});
+						} else {
+							filterPacketAndSend("chat", { message: "2b2w: I have no chunks", position: 0 }, proxyClient);
+						}
+					} else if (chatMessage.text.includes("/2b2w forcefinishedqueue")) {
+						finishedQueue = true;
+						filterPacketAndSend("chat", { message: "2b2w: done", position: 0 }, proxyClient);
 					} else {
 						filterPacketAndSend("chat", { message: "2b2w commands: chunks, forcefinishedqueue", position: 0 }, proxyClient);
 					}
