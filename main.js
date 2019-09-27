@@ -61,6 +61,7 @@ function startQueuing() {
 			webserver.ETA = ETA;
 			server.motd = `Place in queue: ${positioninqueue}`; // set the MOTD because why not
 		}
+		
 		if (finishedQueue === false && meta.name === "chat") { // we can know if we're about to finish the queue by reading the chat message
 			// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 			let chatMessage = JSON.parse(data.message);
@@ -90,7 +91,7 @@ function startQueuing() {
 			} // else timer already exists / is running. to prevent infinite timers being started...
 		}
 	});
-
+	
 	// set up actions in case we get disconnected.
 	client.on('end', () => {
 		if (proxyClient) {
@@ -98,7 +99,7 @@ function startQueuing() {
             proxyClient = null
 		}
 		stop();
-		// setTimeout(startQueuing, 100); // reconnect after 100 ms
+		setTimeout(startQueuing, 100); // reconnect after 100 ms
 	});
 
 	client.on('error', (err) => {
@@ -108,7 +109,7 @@ function startQueuing() {
 		}
 		console.log('err', err);
 		stop();
-		// setTimeout(startQueuing, 100); // reconnect after 100 ms
+		setTimeout(startQueuing, 100); // reconnect after 100 ms
 	});
 
 	server = mc.createServer({ // create a server for us to connect to
