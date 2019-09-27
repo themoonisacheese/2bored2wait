@@ -84,7 +84,7 @@ function startQueuing() {
 			}
 		}
 		
-		if (!proxyClient && !finishedQueue) {
+		if (!proxyClient && finishedQueue) {
 			if(antiafkIntervalObj == null) {
 			    antiafkIntervalObj = setInterval(sendAntiafkMessage, 50000, client);
 			} // else timer already exists / is running. to prevent infinite timers being started...
