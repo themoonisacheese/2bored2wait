@@ -26,7 +26,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 2. Run `screen` to create a new persistent terminal. That way the proxy server won't die when you close the `ssh` session with your computer. To exit the virtual screen, hit Ctrl-a, Ctrl-d, to rejoin to the screen, execute `screen -r`
 3. In your `screen` session, while in the `2bored2wait` directory, run `npm start`. The program does not output any text to the terminal.
 4. Leave your `screen` session with Ctrl-a Ctrl-d. Execute `ip a` to show your IP address. You may want to set up port forwarding to access your host from the Internet.
-5. Open a browser on a device that can reach your host and type <your-IP>:8080 in the address bar, to show the web interface.
+5. Open a browser on a device that can reach your host and type &lt;your-IP&gt;:8080 in the address bar, to show the web interface.
 6. Enter your password and press the "Start queing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 7. once the queue reaches a low number, connect to the minecraft server at your IP address. Currently, you have to connect BEFORE reaching the end of the queue.
 8. To disconnect without having to requeue afterwards, just Disconnect from the game's pause menu.
