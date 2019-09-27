@@ -52,3 +52,6 @@ Coming soon
 # Info
 If you need to contect me for help my discord is 
 surprisejedi#8384
+
+# Todo
+Mention you once you get below 30 queue
