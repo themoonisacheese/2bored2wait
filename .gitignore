@@ -62,3 +62,6 @@ typings/
 
 #secrets
 secrets.json
+
+# npm lock
+package-lock.json
