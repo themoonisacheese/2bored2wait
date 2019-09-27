@@ -65,4 +65,4 @@ surprisejedi#8384
 
 - [ ] Join queue at a specific time. (E.g 'start 8:30')
 
-- [ ] Calculate the perfect time to join the queue based on queue size/eta.
+- [ ] Calculate the perfect time to join the queue based on queue size/eta. (E.g aim to join 2b2t between 8-9pm)
