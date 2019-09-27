@@ -46,8 +46,8 @@ function startQueuing() {
 	var chunk = [];
 	webserver.isInQueue = true;
 	client = mc.createClient({ // connect to 2b2t
-		host: "2b2t.org",
-		port: 25565,
+		host: config.debug.serverip,
+		port: config.debug.serverport,
 		username: secrets.username,
 		password: secrets.password,
 		version: config.MCversion
@@ -88,7 +88,7 @@ function startQueuing() {
 			}
 		}
 		
-		if (!proxyClient && finishedQueue) {
+		if (!proxyClient) {
 			if(antiafkIntervalObj == null) {
 			    antiafkIntervalObj = setInterval(sendAntiafkMessage, 50000, client);
 			} // else timer already exists / is running. to prevent infinite timers being started...
@@ -118,7 +118,7 @@ function startQueuing() {
 	server = mc.createServer({ // create a server for us to connect to
 		'online-mode': false,
 		encryption: true,
-		host: '0.0.0.0',
+		host: config.debug.bindip,
 		port: config.ports.minecraft,
 		version: config.MCversion,
 		'max-players': maxPlayers = 1
@@ -148,13 +148,14 @@ function startQueuing() {
 		proxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t (except internal commands)
 			if (meta.name === "chat") {
 				let chatMessage = JSON.parse(data.message);
-				if (chatMessage.text && chatMessage.text.startsWith === "/2b2w") {
-					if (chatMessage.text === "/2b2w chunks") {
+				if (chatMessage.text && chatMessage.text.includes("/2b2w")) {
+					if (chatMessage.text.includes("/2b2w chunks")) {
 						chunks.forEach(function(element) {  
 							filterPacketAndSend(element[0], element[1], proxyClient);
 						});
+					} else if (chatMessage.tex.includes("/2b2w forcefinishedqueue")) {
 					} else {
-						filterPacketAndSend("chat", { message: "2b2w: to reload chunks, use: /2b2w chunks", position: 0 }, proxyClient);
+						filterPacketAndSend("chat", { message: "2b2w commands: chunks, forcefinishedqueue", position: 0 }, proxyClient);
 					}
 				}
 			} else {
