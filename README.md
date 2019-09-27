@@ -16,6 +16,11 @@ A discord implementation of the popular proxy to wait out 2b2t.org's way too lon
 10. In the directory above edit the file auth.json and replace BOT_TOKEN with your bots token
 11. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
+# Donations
+
+Donations are what helps me keep developing this. They keep me motivated, if you do end up donating you'll get access to the beta and many more features!
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/sjedi2lazy)
 
 # How to use
 1. Read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
