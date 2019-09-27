@@ -19,7 +19,7 @@ A discord implementation of the popular proxy to wait out 2b2t.org's way too lon
 # Donations
 
 Donations are what helps me keep developing this. They keep me motivated, if you do end up donating you'll get access to the beta and many more features!
-
+I'll also add you to my list of people to tell once I've bypassed the queue altogether!
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/sjedi2lazy)
 
 # How to use
