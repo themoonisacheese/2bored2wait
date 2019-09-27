@@ -61,8 +61,8 @@ If you need to contect me for help my discord is
 surprisejedi#8384
 
 # Todo
--[] Mention you once you get below 30 queue
+- [ ] Mention you once you get below 30 queue
 
--[] Join queue at a specific time. (E.g 'start 8:30')
+- [ ] Join queue at a specific time. (E.g 'start 8:30')
 
--[] Calculate the perfect time to join the queue based on queue size/eta.
+- [ ] Calculate the perfect time to join the queue based on queue size/eta.
