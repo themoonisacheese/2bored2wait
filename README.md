@@ -20,7 +20,6 @@ A proxy to wait out 2b2t.org's way too long queue.
 5. edit file with your Minecraft credentials with your chosen editor. I use `nano secrets.json`. Input your Minecraft username and password. Use your email instead of your username if you have created your account after 2012 or have migrated it.
 6. `chmod 700 secrets.json` to prevent other users on the system from viewing your Minecraft password.
 7. edit file with configuration with your chosen editor. I use `nano config.json`. Change the password (for the web interface) and ports if you want to.
-note: some users have reported a problem where `lodash` was reported not installed. `npm install lodash` to force install it. 
 
 # How to use
 1. Read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
