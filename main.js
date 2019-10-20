@@ -147,22 +147,22 @@ function startQueuing() {
 		
 		newProxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t (except internal commands)
 			if (meta.name === "chat") {
-				let chatMessage = JSON.parse(data.message);
-				if (chatMessage.text && chatMessage.text.includes("/2b2w")) {
-					if (chatMessage.text.includes("/2b2w chunks")) {
-						if(chunks.sizeof >= 1) {
-							chunks.forEach(function(element) {  
+				let chatMessage = data.message;
+				if (chatMessage.startsWith("/2b2w")) {
+					if (chatMessage.startsWith("/2b2w chunks")) {
+						if(chunk.sizeof >= 1) {
+							chunk.forEach(function(element) {  
 								filterPacketAndSend(element[0], element[1], proxyClient);
-								filterPacketAndSend("chat", { message: "2b2w: okily-dokily", position: 0 }, proxyClient);
+								filterPacketAndSend({ message: "{\"text\":\"2b2w: okily-dokily\"}", position: 1 }, { name: "chat" }, proxyClient);
 							});
 						} else {
-							filterPacketAndSend("chat", { message: "2b2w: I have no chunks", position: 0 }, proxyClient);
+							filterPacketAndSend({ message: "{\"text\":\"2b2w: I have no chunks\"}", position: 1 }, { name: "chat" }, proxyClient);
 						}
-					} else if (chatMessage.text.includes("/2b2w forcefinishedqueue")) {
+					} else if (chatMessage.startsWith("/2b2w forcefinishedqueue")) {
 						finishedQueue = true;
-						filterPacketAndSend("chat", { message: "2b2w: done", position: 0 }, proxyClient);
+						filterPacketAndSend({ message: "{\"text\":\"2b2w: done\"}", position: 1 }, { name: "chat" }, proxyClient);
 					} else {
-						filterPacketAndSend("chat", { message: "2b2w commands: chunks, forcefinishedqueue", position: 0 }, proxyClient);
+						filterPacketAndSend({ message: "{\"text\":\"2b2w commands: chunks, forcefinishedqueue\"}", position: 1 }, { name: "chat" }, proxyClient);
 					}
 				} else {
 					filterPacketAndSend(data, meta, client);	
