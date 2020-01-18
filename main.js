@@ -25,6 +25,7 @@ let proxyClient; // a reference to the client that is the actual minecraft game
 let client; // the client to connect to 2b2t
 let server; // the minecraft server to pass packets
 let antiafkIntervalObj; // self explanatory
+var chunk = [];
 // function to disconnect from the server
 function stop(){
 	webserver.isInQueue = false;
@@ -38,12 +39,11 @@ function stop(){
 }
 
 function sendAntiafkMessage(client) {
-	filterPacketAndSend("chat", { message: "/msg RusherB0t !que", position: 0 }, client);
+	filterPacketAndSend({ message: "{\"text\":\">\"}", position: 1 }, { name: "chat" }, client);
 }
 
 // function to start the whole thing
 function startQueuing() {
-	var chunk = [];
 	webserver.isInQueue = true;
 	client = mc.createClient({ // connect to 2b2t
 		host: config.debug.serverip,
@@ -102,7 +102,7 @@ function startQueuing() {
             proxyClient = null
 		}
 		stop();
-		setTimeout(startQueuing, 100); // reconnect after 100 ms
+		// setTimeout(startQueuing, 100); // reconnect after 100 ms
 	});
 
 	client.on('error', (err) => {
@@ -112,7 +112,7 @@ function startQueuing() {
 		}
 		console.log('err', err);
 		stop();
-		setTimeout(startQueuing, 100); // reconnect after 100 ms
+		// setTimeout(startQueuing, 100); // reconnect after 100 ms
 	});
 
 	server = mc.createServer({ // create a server for us to connect to
@@ -134,6 +134,7 @@ function startQueuing() {
 			maxPlayers: server.maxPlayers,
 			reducedDebugInfo: false
 		});
+		
 		newProxyClient.write('position', {
 			x: 0,
 			y: 1.62,
@@ -142,8 +143,7 @@ function startQueuing() {
 			pitch: 0,
 			flags: 0x00
 		});
-
-		proxyClient = newProxyClient;
+		
 		
 		newProxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t (except internal commands)
 			if (meta.name === "chat") {
@@ -152,7 +152,7 @@ function startQueuing() {
 					if (chatMessage.startsWith("/2b2w chunks")) {
 						if(chunk.sizeof >= 1) {
 							chunk.forEach(function(element) {  
-								filterPacketAndSend(element[0], element[1], proxyClient);
+								filterPacketAndSend(element[0], element[1], newProxyClient);
 								filterPacketAndSend({ message: "{\"text\":\"2b2w: okily-dokily\"}", position: 1 }, { name: "chat" }, proxyClient);
 							});
 						} else {
@@ -171,6 +171,8 @@ function startQueuing() {
 				filterPacketAndSend(data, meta, client);
 			}
 		});
+		
+		proxyClient = newProxyClient;
 	});
 }
 
