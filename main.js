@@ -102,7 +102,7 @@ function startQueuing() {
             proxyClient = null
 		}
 		stop();
-		// setTimeout(startQueuing, 100); // reconnect after 100 ms
+		setTimeout(startQueuing, 100); // reconnect after 100 ms
 	});
 
 	client.on('error', (err) => {
@@ -112,7 +112,7 @@ function startQueuing() {
 		}
 		console.log('err', err);
 		stop();
-		// setTimeout(startQueuing, 100); // reconnect after 100 ms
+		setTimeout(startQueuing, 100); // reconnect after 100 ms
 	});
 
 	server = mc.createServer({ // create a server for us to connect to
