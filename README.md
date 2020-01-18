@@ -34,8 +34,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 10. Disconnecting from 2b2t (you will have to requeue for your next connect) (I don't see the point in doing that). Use the Stop Queueing button in the web interface.
 
 # Video guide
-Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
-The video does not cover the new linux installation method and `sijanec`'s fork features.
+soon
 
 # Known issues
 - starting the queue will revoke your minecraft token. this means that you will not be able to join normal minecraft servers until you restart the game
