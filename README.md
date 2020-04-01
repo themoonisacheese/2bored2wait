@@ -24,6 +24,21 @@ A proxy to wait out 2b2t.org's way too long queue.
 # Video guide
 Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
 
+# Docker build guide
+1. read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
+2. clone the repo and run `docker build -t 2bored2wait .` to build the image
+3. once the image has built, you can start it with:
+```
+docker run -d -p 80:80 -p 25565:25565 -e MOJANG_USERNAME="hausemaster@youremail.com" -e MOJANG_PASSWORD="myverysecretpassword" 2bored2wait
+```
+4. go to step 5 of How To Use guide above
+
+If you want to change the configuration you will have to mount config.json manually, you can also mount secrets.json manually it you dont want your credentials in the bash history
+
+# Docker usage guide
+
+WORK IN PROGRESS
+
 # Known issues
 - starting the queue will revoke your minecraft token. this means that you will not be able to join normal minecraft servers until you restart the game
 - starting the queue too many times in a row can sometimes boot you out of your minecraft account (starting the queue or connecting in the minecraft client will tell you "wrong email or password"). to fix this, log in to your account at minecraft.net, then restart minecraft. both of these issues are limitations put in place by mojang to prevent account stealing, and are not fixable.

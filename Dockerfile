@@ -12,5 +12,9 @@ COPY . "/srv/app"
 # install requirements
 RUN ["npm", "install"]
 
+EXPOSE 80/tcp
+EXPOSE 25565/tcp
+EXPOSE 25565/udp
+
 # run container
 CMD /srv/app/replace_credentials.sh && npm start
