@@ -39,6 +39,7 @@ function stop(){
 
 // function to start the whole thing
 function startQueuing() {
+	var playerId;
 	webserver.isInQueue = true;
 	client = mc.createClient({ // connect to 2b2t
 		host: "2b2t.org",
@@ -56,6 +57,9 @@ function startQueuing() {
 			webserver.queuePlace = positioninqueue; // update info on the web page
 			webserver.ETA = ETA;
 			server.motd = `Place in queue: ${positioninqueue}`; // set the MOTD because why not
+		}
+		if(meta.name=="login"){
+			playerId=data.entityId;
 		}
 		if (finishedQueue === false && meta.name === "chat") { // we can know if we're about to finish the queue by reading the chat message
 			// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
@@ -108,7 +112,7 @@ function startQueuing() {
 
 	server.on('login', (newProxyClient) => { // handle login
 		newProxyClient.write('login', {
-			entityId: newProxyClient.id,
+			entityId: playerId,
 			levelType: 'default',
 			gameMode: 0,
 			dimension: 0,
