@@ -23,7 +23,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 # Video guide
 Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
 
-# Docker usage guide
+# Docker usage guide (if you know how to use docker)
 1. Read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff 
 2. From a terminal run:
 ```
