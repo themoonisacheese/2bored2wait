@@ -12,17 +12,63 @@ A proxy to wait out 2b2t.org's way too long queue.
 6. If you so wish, edit the configuration in config.json. (On Linux ports below 1024, including port 80, require you to run the program with administrator rights.)
 7. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
-
 # How to use
 1. read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 4. run `npm start`
 5. a browser window should open. You can close it if you want at any moment, and you can access it again at adress http://localhost
-6. press the "Start queing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
+6. press the "Start queueing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 7. once the queue reaches a low number, connect to the minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
 8. after you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
 # Video guide
 Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
+
+# Docker usage guide (if you know how to use docker)
+1. Read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff 
+2. From a terminal run:
+```
+docker run --name 2b2w -d -p 80:80 -p 25565:25565 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" edoardo396/2bored2wait
+```
+3. Open a browser and navigate to http://localhost
+4. Press the "Start queing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
+5. Once the queue reaches a low number, connect to the minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
+6. after you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+
+## Additional configuration
+
+If you want to change the configuration you will have to mount config.json manually, you can also mount secrets.json manually if you don't want your credentials in the bash history
+
+To access logs you can just do
+```
+docker logs 2b2w
+```
+
+You can also easily change which port to map from the docker run command, for example if you want your server reachable on port 25000 instead of the default 25565 and your webserver on port 8080 you would run
+```
+docker run --name 2b2w -d -p 80:**8080** -p 25565:**25000** -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" edoardo396/2bored2wait
+```
+
+To make 2b2w start automatically at boot you can run:
+```
+docker run --name 2b2w --restart unless-stopped -d -p 80:80 -p 25565:25565 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" edoardo396/2bored2wait
+```
+
+# Docker build guide
+1. read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
+2. clone the repo and run `docker build -t 2bored2wait .` to build the image
+3. once the image has built, you can start it with:
+```
+docker run --name 2b2w -d -p 80:80 -p 25565:25565 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" 2bored2wait
+```
+** Remember to change user@domain.com and myverysecretpassword with your actual minecraft credentials! **
+4. Open a browser and navigate to http://localhost
+5. Press the "Start queing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
+6. Once the queue reaches a low number, connect to the minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
+7. after you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+
+If you want to change the configuration you will have to mount config.json manually, you can also mount secrets.json manually if you don't want your credentials in the bash history
+
+All additional configurations from the Docker usage guide apply here as well
 
 # Known issues
 - starting the queue will revoke your minecraft token. this means that you will not be able to join normal minecraft servers until you restart the game
