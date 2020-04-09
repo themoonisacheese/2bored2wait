@@ -16,7 +16,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 1. read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 4. run `npm start`
 5. a browser window should open. You can close it if you want at any moment, and you can access it again at adress http://localhost
-6. press the "Start queing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
+6. press the "Start queueing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 7. once the queue reaches a low number, connect to the minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
 8. after you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
@@ -47,6 +47,8 @@ docker run --name 2b2w -d -p 80:80 -p 25565:25565 -e MOJANG_USERNAME="user@domai
 5. Once the queue reaches a low number, connect to the minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
 6. after you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
+## Additional configuration
+
 If you want to change the configuration you will have to mount config.json manually, you can also mount secrets.json manually if you don't want your credentials in the bash history
 
 To access logs you can just do
@@ -54,11 +56,15 @@ To access logs you can just do
 docker logs 2b2w
 ```
 
-To make 2b2w start automaticcaly at boot you can run:
+You can also easily change which port to map from the docker run command, for example if you want your server reachable on port 25000 instead of the default 25565 and your webserver on port 8080 you would run
+```
+docker run --name 2b2w -d -p *8080*:80 -p *25000*:25565 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" edoardo396/2bored2wait
+```
+
+To make 2b2w start automatically at boot you can run:
 ```
 docker run --name 2b2w --restart unless-stopped -d -p 80:80 -p 25565:25565 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" edoardo396/2bored2wait
 ```
-instead of the command in step 3.
 
 # Known issues
 - starting the queue will revoke your minecraft token. this means that you will not be able to join normal minecraft servers until you restart the game
