@@ -13,7 +13,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 7. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 # How to use
-1. read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
+1. Read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 4. run `npm start`
 5. a browser window should open. You can close it if you want at any moment, and you can access it again at adress http://localhost
 6. press the "Start queueing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
@@ -24,7 +24,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
 
 # Docker usage guide (if you know how to use docker)
-1. Read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff 
+1. Read the code to ensure i'm not stealing your credentials. i'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. From a terminal run:
 ```
 docker run --name 2b2w -d -p 80:80 -p 25565:25565 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" edoardo396/2bored2wait
