@@ -48,7 +48,7 @@ var client = new Discord.Client()
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`)
-    setDiscordActivity("Queue is stopped.")
+    setDiscordActivity("Not queueing.")
 })
 
 client.on('message', msg => {
@@ -82,7 +82,7 @@ client.on('message', msg => {
         });
     }
     if (msg.content === "start") {
-        queuing.startQueue()
+        http.get("http://localhost")
         msg.channel.send({
             embed: {
                 color: 3447003,
@@ -106,7 +106,8 @@ client.on('message', msg => {
         setTimeout(update, 5 * 1000);
     }
     if (msg.content === "stop") {
-        setDiscordActivity("Queue is stopped.")
+        http.get("http://localhost/stop")
+        setDiscordActivity("Not queueing.")
         msg.channel.send({
             embed: {
                 color: 3447003,
@@ -126,7 +127,6 @@ client.on('message', msg => {
                 }
             }
         });
-        queuing.stop()
     }
 })
 
