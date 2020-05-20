@@ -20,7 +20,7 @@ A discord implementation of the popular proxy to wait out 2b2t.org's way too lon
 
 Donations are what helps me keep developing this. They keep me motivated, if you do end up donating you'll get access to the beta and many more features.
 
-If you donate enough I'll tell you how to bypass the queue... When I figure out how ^_^
+If you donate enough I'll tell you how to bypass the queue...
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.me/sjedi2lazy)
 
@@ -43,18 +43,14 @@ Do not give your secrets.json file to anyone under any circumstances.
 My bot does not connect to anything except discord. Please check my source
 code to be **EXTRA** sure.
 
-I would recommend building this from scratch because if I were you I wouldn't trust me. Follow some tutorials for making a discord bot online and use 2b2w/documentation.mdAPI as reference.
+I would recommend building this from scratch because if I were you I wouldn't trust me. Follow some tutorials for making a discord bot online and use [the documentation](2bored2wait/API%20documentation.md) as a reference.
 
 Do not repeatedly stop and start the queue, eventually you will not be able to log in.
 
-# Video guide
-Coming soon
+# 2bored2wait
+This is a fork of 2bored2wait, made by [themoonisacheese](https://github.com/themoonisacheese)
 
-# Known issues
-- starting the queue will revoke your minecraft token. this means that you will not be able to join normal minecraft servers until you restart the game
-- starting the queue too many times in a row can sometimes boot you out of your minecraft account (starting the queue or connecting in the minecraft client will tell you "wrong email or password"). to fix this, log in to your account at minecraft.net, then restart minecraft. both of these issues are limitations put in place by mojang to prevent account stealing, and are not fixable.
-- Some people report not being able to ride animals using this proxy.
-- 2b2t sometimes bugs out and removes you from the queue without telling you. In this case, your queue position will no longer move. Reconnect to fix this.
+I would advise looking over the information for the project [in the readme for 2bored2wait](2bored2wait/README.md)
 
 # Info
 If you need to contect me for help my discord is 
