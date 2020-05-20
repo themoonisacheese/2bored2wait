@@ -54,7 +54,7 @@ I would advise looking over the information for the project [in the readme for 2
 
 # Info
 If you need to contect me for help my discord is 
-surprisejedi#8384
+halcyon#8384
 
 # Todo
 - [ ] Mention you once you get below 30 queue
