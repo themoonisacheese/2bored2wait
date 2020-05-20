@@ -43,14 +43,14 @@ Do not give your secrets.json file to anyone under any circumstances.
 My bot does not connect to anything except discord. Please check my source
 code to be **EXTRA** sure.
 
-I would recommend building this from scratch because if I were you I wouldn't trust me. Follow some tutorials for making a discord bot online and use [the documentation](2bored2wait/API%20documentation.md) as a reference.
+I would recommend building this from scratch because if I were you I wouldn't trust me. Follow some tutorials for making a discord bot online and use [the documentation](https://github.com/themoonisacheese/2bored2wait/blob/master/API%20documentation.md) as a reference.
 
 Do not repeatedly stop and start the queue, eventually you will not be able to log in.
 
 # 2bored2wait
 This is a fork of 2bored2wait, made by [themoonisacheese](https://github.com/themoonisacheese)
 
-I would advise looking over the information for the project [in the readme for 2bored2wait](2bored2wait/README.md)
+I would advise looking over the information for the project [in the readme for 2bored2wait](https://github.com/themoonisacheese/2bored2wait/blob/master/README.md)
 
 # Info
 If you need to contect me for help my discord is 
