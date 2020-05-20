@@ -1,9 +1,9 @@
 // to make sure webserver works correctly
-process.chdir("2b2w/")
+process.chdir("2bored2wait/")
 
 // reqs
 var http = require("http");
-var queuing = require('./2b2w/main.js');
+var queuing = require('./2bored2wait/main.js');
 var auth = require('./auth.json');
 var sleep = require('sleep');
 var Discord = require('discord.js');
@@ -18,7 +18,6 @@ function update() {
             data += chunk;
         });
         resp.on("end", () => {
-
             queueData = JSON.parse(data);
             console.log(`Recieved data: ${queueData.place}`)
             if (queueData.place === "None" || queueData.place === "undefined") {
