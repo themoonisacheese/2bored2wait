@@ -11,7 +11,7 @@ or if you are cloning the repository from the commandline, use `git clone --recu
 4. Run the command `npm install && cd 2boredwait && npm install`
 7. Inside the directory 2bored2wait/ copy secrets.json.example and name it secrets.json. Fill out your minecraft information in the file. Note that you must use your email adress and not your minecraft username.
 8. If you so wish, edit the configuration in config.json. (On Linux ports below 1024, including port 80, require you to run the program with administrator rights.)
-9. You need to create a discord bot. Follow this tutorial up until the programming part.
+9. You need to create a discord bot. Follow this guide: https://discordpy.readthedocs.io/en/latest/discord.html, but don't go into any programming tutorials
 10. In the directory above edit the file auth.json and replace BOT_TOKEN with your bots token
 11. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
