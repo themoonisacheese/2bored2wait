@@ -1,0 +1,4 @@
+[submodule "2bored2wait"]
+	path = 2bored2wait
+	url = https://github.com/themoonisacheese/2bored2wait
+	branch = master
