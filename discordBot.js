@@ -82,7 +82,7 @@ client.on('message', msg => {
         });
     }
     if (msg.content === "start") {
-        http.get("http://localhost")
+        http.get("http://localhost/start")
         msg.channel.send({
             embed: {
                 color: 3447003,
