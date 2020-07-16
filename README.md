@@ -16,7 +16,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 # How to use
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. Run `npm start`
-3. If you created the secrets.json during the installation, you can ignore it, otherwise you have to enter your login data at every program start.
+3. If you created the secrets.json during the installation, you can ignore this or you have to enter your login data now.
 4. A browser window should open. You can close it if you want at any moment, and you can access it again at address http://localhost
 5. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 6. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
