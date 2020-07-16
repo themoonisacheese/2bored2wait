@@ -8,17 +8,19 @@ A proxy to wait out 2b2t.org's way too long queue.
 2. Download this repository with the green button (top right of this page). If you downloaded it as zip, unzip it.
 3. Open a terminal and navigate to the folder you downloaded it in.
 4. Run `npm install`
-5. Copy secrets.json.example and name it secrets.json. Fill out your Minecraft information in the file. Note that you must use your email address and not your Minecraft username.
-6. If you wish, edit the configuration in config.json. (On Linux, ports below 1024, including port 80, require you to run the program with administrator rights.)
-7. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
+5. If you want to save your Minecraft login information in a file for automatic login, proceed to step 6. If not, ignore step 6 and proceed to step 7. However, you will need to re-enter your Minecraft login information into the console each time you start the program.
+6. Copy secrets.json.example and name it secrets.json. Fill out your Minecraft information in the file. Note that you must use your email address and not your Minecraft username.
+7. If you wish, edit the configuration in config.json. (On Linux, ports below 1024, including port 80, require you to run the program with administrator rights.)
+8. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 # How to use
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-4. Run `npm start`
-5. A browser window should open. You can close it if you want at any moment, and you can access it again at address http://localhost
-6. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-7. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
-8. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+2. Run `npm start`
+3. If you created the secrets.json during the installation, you can ignore this or you have to enter your login data now.
+4. A browser window should open. You can close it if you want at any moment, and you can access it again at address http://localhost
+5. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
+6. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
+7. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
 # Video guide
 Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
