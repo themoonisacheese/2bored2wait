@@ -4,6 +4,7 @@
         "web":80
     },
     "openBrowserOnStart": true,
+	"useEmailFeature":false,
     "password":"",
     "MCversion":"1.12.2",
 	"email":"",

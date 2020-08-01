@@ -117,14 +117,16 @@ function startQueuing() {
 			}
 		}
 
-		if(module.exports.isInQueue == true && module.exports.positioninqueue == 10 && finishedQueue == false) {
-			transport.sendMail(message, function(err, info) {
-				if(err) {
-					console.log(err)
-				}else{
-					console.log(info);
-				}
-			});
+		if(config.useEmailFeature) {
+			if(module.exports.isInQueue == true && module.exports.positioninqueue == 10 && finishedQueue == false) {
+				transport.sendMail(message, function(err, info) {
+					if(err) {
+						console.log(err)
+					}else{
+						console.log(info);
+					}
+				});
+			}
 		}
 
 		if (proxyClient) { // if we are connected to the proxy, forward the packet we recieved to our game.
