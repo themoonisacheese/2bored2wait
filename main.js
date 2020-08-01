@@ -6,6 +6,24 @@ const opn = require('opn'); //to open a browser window
 const config = require('./config.json'); // read the config
 const fs = require('fs'); // to check if the secrets.json exists
 
+const nodemailer = require('nodemailer'); //to mail yourself when your done waiting
+
+const message = {
+    from: config.email, // Sender address
+    to: config.email,         // List of recipients
+    subject: '2bored2wait Alarm', // Subject line
+    text: 'Start your fucking Minecraft and connect to localhost!' // Plain text body
+};
+
+let transport = nodemailer.createTransport({
+    host: config.server,
+    port: config.emailport,
+    auth: {
+       user: config.email,
+       pass: config.emailpassword
+    }
+});
+
 var mc_username;
 var mc_password;
 
@@ -97,6 +115,16 @@ function startQueuing() {
                     webserver.ETA = "NOW";  
                 }
 			}
+		}
+
+		if(module.exports.isInQueue == true && module.exports.positioninqueue == 10 && finishedQueue == false) {
+			transport.sendMail(message, function(err, info) {
+				if(err) {
+					console.log(err)
+				}else{
+					console.log(info);
+				}
+			});
 		}
 
 		if (proxyClient) { // if we are connected to the proxy, forward the packet we recieved to our game.

@@ -5,5 +5,9 @@
     },
     "openBrowserOnStart": true,
     "password":"",
-    "MCversion":"1.12.2"
+    "MCversion":"1.12.2",
+	"email":"",
+	"emailpassword":"",
+	"emailserver":"",
+	"emailport":""
 }
