@@ -10,8 +10,9 @@ A proxy to wait out 2b2t.org's way too long queue.
 4. Run `npm install`
 5. If you want to save your Minecraft login information in a file for automatic login, proceed to step 6. If not, ignore step 6 and proceed to step 7. However, you will need to re-enter your Minecraft login information into the console each time you start the program.
 6. Copy secrets.json.example and name it secrets.json. Fill out your Minecraft information in the file. Note that you must use your email address and not your Minecraft username.
-7. If you wish, edit the configuration in config.json. (On Linux, ports below 1024, including port 80, require you to run the program with administrator rights.)
-8. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
+7. Configirate your Email, Password, Email Server and Email Port in the config.json.
+8. If you wish, edit the configuration further in config.json. (On Linux, ports below 1024, including port 80, require you to run the program with administrator rights.)
+9. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 # How to use
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
