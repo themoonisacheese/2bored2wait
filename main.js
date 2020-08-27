@@ -27,6 +27,8 @@ let transport = nodemailer.createTransport({
 var mc_username;
 var mc_password;
 
+mailsend = false;
+
 if(fs.existsSync("./secrets.json")) {
 	const secrets = require('./secrets.json');
 	mc_username = secrets.username;
@@ -118,7 +120,8 @@ function startQueuing() {
 		}
 
 		if(config.useEmailFeature) {
-			if(module.exports.isInQueue == true && module.exports.positioninqueue == 10 && finishedQueue == false) {
+			if(module.exports.isInQueue == true && module.exports.positioninqueue == 10 && mailsend == false) {
+				mailsend = true;
 				transport.sendMail(message, function(err, info) {
 					if(err) {
 						console.log(err)
