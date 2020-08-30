@@ -5,8 +5,7 @@ A discord implementation of the popular proxy to wait out 2b2t.org's way too lon
 
 # How to install
 1. Download node.js and install it. On non-windows platforms, you also need npm.
-2. Download this repository with the green button (top right of this page). If you downloaded it as zip, unzip it.
-or if you are cloning the repository from the commandline, use `git clone --recursive https://github.com/surprisejedi/2lazy2wait`
+2. Clone the repository from the commandline, use `git clone --recursive https://github.com/surprisejedi/2lazy2wait`
 3. Open a terminal and navigate to the folder you downloaded it
 4. Run the command `npm install && cd 2boredwait && npm install`
 7. Inside the directory 2bored2wait/ copy secrets.json.example and name it secrets.json. Fill out your minecraft information in the file. Note that you must use your email adress and not your minecraft username.
