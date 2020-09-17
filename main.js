@@ -30,9 +30,7 @@ if(fs.existsSync("./secrets.json")) {
 		rl.question("Password: ", function(userpassword) {
 			mc_username = username;
 			mc_password = userpassword;
-			for(var i = 0; i < process.stdout.getWindowSize()[1]; i++) {
-				console.log('\n');  // i know it's not the best way to clear a console but i don't know how to do it
-			}
+			console.clear();
 		});
 	});
 }
