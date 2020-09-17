@@ -401,12 +401,12 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					break;
 				case "auth":
 					let authMsg = "Authentication";
-					if (DiscordOrigin) sendDiscordMsg(authMsg, authMsg);
+					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, authMsg, authMsg);
 					else console.log(authMsg);
 					break;
 				case "calcTime":
 					let calcMsg = "Calculating the time, so you can paly at " + starttimestring
-					if (DiscordOrigin) sendDiscordMsg("calculating time", calcMsg);
+					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "calculating time", calcMsg);
 					console.log(calcMsg);
 					break;
 			}
