@@ -80,7 +80,7 @@ options = {
 	version: config.minecraftserver.version
 }
 if (config.antiAntiAFK) setInterval(function () {
-	if(proxyClient) client.write("chat", { message: "{\"text\":\">\"}", position: 1 })
+	if(proxyClient) client.write("chat", { message: "/msg RusherB0t !que", position: 1 })
 }, 50000)
 
 function cmdInput() {
