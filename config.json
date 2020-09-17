@@ -1,9 +1,29 @@
 {
+    "discordBot": true,
+    "webserver": false,
     "ports":{
-        "minecraft":25565,
-        "web":80
+        "minecraft":25566, // port for the proxy server
+        "web":8080
     },
-    "openBrowserOnStart": true,
-    "password":"",
-    "MCversion":"1.12.2"
+    "openBrowserOnStart": false,
+    "password":"", // password for the webinterface
+    "MCversion":"1.12.2",
+    "logging": true, // log errors and queue place
+    "reconnect": {
+        "onError": true, // reconnect on error or if 2b2t kicks you
+        "notConnectedQueueEnd": false // restart the queue if you are not connect at the end of it
+    },
+    "minecraftserver": { // the server you want to connect. Make not much sense to change it, was just added for development purpose
+        "hostname": "2b2t.org",
+        "port": 25565,
+        "renderDistance": 8,
+        "version": "1.12.2",
+        "onlinemode": true, // chunk caching does not work correctly if set to false
+        "username": "lol" // the username to use if onlinemode is false
+    },
+    "notification": { // sends a message via discord if the place in the queue reaches the specified number
+        "enabled": true, // you must send the bot a message once.
+        "queuePlace": 20
+    },
+    "antiAntiAFK": true // to bypass antiAFK plugins
 }
