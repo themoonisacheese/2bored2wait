@@ -19,8 +19,15 @@ A proxy to wait out 2b2t.org's way too long queue.
 3. If you created the secrets.json during the installation, you can ignore this or you have to enter your login data now.
 4. A browser window should open. You can close it if you want at any moment, and you can access it again at address http://localhost
 5. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-6. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
-7. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+6. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+
+# Commands
+All commands can be used through discord or the cli.
+- `start` will start the queue. It takes between 15-30 seconds for the bot to update with the queue position.
+- `start 14:00` will start at 2pm.
+- `play 8:00` will try to calculate the right time to join so you can at 8:00
+- `update` will send an update to the current channel with your position and ETA.
+- `stop` will stop the queue.
 
 # Video guide
 Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
@@ -75,6 +82,5 @@ All additional configurations from the Docker usage guide apply here as well.
 
 # Known issues
 - Starting the queue will revoke your Minecraft token. this means that you will not be able to join normal Minecraft servers until you restart the game
-- Starting the queue too many times in a row can sometimes boot you out of your Minecraft account (starting the queue or connecting in the Minecraft client will tell you "wrong email or password"). to fix this, log in to your account at minecraft.net, then restart Minecraft. Both of these issues are limitations put in place by Mojang to prevent account stealing and are not fixable.
-- Some people report not being able to ride animals using this proxy.
+- If you connect after the queue is finnished or reconnect the proxy will send cached chunk data. Otherwise you would fly in a emtpy world. Other data however like entities are not chached and will not displayed correctly. You can move out of render distance and come back to fix this issue. Sometimes the client renders a cached chunk with a blank texture.
 - 2b2t sometimes bugs out and removes you from the queue without telling you. In this case, your queue position will no longer move. Reconnect to fix this.
