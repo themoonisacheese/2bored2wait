@@ -43,7 +43,6 @@ var stoppedByPlayer = false;
 var timedStart;
 var lastQueuePlace;
 var chunkData = [];
-var notisend = false;
 var loginpacket;
 var id;
 var totalWaitTime;
@@ -111,7 +110,7 @@ function startQueuing() {
 		options.username = mc_username;
 		options.password = mc_password;
 		options.tokensLocation = "./minecraft_token.json"
-		options.tokensDebug = true;
+		options.tokensDebug = false;
 		tokens.use(options, function (_err, _opts) {
 
 			if (_err) throw _err;
@@ -129,6 +128,7 @@ function startQueuing() {
 function join() {
 	let ETAhour;
 	let timepassed;
+	let notisend = false;
 	doing = "queue"
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
