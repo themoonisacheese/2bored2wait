@@ -1,5 +1,5 @@
 // imports
-const jsonminify = require("./json.minify.js"); // to remove comments from the config.json, because normally comments in json are not allowed
+const jsonminify = require("node-json-minify"); // to remove comments from the config.json, because normally comments in json are not allowed
 const fs = require('fs');
 const mc = require('minecraft-protocol'); // to handle minecraft login session
 const webserver = require('./webserver.js'); // to serve the webserver
