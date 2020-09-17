@@ -53,7 +53,6 @@ var doing;
 var calcInterval;
 var authInterval;
 var reconnectinterval;
-var antiAntiAFk;
 webserver.restartQueue = config.reconnect.notConnectedQueueEnd;
 if (config.webserver) {
 	webserver.createServer(config.ports.web); // create the webserver
@@ -82,6 +81,9 @@ options = {
 	port: config.minecraftserver.port,
 	version: config.minecraftserver.version
 }
+if (config.antiAntiAFK) setInterval(function () {
+	if(proxyClient) client.write("chat", { message: "{\"text\":\">\"}", position: 1 })
+}, 50000)
 
 function cmdInput() {
 	prompt.get("cmd", function (err, result) {
@@ -133,7 +135,6 @@ function join() {
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
 	let finishedQueue = false;
-	antiAntiAfkmsg();
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "map_chunk":
@@ -231,7 +232,6 @@ function join() {
 
 	server.on('login', (newProxyClient) => { // handle login
 		setTimeout(sendChunks, 1000)
-		if (config.antiAntiAFK) clearInterval(antiAntiAFk);
 		newProxyClient.write('login', loginpacket);
 		newProxyClient.write('position', {
 			x: 0,
@@ -260,12 +260,6 @@ function join() {
 			}
 			filterPacketAndSend(data, meta, client);
 		});
-		newProxyClient.on("end", () => {
-			setTimeout(function(){
-				if (webserver.isInQueue) antiAntiAfkmsg();
-			},1000);
-		})
-
 		proxyClient = newProxyClient;
 	});
 }
@@ -512,13 +506,6 @@ function calcTime(msg) {
 	}, 60000);
 
 }
-
-function antiAntiAfkmsg() {
-	if (config.antiAntiAFK) antiAntiAFk = setInterval(function () {
-		client.write("chat", { message: "{\"text\":\">\"}", position: 1 })
-	}, 50000)
-}
-
 function stopQueing() {
 	stoppedByPlayer = true;
 	stop();
