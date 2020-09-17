@@ -4,7 +4,7 @@ const fs = require('fs');
 const mc = require('minecraft-protocol'); // to handle minecraft login session
 const webserver = require('./webserver.js'); // to serve the webserver
 const opn = require('opn'); //to open a browser window
-const config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // read the config
+var config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // read the config
 const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
@@ -20,6 +20,7 @@ if(fs.existsSync("./secrets.json")) {
 	secrets = require('./secrets.json');
 	mc_username = secrets.username;
 	mc_password = secrets.password;
+	config.discordBot = false;
 }else {
 	const rl = require("readline").createInterface({
 		input: process.stdin,
@@ -38,12 +39,10 @@ if(fs.existsSync("./secrets.json")) {
 
 webserver.createServer(config.ports.web); // create the webserver
 webserver.password = config.password
-var auth;
 var stoppedByPlayer = false;
 var timedStart;
 var lastQueuePlace;
 var chunkData = [];
-var c = 0;
 var notisend = false;
 var loginpacket;
 var id;
