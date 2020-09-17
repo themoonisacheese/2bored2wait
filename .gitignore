@@ -59,6 +59,14 @@ typings/
 
 # next.js build output
 .next
-
+#config
+config.json
 #secrets
 secrets.json
+#discord user id
+saveid
+#hiden files
+.idea
+.project
+minecraft_token.json
+.eslintrc.js
