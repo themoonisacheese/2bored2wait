@@ -20,8 +20,8 @@ if(fs.existsSync("./secrets.json")) {
 	secrets = require('./secrets.json');
 	mc_username = secrets.username;
 	mc_password = secrets.password;
-	config.discordBot = false;
 }else {
+	config.discordBot = false;
 	const rl = require("readline").createInterface({
 		input: process.stdin,
 		output: process.stdout
