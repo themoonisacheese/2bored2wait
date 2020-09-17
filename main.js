@@ -415,28 +415,23 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			switch (doing) {
 				case "queue":
 					stopQueing();
-					if (DiscordOrigin) stopMsg(DiscordOrigin, discordMsg.channel, "Queue");
-					else console.log("The queue is stopped");
+					stopMsg(DiscordOrigin, discordMsg.channel, "Queue");
 					break;
 				case "timedStart":
 					clearTimeout(timedStart);
-					if (DiscordOrigin) stopMsg(DiscordOrigin, discordMsg.channel, "Timer");
-					else console.log("The timer is stopped");
+					stopMsg(DiscordOrigin, discordMsg.channel, "Timer");
 					break;
 				case "reconnect":
 					clearInterval(reconnectinterval);
-					if (DiscordOrigin) stopMsg(DiscordOrigin, discordMsg.channel, "Reconnecting");
-					else console.log("Reconnecting is stoppd");
+					stopMsg(DiscordOrigin, discordMsg.channel, "Reconnecting");
 					break;
 				case "auth":
 					clearInterval(authInterval);
-					if (DiscordOrigin) stopMsg(DiscordOrigin, discordMsg.channel, "Authentication");
-					else console.log("Authentication is stopped");
+					stopMsg(DiscordOrigin, discordMsg.channel, "Authentication");
 					break;
 				case "calcTime":
 					clearInterval(calcInterval);
-					if (DiscordOrigin) stopMsg(DiscordOrigin, discordMsg.channel, "Time calculation");
-					else console.log("Time calculation is stopped");
+					stopMsg(DiscordOrigin, discordMsg.channel, "Time calculation");
 					break;
 			}
 			break;
