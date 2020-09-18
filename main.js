@@ -80,7 +80,7 @@ options = {
 	version: config.minecraftserver.version
 }
 if (config.antiAntiAFK) setInterval(function () {
-	if(proxyClient) client.write("chat", { message: "{\"text\":\">\"}", position: 1 })
+	if(proxyClient) client.write("chat", { message: "/msg RusherB0t !que", position: 1 })
 }, 50000)
 
 function cmdInput() {
@@ -136,7 +136,7 @@ function join() {
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "map_chunk":
-				chunkData.push(data);
+				if(config.chunkCaching) chunkData.push(data);
 				break;
 			case "playerlist_header":
 				if (!finishedQueue && config.minecraftserver.hostname === "2b2t.org") { // if the packet contains the player list, we can use it to see our place in the queue
@@ -263,7 +263,7 @@ function join() {
 }
 
 function sendChunks() {
-	for (let i = 0; i < chunkData.length; i++) {
+	if(config.chunkCaching) for (let i = 0; i < chunkData.length; i++) {
 		proxyClient.write("map_chunk", chunkData[i]);
 	}
 }
