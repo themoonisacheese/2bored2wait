@@ -15,12 +15,14 @@ const save = "./saveid"
 var mc_username;
 var mc_password;
 var secrets;
-
-if(fs.existsSync("./secrets.json")) {
+try {
+	fs.accessSync("./secrets.json", fs.constants.R_OK);
 	secrets = require('./secrets.json');
 	mc_username = secrets.username;
 	mc_password = secrets.password;
-}else {
+	prompt.start();
+	cmdInput();
+} catch {
 	config.discordBot = false;
 	const rl = require("readline").createInterface({
 		input: process.stdin,
@@ -31,6 +33,9 @@ if(fs.existsSync("./secrets.json")) {
 			mc_username = username;
 			mc_password = userpassword;
 			console.clear();
+			rl.close()
+			prompt.start();
+			cmdInput();
 		});
 	});
 }
@@ -69,10 +74,6 @@ if (config.openBrowserOnStart && config.webserver) {
 var proxyClient; // a reference to the client that is the actual minecraft game
 let client; // the client to connect to 2b2t
 let server; // the minecraft server to pass packets
-
-//comand prompt
-prompt.start();
-cmdInput();
 
 options = {
 	host: config.minecraftserver.hostname,
