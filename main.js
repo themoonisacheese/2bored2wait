@@ -387,7 +387,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					else console.log(timerMsg);
 					break;
 				case "reconnect":
-					let reconnectMsg = "2bt is currently offline. Trying to reconnect";
+					let reconnectMsg = "2b2t is currently offline. Trying to reconnect";
 					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "Reconnecting", reconnectMsg);
 					else console.log(reconnectMsg);
 					break;
