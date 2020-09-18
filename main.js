@@ -24,20 +24,22 @@ try {
 	cmdInput();
 } catch {
 	config.discordBot = false;
-	const rl = require("readline").createInterface({
-		input: process.stdin,
-		output: process.stdout
-	});
-	rl.question("Username: ", function(username) {
-		rl.question("Password: ", function(userpassword) {
-			mc_username = username;
-			mc_password = userpassword;
-			console.clear();
-			rl.close()
-			prompt.start();
-			cmdInput();
+	if(config.minecraftserver.onlinemode) {
+		const rl = require("readline").createInterface({
+			input: process.stdin,
+			output: process.stdout
 		});
-	});
+		rl.question("Username: ", function(username) {
+			rl.question("Password: ", function(userpassword) {
+				mc_username = username;
+				mc_password = userpassword;
+				console.clear();
+				rl.close()
+				prompt.start();
+				cmdInput();
+			});
+		});
+	}
 }
 
 webserver.createServer(config.ports.web); // create the webserver
