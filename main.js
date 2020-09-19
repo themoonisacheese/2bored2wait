@@ -49,7 +49,7 @@ var timedStart;
 var lastQueuePlace;
 var chunkData = [];
 var loginpacket;
-var id;
+let dcUser; // discord user that controlls the bot
 var totalWaitTime;
 var starttimestring;
 var playTime;
@@ -156,10 +156,8 @@ function join() {
 						server.motd = `Place in queue: ${positioninqueue} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						activity("Pos: " + webserver.queuePlace + " ETA: " + webserver.ETA); //set the Discord Activity
 						log("Position in Queue: " + webserver.queuePlace)
-						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && id != null) {
-							dc.fetchUser(id, false).then(user => {
-								sendDiscordMsg(user.dmChannel, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
-							})
+						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
+								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
 					}
@@ -316,28 +314,27 @@ function activity(string) {
 
 //the discordBot part starts here.
 if (config.discordBot) {
-	fs.access(save, error => {
-		fs.readFile(save, "utf8", (err, data) => {
-			if (err) log(err)
-			id = data;
-		});
-	});
 	var dc = new discord.Client()
 	dc.on('ready', () => {
 		dc.user.setActivity("Queue is stopped.");
+		fs.readFile(save, "utf8", (err, id) => {
+			if(!err) dc.users.fetch(id).then(user => {
+				dcUser = user;
+			});
+		});
 	});
 
 	dc.on('message', msg => {
 		if (msg.author.username !== dc.user.username) {
 			userInput(msg.content, true, msg);
-			if (msg.author.id !== id) {
+			if (dcUser == null || msg.author.id !== dcUser.id) {
 				fs.writeFile(save, msg.author.id, function (err) {
 					if (err) {
-						log(err);
+						throw err;
 					}
 				});
 			}
-			id = msg.author.id
+			dcUser = msg.author;
 		}
 	});
 
