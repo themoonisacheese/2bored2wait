@@ -407,23 +407,23 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			switch (doing) {
 				case "queue":
 					stopQueing();
-					stopMsg(DiscordOrigin, discordMsg.channel, "Queue");
+					stopMsg(DiscordOrigin, discordMsg, "Queue");
 					break;
 				case "timedStart":
 					clearTimeout(timedStart);
-					stopMsg(DiscordOrigin, discordMsg.channel, "Timer");
+					stopMsg(DiscordOrigin, discordMsg, "Timer");
 					break;
 				case "reconnect":
 					clearInterval(reconnectinterval);
-					stopMsg(DiscordOrigin, discordMsg.channel, "Reconnecting");
+					stopMsg(DiscordOrigin, discordMsg, "Reconnecting");
 					break;
 				case "auth":
 					clearInterval(authInterval);
-					stopMsg(DiscordOrigin, discordMsg.channel, "Authentication");
+					stopMsg(DiscordOrigin, discordMsg, "Authentication");
 					break;
 				case "calcTime":
 					clearInterval(calcInterval);
-					stopMsg(DiscordOrigin, discordMsg.channel, "Time calculation");
+					stopMsg(DiscordOrigin, discordMsg, "Time calculation");
 					break;
 			}
 			break;
@@ -447,8 +447,8 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 	}
 }
 
-function stopMsg(discordOrigin, channel, stoppedThing) {
-	if (discordOrigin) sendDiscordMsg(channel, stoppedThing, stoppedThing + " is **stopped**");
+function stopMsg(discordOrigin, msg, stoppedThing) {
+	if (discordOrigin) sendDiscordMsg(msg.channel, stoppedThing, stoppedThing + " is **stopped**");
 	else console.log(stoppedThing + " is stopped");
 }
 
