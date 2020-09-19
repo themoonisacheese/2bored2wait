@@ -9,7 +9,7 @@ const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
 const prompt = require("prompt");
-const tokens = require('prismarine-tokens');
+const tokens = require('prismarine-tokens-fixed');
 const save = "./saveid"
 var mc_username;
 var mc_password;
