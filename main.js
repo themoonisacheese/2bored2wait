@@ -15,6 +15,7 @@ const save = "./saveid"
 var mc_username;
 var mc_password;
 var secrets;
+let finishedQueue = config.minecraftserver.hostname !== "2b2t.org";
 try {
 	fs.accessSync("./secrets.json", fs.constants.R_OK);
 	secrets = require('./secrets.json');
@@ -83,7 +84,7 @@ options = {
 	version: config.minecraftserver.version
 }
 if (config.antiAntiAFK) setInterval(function () {
-	if(proxyClient) client.write("chat", { message: "/msg RusherB0t !que", position: 1 })
+	if(proxyClient == null && webserver.isInQueue && !finishedQueue) client.write("chat", { message: "/msg RusherB0t !que", position: 1 })
 }, 50000)
 
 function cmdInput() {
@@ -96,6 +97,7 @@ function cmdInput() {
 // function to disconnect from the server
 function stop() {
 	webserver.isInQueue = false;
+	finishedQueue = false;
 	webserver.queuePlace = "None";
 	webserver.ETA = "None";
 	client.end(); // disconnect
@@ -135,7 +137,6 @@ function join() {
 	doing = "queue"
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
-	let finishedQueue = false;
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "map_chunk":
@@ -177,7 +178,7 @@ function join() {
 							finishedQueue = true;
 							webserver.queuePlace = "FINISHED";
 							webserver.ETA = "NOW";
-							activity("Queue is finished")
+							activity("Queue is finished");
 						}
 					}
 				}
