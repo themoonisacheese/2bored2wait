@@ -21,7 +21,6 @@
     "discord.js": "^12.3.1",
     "luxon": "^1.25.0",
     "minecraft-protocol": "^1.8.3",
-    "minecraft-server-util": "^2.2.0",
     "moment": "^2.28.0",
     "node-json-minify": "^1.0.0",
     "opn": "^6.0.0",

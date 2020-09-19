@@ -9,7 +9,6 @@ const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
 const prompt = require("prompt");
-const mc_util = require('minecraft-server-util');
 const tokens = require('prismarine-tokens');
 const save = "./saveid"
 var mc_username;
@@ -84,7 +83,7 @@ options = {
 	version: config.minecraftserver.version
 }
 if (config.antiAntiAFK) setInterval(function () {
-	if(proxyClient == null && webserver.isInQueue && !finishedQueue) client.write("chat", { message: "/msg RusherB0t !que", position: 1 })
+	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "/msg RusherB0t !que", position: 1 })
 }, 50000)
 
 function cmdInput() {
@@ -292,12 +291,9 @@ function reconnect() {
 }
 
 function reconnectLoop() {
-	mc_util.ping(config.minecraftserver.hostname, config.minecraftserver.port)
-		.then((response) => {
-			startQueuing();
-		})
-		.catch((error) => {
-			setTimeout(reconnectLoop, 3000);
+	mc.ping({host: config.minecraftserver.hostname, port: config.minecraftserver.port}, (err) => {
+		if(err) setTimeout(reconnectLoop, 3000);
+		else startQueuing();
 		});
 }
 
