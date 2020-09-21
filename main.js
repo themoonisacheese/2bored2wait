@@ -96,7 +96,7 @@ function cmdInput() {
 // function to disconnect from the server
 function stop() {
 	webserver.isInQueue = false;
-	finishedQueue = false;
+	finishedQueue = config.minecraftserver.hostname !== "2b2t.org";
 	webserver.queuePlace = "None";
 	webserver.ETA = "None";
 	client.end(); // disconnect
