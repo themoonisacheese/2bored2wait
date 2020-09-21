@@ -9,30 +9,37 @@ const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
 const prompt = require("prompt");
-const mc_util = require('minecraft-server-util');
-const tokens = require('prismarine-tokens');
+const tokens = require('prismarine-tokens-fixed');
 const save = "./saveid"
 var mc_username;
 var mc_password;
 var secrets;
-
-if(fs.existsSync("./secrets.json")) {
+let finishedQueue = config.minecraftserver.hostname !== "2b2t.org";
+try {
+	fs.accessSync("./secrets.json", fs.constants.R_OK);
 	secrets = require('./secrets.json');
 	mc_username = secrets.username;
 	mc_password = secrets.password;
-}else {
+	prompt.start();
+	cmdInput();
+} catch {
 	config.discordBot = false;
-	const rl = require("readline").createInterface({
-		input: process.stdin,
-		output: process.stdout
-	});
-	rl.question("Username: ", function(username) {
-		rl.question("Password: ", function(userpassword) {
-			mc_username = username;
-			mc_password = userpassword;
-			console.clear();
+	if(config.minecraftserver.onlinemode) {
+		const rl = require("readline").createInterface({
+			input: process.stdin,
+			output: process.stdout
 		});
-	});
+		rl.question("Username: ", function(username) {
+			rl.question("Password: ", function(userpassword) {
+				mc_username = username;
+				mc_password = userpassword;
+				console.clear();
+				rl.close()
+				prompt.start();
+				cmdInput();
+			});
+		});
+	}
 }
 
 webserver.createServer(config.ports.web); // create the webserver
@@ -42,7 +49,7 @@ var timedStart;
 var lastQueuePlace;
 var chunkData = [];
 var loginpacket;
-var id;
+let dcUser; // discord user that controlls the bot
 var totalWaitTime;
 var starttimestring;
 var playTime;
@@ -70,17 +77,13 @@ var proxyClient; // a reference to the client that is the actual minecraft game
 let client; // the client to connect to 2b2t
 let server; // the minecraft server to pass packets
 
-//comand prompt
-prompt.start();
-cmdInput();
-
 options = {
 	host: config.minecraftserver.hostname,
 	port: config.minecraftserver.port,
 	version: config.minecraftserver.version
 }
 if (config.antiAntiAFK) setInterval(function () {
-	if(proxyClient) client.write("chat", { message: "/msg RusherB0t !que", position: 1 })
+	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "/msg RusherB0t !que", position: 1 })
 }, 50000)
 
 function cmdInput() {
@@ -93,6 +96,7 @@ function cmdInput() {
 // function to disconnect from the server
 function stop() {
 	webserver.isInQueue = false;
+	finishedQueue = false;
 	webserver.queuePlace = "None";
 	webserver.ETA = "None";
 	client.end(); // disconnect
@@ -132,7 +136,6 @@ function join() {
 	doing = "queue"
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
-	let finishedQueue = false;
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "map_chunk":
@@ -153,10 +156,8 @@ function join() {
 						server.motd = `Place in queue: ${positioninqueue} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						activity("Pos: " + webserver.queuePlace + " ETA: " + webserver.ETA); //set the Discord Activity
 						log("Position in Queue: " + webserver.queuePlace)
-						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && id != null) {
-							dc.fetchUser(id, false).then(user => {
-								sendDiscordMsg(user.dmChannel, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
-							})
+						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
+								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
 					}
@@ -174,7 +175,7 @@ function join() {
 							finishedQueue = true;
 							webserver.queuePlace = "FINISHED";
 							webserver.ETA = "NOW";
-							activity("Queue is finished")
+							activity("Queue is finished");
 						}
 					}
 				}
@@ -288,12 +289,9 @@ function reconnect() {
 }
 
 function reconnectLoop() {
-	mc_util.ping(config.minecraftserver.hostname, config.minecraftserver.port)
-		.then((response) => {
-			startQueuing();
-		})
-		.catch((error) => {
-			setTimeout(reconnectLoop, 3000);
+	mc.ping({host: config.minecraftserver.hostname, port: config.minecraftserver.port}, (err) => {
+		if(err) setTimeout(reconnectLoop, 3000);
+		else startQueuing();
 		});
 }
 
@@ -316,28 +314,27 @@ function activity(string) {
 
 //the discordBot part starts here.
 if (config.discordBot) {
-	fs.access(save, error => {
-		fs.readFile(save, "utf8", (err, data) => {
-			if (err) log(err)
-			id = data;
-		});
-	});
 	var dc = new discord.Client()
 	dc.on('ready', () => {
 		dc.user.setActivity("Queue is stopped.");
+		fs.readFile(save, "utf8", (err, id) => {
+			if(!err) dc.users.fetch(id).then(user => {
+				dcUser = user;
+			});
+		});
 	});
 
 	dc.on('message', msg => {
 		if (msg.author.username !== dc.user.username) {
 			userInput(msg.content, true, msg);
-			if (msg.author.id !== id) {
+			if (dcUser == null || msg.author.id !== dcUser.id) {
 				fs.writeFile(save, msg.author.id, function (err) {
 					if (err) {
-						log(err);
+						throw err;
 					}
 				});
 			}
-			id = msg.author.id
+			dcUser = msg.author;
 		}
 	});
 
@@ -387,7 +384,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					else console.log(timerMsg);
 					break;
 				case "reconnect":
-					let reconnectMsg = "2bt is currently offline. Trying to reconnect";
+					let reconnectMsg = "2b2t is currently offline. Trying to reconnect";
 					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "Reconnecting", reconnectMsg);
 					else console.log(reconnectMsg);
 					break;
@@ -407,23 +404,23 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			switch (doing) {
 				case "queue":
 					stopQueing();
-					stopMsg(DiscordOrigin, discordMsg.channel, "Queue");
+					stopMsg(DiscordOrigin, discordMsg, "Queue");
 					break;
 				case "timedStart":
 					clearTimeout(timedStart);
-					stopMsg(DiscordOrigin, discordMsg.channel, "Timer");
+					stopMsg(DiscordOrigin, discordMsg, "Timer");
 					break;
 				case "reconnect":
 					clearInterval(reconnectinterval);
-					stopMsg(DiscordOrigin, discordMsg.channel, "Reconnecting");
+					stopMsg(DiscordOrigin, discordMsg, "Reconnecting");
 					break;
 				case "auth":
 					clearInterval(authInterval);
-					stopMsg(DiscordOrigin, discordMsg.channel, "Authentication");
+					stopMsg(DiscordOrigin, discordMsg, "Authentication");
 					break;
 				case "calcTime":
 					clearInterval(calcInterval);
-					stopMsg(DiscordOrigin, discordMsg.channel, "Time calculation");
+					stopMsg(DiscordOrigin, discordMsg, "Time calculation");
 					break;
 			}
 			break;
@@ -447,8 +444,8 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 	}
 }
 
-function stopMsg(discordOrigin, channel, stoppedThing) {
-	if (discordOrigin) sendDiscordMsg(channel, stoppedThing, stoppedThing + " is **stopped**");
+function stopMsg(discordOrigin, msg, stoppedThing) {
+	if (discordOrigin) sendDiscordMsg(msg.channel, stoppedThing, stoppedThing + " is **stopped**");
 	else console.log(stoppedThing + " is stopped");
 }
 
