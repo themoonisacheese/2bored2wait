@@ -18,7 +18,7 @@
         "port": 25565,
         "renderDistance": 8,
         "version": "1.12.2",
-        "onlinemode": true, // chunk caching does not work correctly if set to false
+        "onlinemode": true,
         "username": "lol" // the username to use if onlinemode is false
     },
     "notification": { // sends a message via discord if the place in the queue reaches the specified number
