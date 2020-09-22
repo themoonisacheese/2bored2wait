@@ -51,9 +51,7 @@ var starttimestring;
 var playTime;
 var options;
 var doing;
-var calcInterval;
-var authInterval;
-var reconnectinterval;
+let interval;
 webserver.restartQueue = config.reconnect.notConnectedQueueEnd;
 if (config.webserver) {
 	webserver.createServer(config.ports.web); // create the webserver
@@ -401,15 +399,15 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					stopMsg(DiscordOrigin, discordMsg, "Timer");
 					break;
 				case "reconnect":
-					clearInterval(reconnectinterval);
+					clearInterval(interval.reconnect);
 					stopMsg(DiscordOrigin, discordMsg, "Reconnecting");
 					break;
 				case "auth":
-					clearInterval(authInterval);
+					clearInterval(interval.auth);
 					stopMsg(DiscordOrigin, discordMsg, "Authentication");
 					break;
 				case "calcTime":
-					clearInterval(calcInterval);
+					clearInterval(interval.calc);
 					stopMsg(DiscordOrigin, discordMsg, "Time calculation");
 					break;
 			}
@@ -472,7 +470,7 @@ function timeStringtoDateTime(time) {
 
 function calcTime(msg) {
 	doing = "calcTime"
-	calcInterval = setInterval(function () {
+	interval.calc = setInterval(function () {
 		https.get("https://2b2t.io/api/queue", (resp) => {
 			let data = '';
 			resp.on('data', (chunk) => {
@@ -484,7 +482,7 @@ function calcTime(msg) {
 				playTime = timeStringtoDateTime(msg);
 				if (playTime.toSeconds() - DateTime.local().toSeconds() < totalWaitTime * 3600) {
 					startQueuing();
-					clearInterval(calcInterval);
+					clearInterval(interval.calc);
 				}
 			});
 		});
