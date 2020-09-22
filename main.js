@@ -8,34 +8,30 @@ var config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); /
 const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
-const prompt = require("prompt");
 const tokens = require('prismarine-tokens-fixed');
 const save = "./saveid"
 var mc_username;
 var mc_password;
 var secrets;
 let finishedQueue = config.minecraftserver.hostname !== "2b2t.org";
+const rl = require("readline").createInterface({
+	input: process.stdin,
+	output: process.stdout
+});
 try {
 	fs.accessSync("./secrets.json", fs.constants.R_OK);
 	secrets = require('./secrets.json');
 	mc_username = secrets.username;
 	mc_password = secrets.password;
-	prompt.start();
 	cmdInput();
 } catch {
 	config.discordBot = false;
 	if(config.minecraftserver.onlinemode) {
-		const rl = require("readline").createInterface({
-			input: process.stdin,
-			output: process.stdout
-		});
 		rl.question("Username: ", function(username) {
 			rl.question("Password: ", function(userpassword) {
 				mc_username = username;
 				mc_password = userpassword;
 				console.clear();
-				rl.close()
-				prompt.start();
 				cmdInput();
 			});
 		});
@@ -87,8 +83,8 @@ if (config.antiAntiAFK) setInterval(function () {
 }, 50000)
 
 function cmdInput() {
-	prompt.get("cmd", function (err, result) {
-		userInput(result.cmd, false);
+	rl.question("$ ", (cmd) => {
+		userInput(cmd, false);
 		cmdInput();
 	});
 }
@@ -271,14 +267,15 @@ function sendChunks() {
 
 function log(logmsg) {
 	if (config.logging) {
-		fs.appendFile('../2smart2wait.log', DateTime.local().toLocaleString({
+		fs.appendFile('2bored2wait.log', DateTime.local().toLocaleString({
 			hour: '2-digit',
 			minute: '2-digit',
 			hour12: false
 		}) + "	" + logmsg + "\n", err => {
 			if (err) console.error(err)
 		})
-		console.log(logmsg);
+		let line = rl.line;
+		process.stdout.write("\033[F\n" + logmsg + "\n$ " + line);
 	}
 }
 
