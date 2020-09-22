@@ -342,8 +342,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 	switch (cmd) {
 		case "start":
 			startQueuing();
-			if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "Queue", "Queue is starting up");
-			else console.log("Queue is starting up.")
+			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
 			break;
 		case "update":
 			switch (doing) {
@@ -376,24 +375,18 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					else console.log("Position: " + webserver.queuePlace + "  Estimated time until login: " + webserver.ETA);
 					break;
 				case "timedStart":
-					let timerMsg = "Timer is set to " + starttimestring;
-					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "Timer", timerMsg);
-					else console.log(timerMsg);
+					msg(DiscordOrigin, discordMsg, "Timer", "Timer is set to " + starttimestring);
 					break;
 				case "reconnect":
-					let reconnectMsg = "2b2t is currently offline. Trying to reconnect";
-					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "Reconnecting", reconnectMsg);
-					else console.log(reconnectMsg);
+					msg(DiscordOrigin, discordMsg, "Reconnecting", "2b2t is currently offline. Trying to reconnect");
 					break;
 				case "auth":
 					let authMsg = "Authentication";
-					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, authMsg, authMsg);
-					else console.log(authMsg);
+					msg(DiscordOrigin, discordMsg, authMsg, authMsg);
 					break;
 				case "calcTime":
-					let calcMsg = "Calculating the time, so you can paly at " + starttimestring
-					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "calculating time", calcMsg);
-					console.log(calcMsg);
+					let calcMsg = 
+					msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can paly at " + starttimestring);
 					break;
 			}
 			break;
@@ -426,24 +419,24 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 				doing = "timedStart"
 				timedStart = setTimeout(startQueuing, timeStringtoDateTime(cmd).toMillis() - DateTime.local().toMillis());
 				activity("Starting at " + starttimestring);
-				if (DiscordOrigin) {
-					sendDiscordMsg(discordMsg.channel, "Timer", "Queue is starting at " + starttimestring);
-				} else console.log("Queue is starting at " + starttimestring);
+				msg(DiscordOrigin, msg, "Timer", "Queue is starting at " + starttimestring);
 			} else if (/^play (\d|[0-1]\d|2[0-3]):[0-5]\d$/.test(cmd)) {
 				timeStringtoDateTime(cmd);
 				calcTime(cmd);
-				let output = "The perfect time to start the will be calculated, so you play at " + starttimestring;
-				if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "time calculator", output);
-				else console.log(output);
+				msg(DiscordOrigin, discordMsg, "Time calculator", "The perfect time to start the will be calculated, so you can play at " + starttimestring);
 				activity("You can play at " + starttimestring);
-			} else if (DiscordOrigin) discordMsg.channel.send("Error: Unknown command");
-			else console.error("Unknown command")
+			}
+			else msg(discordOrigin, discordMsg, "Error", "Unknown command");
 	}
 }
 
 function stopMsg(discordOrigin, msg, stoppedThing) {
-	if (discordOrigin) sendDiscordMsg(msg.channel, stoppedThing, stoppedThing + " is **stopped**");
-	else console.log(stoppedThing + " is stopped");
+	msg(dsicordOrigin, msg.channel, stoppedThing, stoppedThing + " is **stopped**");
+}
+
+function msg(discordOrigin, msg, titel, content) {
+	if(discordOrigin) sendDicordMsg(msg.channel, titel, content);
+	else console.log(content);
 }
 
 function sendDiscordMsg(channel, titel, content) {
