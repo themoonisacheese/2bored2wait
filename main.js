@@ -13,7 +13,7 @@ const save = "./saveid"
 var mc_username;
 var mc_password;
 var secrets;
-let finishedQueue = config.minecraftserver.hostname !== "2b2t.org";
+let finishedQueue = !config.minecraftserver.is2b2t;
 const rl = require("readline").createInterface({
 	input: process.stdin,
 	output: process.stdout
@@ -90,7 +90,7 @@ function cmdInput() {
 // function to disconnect from the server
 function stop() {
 	webserver.isInQueue = false;
-	finishedQueue = config.minecraftserver.hostname !== "2b2t.org";
+	finishedQueue = !config.minecraftserver.is2b2t;
 	webserver.queuePlace = "None";
 	webserver.ETA = "None";
 	client.end(); // disconnect
@@ -136,7 +136,7 @@ function join() {
 				if(config.chunkCaching) chunkData.push(data);
 				break;
 			case "playerlist_header":
-				if (!finishedQueue && config.minecraftserver.hostname === "2b2t.org") { // if the packet contains the player list, we can use it to see our place in the queue
+				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
 					let headermessage = JSON.parse(data.header);
 					let positioninqueue = headermessage.text.split("\n")[5].substring(25);
 					webserver.queuePlace = positioninqueue; // update info on the web page
