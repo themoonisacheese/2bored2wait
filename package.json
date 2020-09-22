@@ -9,21 +9,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GisliNielsen/2bored2wait.git"
+    "url": "git+https://github.com/themoonisacheese/2bored2wait.git"
   },
   "author": "",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/GisliNielsen/2bored2wait/issues"
+    "url": "https://github.com/themoonisacheese/2bored2wait/issues"
   },
-  "homepage": "https://github.com/GisliNielsen/2bored2wait#readme",
+  "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
     "discord.js": "^12.3.1",
     "luxon": "^1.25.0",
     "minecraft-protocol": "^1.8.3",
     "moment": "^2.28.0",
     "node-json-minify": "^1.0.0",
-    "opn": "^6.0.0",
-    "prismarine-tokens-fixed": "^1.1.2"
+    "open": "^6.0.0",
+    "prismarine-tokens-fixed": "^1.1.2",
   }
 }
