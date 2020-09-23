@@ -34,14 +34,14 @@ Here's a video guide on how to install and use 2b2w: https://www.youtube.com/wat
 
 # Docker usage guide (if you know how to use docker)
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-2. From a terminal run:
+2. Edit docker-compose.yml and start the container
 ```
-docker run --name 2b2w -d -p 80:80 -p 25565:25565 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" edoardo396/2bored2wait
+docker-compose up -d
 ```
-3. Open a browser and navigate to http://localhost
-4. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-5. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
-6. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+3. Open a browser and navigate to http://localhost, attach to the container, or open a chat dialog with the discord bot
+4. Press the "Start queuing" button/message the bot or cli "start"
+5. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
+6. After you log off, stop the 2bored2wait queue or your account will stay logged in on the server. You can reconnect to localhost in case you disconnected by accident.
 
 ## Additional configuration
 
@@ -49,31 +49,29 @@ If you want to change the configuration you will have to mount config.json manua
 
 To access logs you can just do
 ```
-docker logs 2b2w
+docker logs 2bored2wait
 ```
 
-You can also easily change which port to map from the docker run command, for example, if you want your server reachable on port 25000 instead of the default 25565 and your webserver on port 8080 you would run
+You can also easily change which port to map from the docker-compose, for example, if you want your server reachable on port 25000 instead of the default 25565 and your webserver on port 8080 you can change these varibles in the docker-compose
 ```
-docker run --name 2b2w -d -p 80:**8080** -p 25565:**25000** -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" edoardo396/2bored2wait
+      ports:
+         - "8080:8080"
+         - "25000:25566"
 ```
 
-To make 2b2w start automatically at boot you can run:
-```
-docker run --name 2b2w --restart unless-stopped -d -p 80:80 -p 25565:25565 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" edoardo396/2bored2wait
-```
 
 # Docker build guide
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. Clone the repo and run `docker build -t 2bored2wait .` to build the image.
 3. Once the image has built, you can start it with:
 ```
-docker run --name 2b2w -d -p 80:80 -p 25565:25565 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" 2bored2wait
+docker run --name 2bored2wait -d -p 80:8080 -p 25565:25566 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" -e BOT_TOKEN="mydiscordbottoken" 2bored2wait
 ```
-** Remember to change user@domain.com and myverysecretpassword with your actual Minecraft credentials! **
+** Remember to change user@domain.com and myverysecretpassword with your actual Minecraft credentials, as well as mydiscordbottoken with your actual Discord Bot Token **
 
 4. Open a browser and navigate to http://localhost
 5. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-6. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`. Currently, you have to connect BEFORE reaching the end of the queue or you will not spawn in the world correctly (I'm told that sneaking around and right-clicking things eventually makes you spawn correctly but I was not able to verify that).
+6. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
 7. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
 If you want to change the configuration you will have to mount config.json manually, you can also mount secrets.json manually if you don't want your credentials in the bash history.
@@ -82,5 +80,4 @@ All additional configurations from the Docker usage guide apply here as well.
 
 # Known issues
 - Starting the queue will revoke your Minecraft token. this means that you will not be able to join normal Minecraft servers until you restart the game
-- If you connect after the queue is finnished or reconnect the proxy will send cached chunk data. Otherwise you would fly in a emtpy world. Other data however like entities are not chached and will not displayed correctly. You can move out of render distance and come back to fix this issue. Sometimes the client renders a cached chunk with a blank texture.
-- 2b2t sometimes bugs out and removes you from the queue without telling you. In this case, your queue position will no longer move. Reconnect to fix this.
+- If you connect after the queue is finished or reconnect the proxy will send cached chunk data. Otherwise you would fly in an empty world. Other data such as  entities and your player inventory are not chached and will not displayed correctly. You can move out of render distance (i find going through a nether portal works best)  and come back to fix this issue. Sometimes the client renders a cached chunk with a blank texture.
