@@ -10,11 +10,17 @@ WORKDIR "/srv/app"
 COPY . "/srv/app"
 
 # install requirements
+RUN apt-get update && apt-get install -y \
+    git\
+    && rm -rf /var/lib/apt/lists/*
+
 RUN ["npm", "install"]
 
-EXPOSE 80/tcp
-EXPOSE 25565/tcp
-EXPOSE 25565/udp
+
+# exposing 8080 (webui), 25566 (mc proxy)
+EXPOSE 8080/tcp
+EXPOSE 25566/tcp
+EXPOSE 25566/udp
 
 # run container
 CMD /srv/app/replace_credentials.sh && npm start

@@ -14,5 +14,6 @@ if [ ! -f /srv/app/secrets.json ]; then
     # insert credentials into file from env
     sed -i 's/example@hotmail.com/'"$MOJANG_USERNAME"'/g' secrets.json
     sed -i 's/password123/'"$MOJANG_PASSWORD"'/g' secrets.json
+    sed -i 's/DiscordBotToken/'"$BOT_TOKEN"'/g' secrets.json
 
 fi
