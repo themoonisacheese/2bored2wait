@@ -429,7 +429,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 }
 
 function stopMsg(discordOrigin, msg, stoppedThing) {
-	msg(dsicordOrigin, msg.channel, stoppedThing, stoppedThing + " is **stopped**");
+	msg(discordOrigin, msg.channel, stoppedThing, stoppedThing + " is **stopped**");
 }
 
 function msg(discordOrigin, msg, titel, content) {
