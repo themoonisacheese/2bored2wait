@@ -15,10 +15,11 @@
     },
     "minecraftserver": { // the server you want to connect. Make not much sense to change it, was just added for development purpose
         "hostname": "2b2t.org",
+	"is2b2t": true, // to allow proxies inbetween 2bored2wait and 2b2t
         "port": 25565,
         "renderDistance": 8,
         "version": "1.12.2",
-        "onlinemode": true, // chunk caching does not work correctly if set to false
+        "onlinemode": true,
         "username": "lol" // the username to use if onlinemode is false
     },
     "notification": { // sends a message via discord if the place in the queue reaches the specified number

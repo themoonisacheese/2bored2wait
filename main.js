@@ -8,34 +8,30 @@ var config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); /
 const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
-const prompt = require("prompt");
 const tokens = require('prismarine-tokens-fixed');
 const save = "./saveid"
 var mc_username;
 var mc_password;
 var secrets;
-let finishedQueue = config.minecraftserver.hostname !== "2b2t.org";
+let finishedQueue = !config.minecraftserver.is2b2t;
+const rl = require("readline").createInterface({
+	input: process.stdin,
+	output: process.stdout
+});
 try {
 	fs.accessSync("./secrets.json", fs.constants.R_OK);
 	secrets = require('./secrets.json');
 	mc_username = secrets.username;
 	mc_password = secrets.password;
-	prompt.start();
 	cmdInput();
 } catch {
 	config.discordBot = false;
 	if(config.minecraftserver.onlinemode) {
-		const rl = require("readline").createInterface({
-			input: process.stdin,
-			output: process.stdout
-		});
 		rl.question("Username: ", function(username) {
 			rl.question("Password: ", function(userpassword) {
 				mc_username = username;
 				mc_password = userpassword;
 				console.clear();
-				rl.close()
-				prompt.start();
 				cmdInput();
 			});
 		});
@@ -55,9 +51,7 @@ var starttimestring;
 var playTime;
 var options;
 var doing;
-var calcInterval;
-var authInterval;
-var reconnectinterval;
+let interval;
 webserver.restartQueue = config.reconnect.notConnectedQueueEnd;
 if (config.webserver) {
 	webserver.createServer(config.ports.web); // create the webserver
@@ -87,8 +81,8 @@ if (config.antiAntiAFK) setInterval(function () {
 }, 50000)
 
 function cmdInput() {
-	prompt.get("cmd", function (err, result) {
-		userInput(result.cmd, false);
+	rl.question("$ ", (cmd) => {
+		userInput(cmd, false);
 		cmdInput();
 	});
 }
@@ -96,7 +90,7 @@ function cmdInput() {
 // function to disconnect from the server
 function stop() {
 	webserver.isInQueue = false;
-	finishedQueue = false;
+	finishedQueue = !config.minecraftserver.is2b2t;
 	webserver.queuePlace = "None";
 	webserver.ETA = "None";
 	client.end(); // disconnect
@@ -142,7 +136,7 @@ function join() {
 				if(config.chunkCaching) chunkData.push(data);
 				break;
 			case "playerlist_header":
-				if (!finishedQueue && config.minecraftserver.hostname === "2b2t.org") { // if the packet contains the player list, we can use it to see our place in the queue
+				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
 					let headermessage = JSON.parse(data.header);
 					let positioninqueue = headermessage.text.split("\n")[5].substring(25);
 					webserver.queuePlace = positioninqueue; // update info on the web page
@@ -271,14 +265,15 @@ function sendChunks() {
 
 function log(logmsg) {
 	if (config.logging) {
-		fs.appendFile('../2smart2wait.log', DateTime.local().toLocaleString({
+		fs.appendFile('2bored2wait.log', DateTime.local().toLocaleString({
 			hour: '2-digit',
 			minute: '2-digit',
 			hour12: false
 		}) + "	" + logmsg + "\n", err => {
 			if (err) console.error(err)
 		})
-		console.log(logmsg);
+		let line = rl.line;
+		process.stdout.write("\033[F\n" + logmsg + "\n$ " + line);
 	}
 }
 
@@ -345,8 +340,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 	switch (cmd) {
 		case "start":
 			startQueuing();
-			if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "Queue", "Queue is starting up");
-			else console.log("Queue is starting up.")
+			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
 			break;
 		case "update":
 			switch (doing) {
@@ -379,24 +373,18 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					else console.log("Position: " + webserver.queuePlace + "  Estimated time until login: " + webserver.ETA);
 					break;
 				case "timedStart":
-					let timerMsg = "Timer is set to " + starttimestring;
-					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "Timer", timerMsg);
-					else console.log(timerMsg);
+					msg(DiscordOrigin, discordMsg, "Timer", "Timer is set to " + starttimestring);
 					break;
 				case "reconnect":
-					let reconnectMsg = "2b2t is currently offline. Trying to reconnect";
-					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "Reconnecting", reconnectMsg);
-					else console.log(reconnectMsg);
+					msg(DiscordOrigin, discordMsg, "Reconnecting", "2b2t is currently offline. Trying to reconnect");
 					break;
 				case "auth":
 					let authMsg = "Authentication";
-					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, authMsg, authMsg);
-					else console.log(authMsg);
+					msg(DiscordOrigin, discordMsg, authMsg, authMsg);
 					break;
 				case "calcTime":
-					let calcMsg = "Calculating the time, so you can paly at " + starttimestring
-					if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "calculating time", calcMsg);
-					console.log(calcMsg);
+					let calcMsg = 
+					msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can paly at " + starttimestring);
 					break;
 			}
 			break;
@@ -411,15 +399,15 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					stopMsg(DiscordOrigin, discordMsg, "Timer");
 					break;
 				case "reconnect":
-					clearInterval(reconnectinterval);
+					clearInterval(interval.reconnect);
 					stopMsg(DiscordOrigin, discordMsg, "Reconnecting");
 					break;
 				case "auth":
-					clearInterval(authInterval);
+					clearInterval(interval.auth);
 					stopMsg(DiscordOrigin, discordMsg, "Authentication");
 					break;
 				case "calcTime":
-					clearInterval(calcInterval);
+					clearInterval(interval.calc);
 					stopMsg(DiscordOrigin, discordMsg, "Time calculation");
 					break;
 			}
@@ -429,24 +417,24 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 				doing = "timedStart"
 				timedStart = setTimeout(startQueuing, timeStringtoDateTime(cmd).toMillis() - DateTime.local().toMillis());
 				activity("Starting at " + starttimestring);
-				if (DiscordOrigin) {
-					sendDiscordMsg(discordMsg.channel, "Timer", "Queue is starting at " + starttimestring);
-				} else console.log("Queue is starting at " + starttimestring);
+				msg(DiscordOrigin, msg, "Timer", "Queue is starting at " + starttimestring);
 			} else if (/^play (\d|[0-1]\d|2[0-3]):[0-5]\d$/.test(cmd)) {
 				timeStringtoDateTime(cmd);
 				calcTime(cmd);
-				let output = "The perfect time to start the will be calculated, so you play at " + starttimestring;
-				if (DiscordOrigin) sendDiscordMsg(discordMsg.channel, "time calculator", output);
-				else console.log(output);
+				msg(DiscordOrigin, discordMsg, "Time calculator", "The perfect time to start the will be calculated, so you can play at " + starttimestring);
 				activity("You can play at " + starttimestring);
-			} else if (DiscordOrigin) discordMsg.channel.send("Error: Unknown command");
-			else console.error("Unknown command")
+			}
+			else msg(discordOrigin, discordMsg, "Error", "Unknown command");
 	}
 }
 
 function stopMsg(discordOrigin, msg, stoppedThing) {
-	if (discordOrigin) sendDiscordMsg(msg.channel, stoppedThing, stoppedThing + " is **stopped**");
-	else console.log(stoppedThing + " is stopped");
+	msg(discordOrigin, msg.channel, stoppedThing, stoppedThing + " is **stopped**");
+}
+
+function msg(discordOrigin, msg, titel, content) {
+	if(discordOrigin) sendDicordMsg(msg.channel, titel, content);
+	else console.log(content);
 }
 
 function sendDiscordMsg(channel, titel, content) {
@@ -482,7 +470,7 @@ function timeStringtoDateTime(time) {
 
 function calcTime(msg) {
 	doing = "calcTime"
-	calcInterval = setInterval(function () {
+	interval.calc = setInterval(function () {
 		https.get("https://2b2t.io/api/queue", (resp) => {
 			let data = '';
 			resp.on('data', (chunk) => {
@@ -494,7 +482,7 @@ function calcTime(msg) {
 				playTime = timeStringtoDateTime(msg);
 				if (playTime.toSeconds() - DateTime.local().toSeconds() < totalWaitTime * 3600) {
 					startQueuing();
-					clearInterval(calcInterval);
+					clearInterval(interval.calc);
 				}
 			});
 		});
