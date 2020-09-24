@@ -424,7 +424,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 				msg(DiscordOrigin, discordMsg, "Time calculator", "The perfect time to start the will be calculated, so you can play at " + starttimestring);
 				activity("You can play at " + starttimestring);
 			}
-			else msg(discordOrigin, discordMsg, "Error", "Unknown command");
+			else msg(DiscordOrigin, discordMsg, "Error", "Unknown command");
 	}
 }
 
