@@ -80,4 +80,4 @@ All additional configurations from the Docker usage guide apply here as well.
 
 # Known issues
 - Starting the queue will revoke your Minecraft token. this means that you will not be able to join normal Minecraft servers until you restart the game
-- If you connect after the queue is finished or reconnect the proxy will send cached chunk data. Otherwise you would fly in an empty world. Other data such as  entities and your player inventory are not chached and will not displayed correctly. You can move out of render distance (i find going through a nether portal works best)  and come back to fix this issue. Sometimes the client renders a cached chunk with a blank texture.
+- If you connect after the queue is finished or reconnect the proxy will send cached chunk data. Otherwise you would fly in an empty world. Other data such as  entities and your player inventory are not cached and will not be displayed correctly. You can move out of render distance (I find going through a nether portal works best) and return to fix this issue. Sometimes the client renders a cached chunk with a blank texture.
