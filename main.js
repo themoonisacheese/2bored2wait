@@ -9,7 +9,7 @@ const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
 const tokens = require('prismarine-tokens-fixed');
-const save = "./saveid"
+const save = "./saveid";
 var mc_username;
 var mc_password;
 var secrets;
@@ -98,7 +98,6 @@ function stop() {
 		proxyClient.end("Stopped the proxy."); // boot the player from the server
 	}
 	server.close(); // close the server
-	activity("Queue is stopped.");
 }
 
 // function to start the whole thing
@@ -148,8 +147,7 @@ function join() {
 						ETAhour = totalWaitTime - timepassed;
 						webserver.ETA = Math.floor(ETAhour) + "h " + Math.round((ETAhour % 1) * 60) + "m";
 						server.motd = `Place in queue: ${positioninqueue} ETA: ${webserver.ETA}`; // set the MOTD because why not
-						activity("Pos: " + webserver.queuePlace + " ETA: " + webserver.ETA); //set the Discord Activity
-						log("Position in Queue: " + webserver.queuePlace)
+						logActivity("Pos: " + webserver.queuePlace + " ETA: " + webserver.ETA); //set the Discord Activity
 						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
 								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
@@ -272,13 +270,14 @@ function log(logmsg) {
 		}) + "	" + logmsg + "\n", err => {
 			if (err) console.error(err)
 		})
-		let line = rl.line;
-		process.stdout.write("\033[F\n" + logmsg + "\n$ " + line);
 	}
+	let line = rl.line;
+	process.stdout.write("\033[F\n" + logmsg + "\n$ " + line);
 }
 
 function reconnect() {
-	doing = "reconnect"
+	doing = "reconnect";
+	logActivity("Reconnecting... ");
 	if (stoppedByPlayer) stoppedByPlayer = false;
 	else reconnectLoop();
 }
@@ -428,8 +427,8 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 	}
 }
 
-function stopMsg(discordOrigin, msg, stoppedThing) {
-	msg(discordOrigin, msg.channel, stoppedThing, stoppedThing + " is **stopped**");
+function stopMsg(discordOrigin, discordMsg, stoppedThing) {
+	msg(discordOrigin, discordMsg && discordMsg.channel, stoppedThing, stoppedThing + " is **stopped**");
 }
 
 function msg(discordOrigin, msg, titel, content) {
@@ -492,6 +491,12 @@ function calcTime(msg) {
 function stopQueing() {
 	stoppedByPlayer = true;
 	stop();
+	logActivity("Queue is stopped.");
+}
+
+function logActivity(update) {
+	activity(update);
+	log(update);
 }
 module.exports = {
 	startQueue: function () {
