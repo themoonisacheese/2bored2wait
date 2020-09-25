@@ -43,7 +43,7 @@ webserver.password = config.password
 var stoppedByPlayer = false;
 var timedStart;
 var lastQueuePlace;
-var chunkData = [];
+var chunkData = new Map();
 var loginpacket;
 let dcUser; // discord user that controlls the bot
 var totalWaitTime;
@@ -132,7 +132,10 @@ function join() {
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "map_chunk":
-				if(config.chunkCaching) chunkData.push(data);
+				if(config.chunkCaching) chunkData.set(data.x + "_" + data.z, data);
+				break;
+			case "unload_chunk":
+				if(config.chunkCaching) chunkData.delete(data.chunkX + "_" + data.chunkZ);
 				break;
 			case "playerlist_header":
 				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
@@ -167,14 +170,14 @@ function join() {
 							finishedQueue = true;
 							webserver.queuePlace = "FINISHED";
 							webserver.ETA = "NOW";
-							activity("Queue is finished");
+							logActivity("Queue is finished");
 						}
 					}
 				}
 				break;
 			case "respawn":
 				Object.assign(loginpacket, data);
-				chunkData = [];
+				chunkData = new Map();
 				break;
 			case "login":
 				loginpacket = data;
@@ -234,21 +237,6 @@ function join() {
 		});
 
 		newProxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t
-			let chunkPos = {};
-			if (meta.name === "position") {
-				chunkPos.x = round(data.x / 16);
-				chunkPos.z = round(data.z / 16);
-				if (chunkPos.z !== chunkPos.lx || chunkPos.x !== chunkPos.lx) {
-
-					for (let i = 0; i < chunkData.length; i++) {
-						if (chunkData[i].x < chunkPos.x - config.minecraftserver.renderDistance || chunkData[i].x > chunkPos + config.minecraftserver.renderDistance || chunkData[i].z < chunkPos.z - config.minecraftserver.renderDistance || chunkData[i] > chunkPos.z + config.minecraftserver.renderDistance) { //if a cached chunk is outside of the render distance
-							chunkData.splice(i, 1); // we delete it.
-						}
-					}
-				}
-				chunkPos.lx = chunkPos.x;
-				chunkPos.lz = chunkPos.z;
-			}
 			filterPacketAndSend(data, meta, client);
 		});
 		proxyClient = newProxyClient;
@@ -256,9 +244,9 @@ function join() {
 }
 
 function sendChunks() {
-	if(config.chunkCaching) for (let i = 0; i < chunkData.length; i++) {
-		proxyClient.write("map_chunk", chunkData[i]);
-	}
+	if(config.chunkCaching) chunkData.forEach((data) => {
+		proxyClient.write("map_chunk", data);
+	});
 }
 
 function log(logmsg) {
@@ -277,9 +265,11 @@ function log(logmsg) {
 
 function reconnect() {
 	doing = "reconnect";
-	logActivity("Reconnecting... ");
 	if (stoppedByPlayer) stoppedByPlayer = false;
-	else reconnectLoop();
+	else {
+		logActivity("Reconnecting... ");
+		reconnectLoop();
+	}
 }
 
 function reconnectLoop() {
@@ -491,7 +481,6 @@ function calcTime(msg) {
 function stopQueing() {
 	stoppedByPlayer = true;
 	stop();
-	logActivity("Queue is stopped.");
 }
 
 function logActivity(update) {
