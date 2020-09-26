@@ -422,7 +422,7 @@ function stopMsg(discordOrigin, discordMsg, stoppedThing) {
 }
 
 function msg(discordOrigin, msg, titel, content) {
-	if(discordOrigin) sendDicordMsg(msg.channel, titel, content);
+	if(discordOrigin) sendDiscordMsg(msg.channel, titel, content);
 	else console.log(content);
 }
 
