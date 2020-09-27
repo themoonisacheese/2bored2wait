@@ -38,8 +38,6 @@ try {
 	}
 }
 
-webserver.createServer(config.ports.web); // create the webserver
-webserver.password = config.password
 var stoppedByPlayer = false;
 var timedStart;
 var lastQueuePlace;
