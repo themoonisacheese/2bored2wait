@@ -23,4 +23,4 @@ EXPOSE 25566/tcp
 EXPOSE 25566/udp
 
 # run container
-CMD /srv/app/replace_credentials.sh && npm start
+CMD /srv/app/replace_config.sh && /srv/app/replace_credentials.sh && npm start
