@@ -9,7 +9,7 @@ const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
 const tokens = require('prismarine-tokens-fixed');
-const save = "./saveid"
+const save = "./saveid";
 var mc_username;
 var mc_password;
 var secrets;
@@ -38,12 +38,10 @@ try {
 	}
 }
 
-webserver.createServer(config.ports.web); // create the webserver
-webserver.password = config.password
 var stoppedByPlayer = false;
 var timedStart;
 var lastQueuePlace;
-var chunkData = [];
+var chunkData = new Map();
 var loginpacket;
 let dcUser; // discord user that controlls the bot
 var totalWaitTime;
@@ -98,7 +96,6 @@ function stop() {
 		proxyClient.end("Stopped the proxy."); // boot the player from the server
 	}
 	server.close(); // close the server
-	activity("Queue is stopped.");
 }
 
 // function to start the whole thing
@@ -133,7 +130,10 @@ function join() {
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "map_chunk":
-				if(config.chunkCaching) chunkData.push(data);
+				if(config.chunkCaching) chunkData.set(data.x + "_" + data.z, data);
+				break;
+			case "unload_chunk":
+				if(config.chunkCaching) chunkData.delete(data.chunkX + "_" + data.chunkZ);
 				break;
 			case "playerlist_header":
 				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
@@ -148,8 +148,7 @@ function join() {
 						ETAhour = totalWaitTime - timepassed;
 						webserver.ETA = Math.floor(ETAhour) + "h " + Math.round((ETAhour % 1) * 60) + "m";
 						server.motd = `Place in queue: ${positioninqueue} ETA: ${webserver.ETA}`; // set the MOTD because why not
-						activity("Pos: " + webserver.queuePlace + " ETA: " + webserver.ETA); //set the Discord Activity
-						log("Position in Queue: " + webserver.queuePlace)
+						logActivity("Pos: " + webserver.queuePlace + " ETA: " + webserver.ETA); //set the Discord Activity
 						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
 								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
@@ -169,14 +168,14 @@ function join() {
 							finishedQueue = true;
 							webserver.queuePlace = "FINISHED";
 							webserver.ETA = "NOW";
-							activity("Queue is finished");
+							logActivity("Queue is finished");
 						}
 					}
 				}
 				break;
 			case "respawn":
 				Object.assign(loginpacket, data);
-				chunkData = [];
+				chunkData = new Map();
 				break;
 			case "login":
 				loginpacket = data;
@@ -236,21 +235,6 @@ function join() {
 		});
 
 		newProxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t
-			let chunkPos = {};
-			if (meta.name === "position") {
-				chunkPos.x = round(data.x / 16);
-				chunkPos.z = round(data.z / 16);
-				if (chunkPos.z !== chunkPos.lx || chunkPos.x !== chunkPos.lx) {
-
-					for (let i = 0; i < chunkData.length; i++) {
-						if (chunkData[i].x < chunkPos.x - config.minecraftserver.renderDistance || chunkData[i].x > chunkPos + config.minecraftserver.renderDistance || chunkData[i].z < chunkPos.z - config.minecraftserver.renderDistance || chunkData[i] > chunkPos.z + config.minecraftserver.renderDistance) { //if a cached chunk is outside of the render distance
-							chunkData.splice(i, 1); // we delete it.
-						}
-					}
-				}
-				chunkPos.lx = chunkPos.x;
-				chunkPos.lz = chunkPos.z;
-			}
 			filterPacketAndSend(data, meta, client);
 		});
 		proxyClient = newProxyClient;
@@ -258,9 +242,9 @@ function join() {
 }
 
 function sendChunks() {
-	if(config.chunkCaching) for (let i = 0; i < chunkData.length; i++) {
-		proxyClient.write("map_chunk", chunkData[i]);
-	}
+	if(config.chunkCaching) chunkData.forEach((data) => {
+		proxyClient.write("map_chunk", data);
+	});
 }
 
 function log(logmsg) {
@@ -272,15 +256,18 @@ function log(logmsg) {
 		}) + "	" + logmsg + "\n", err => {
 			if (err) console.error(err)
 		})
-		let line = rl.line;
-		process.stdout.write("\033[F\n" + logmsg + "\n$ " + line);
 	}
+	let line = rl.line;
+	process.stdout.write("\033[F\n" + logmsg + "\n$ " + line);
 }
 
 function reconnect() {
-	doing = "reconnect"
+	doing = "reconnect";
 	if (stoppedByPlayer) stoppedByPlayer = false;
-	else reconnectLoop();
+	else {
+		logActivity("Reconnecting... ");
+		reconnectLoop();
+	}
 }
 
 function reconnectLoop() {
@@ -428,12 +415,12 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 	}
 }
 
-function stopMsg(discordOrigin, msg, stoppedThing) {
-	msg(discordOrigin, msg.channel, stoppedThing, stoppedThing + " is **stopped**");
+function stopMsg(discordOrigin, discordMsg, stoppedThing) {
+	msg(discordOrigin, discordMsg, stoppedThing, stoppedThing + " is **stopped**");
 }
 
 function msg(discordOrigin, msg, titel, content) {
-	if(discordOrigin) sendDicordMsg(msg.channel, titel, content);
+	if(discordOrigin) sendDiscordMsg(msg.channel, titel, content);
 	else console.log(content);
 }
 
@@ -492,6 +479,11 @@ function calcTime(msg) {
 function stopQueing() {
 	stoppedByPlayer = true;
 	stop();
+}
+
+function logActivity(update) {
+	activity(update);
+	log(update);
 }
 module.exports = {
 	startQueue: function () {

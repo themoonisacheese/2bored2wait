@@ -17,7 +17,6 @@
         "hostname": "2b2t.org",
 	"is2b2t": true, // to allow proxies inbetween 2bored2wait and 2b2t
         "port": 25565,
-        "renderDistance": 8,
         "version": "1.12.2",
         "onlinemode": true,
         "username": "lol" // the username to use if onlinemode is false

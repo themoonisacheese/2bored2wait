@@ -19,6 +19,7 @@
                     if (this.readyState == 4 && this.status == 200) {
                         const response = JSON.parse(this.responseText);
                         document.getElementsByClassName("place")[0].innerHTML = response.place;
+                        document.title = "2Bored2Wait - " + response.place;
                         document.getElementsByClassName("ETA")[0].innerHTML = response.ETA;
                         document.getElementsByClassName("restartQueue")[0].checked = response.restartQueue
                         const queueButton = document.getElementById('queueButton');
