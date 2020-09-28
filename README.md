@@ -10,7 +10,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 4. Run `npm install`
 5. If you want to save your Minecraft login information in a file for automatic login, proceed to step 6. If not, ignore step 6 and proceed to step 7. However, you will need to re-enter your Minecraft login information into the console each time you start the program.
 6. Copy secrets.json.example and name it secrets.json. Fill out your Minecraft information in the file. Note that you must use your email address and not your Minecraft username.
-7. If you wish, edit the configuration in config.json. (On Linux, ports below 1024, including port 80, require you to run the program with administrator rights.)
+7. Copy config.json.example and name it config.json. Replace DISCORDBOT_FLAG and WEBSERVER_FLAG with true or false to your liking, then replace MINECRAFT_PROXY_PORT and WEB_UI_PORT with valid ports. Edit other values to your preference.
 8. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 # How to use
@@ -65,7 +65,7 @@ You can also easily change which port to map from the docker-compose, for exampl
 2. Clone the repo and run `docker build -t 2bored2wait .` to build the image.
 3. Once the image has built, you can start it with:
 ```
-docker run --name 2bored2wait -d -p 80:8080 -p 25565:25566 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" -e BOT_TOKEN="mydiscordbottoken" 2bored2wait
+docker run --name 2bored2wait -d -p 80:8080 -p 25565:25566 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" -e BOT_TOKEN="mydiscordbottoken" -e DISCORD_BOT="true" -e WEBSERVER="true" -e MINECRAFT_PORT=25566 -e WEBUI_PORT=8080 2bored2wait
 ```
 ** Remember to change user@domain.com and myverysecretpassword with your actual Minecraft credentials, as well as mydiscordbottoken with your actual Discord Bot Token **
 
