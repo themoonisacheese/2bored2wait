@@ -1,9 +1,9 @@
 {
-    "discordBot": true,
-    "webserver": false,
+    "discordBot": DISCORDBOT_FLAG,
+    "webserver": WEBSERVER_FLAG,
     "ports":{
-        "minecraft":25566, // port for the proxy server
-        "web":8080
+        "minecraft":MINECRAFT_PROXY_PORT, // port for the proxy server
+       "web":WEB_UI_PORT
     },
     "openBrowserOnStart": false,
     "password":"", // password for the webinterface

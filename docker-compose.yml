@@ -14,3 +14,7 @@ services:
          MOJANG_USERNAME: Your Minecraft Username
          MOJANG_PASSWORD: Your Minecraft Password
          BOT_TOKEN: Your Discord Bot Token
+         DISCORD_BOT: "true"
+         WEBSERVER: "true"
+         MINECRAFT_PORT: 25566
+         WEBUI_PORT: 8080
