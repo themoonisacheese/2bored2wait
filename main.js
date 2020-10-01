@@ -49,7 +49,7 @@ var starttimestring;
 var playTime;
 var options;
 var doing;
-let interval;
+let interval = {};
 webserver.restartQueue = config.reconnect.notConnectedQueueEnd;
 if (config.webserver) {
 	webserver.createServer(config.ports.web); // create the webserver
@@ -408,7 +408,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			} else if (/^play (\d|[0-1]\d|2[0-3]):[0-5]\d$/.test(cmd)) {
 				timeStringtoDateTime(cmd);
 				calcTime(cmd);
-				msg(DiscordOrigin, discordMsg, "Time calculator", "The perfect time to start the will be calculated, so you can play at " + starttimestring);
+				msg(DiscordOrigin, discordMsg, "Time calculator", "The perfect time to start the queue will be calculated, so you can play at " + starttimestring);
 				activity("You can play at " + starttimestring);
 			}
 			else msg(DiscordOrigin, discordMsg, "Error", "Unknown command");
