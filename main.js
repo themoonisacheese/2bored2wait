@@ -49,7 +49,7 @@ var starttimestring;
 var playTime;
 var options;
 var doing;
-let interval;
+let interval = {};
 webserver.restartQueue = config.reconnect.notConnectedQueueEnd;
 if (config.webserver) {
 	webserver.createServer(config.ports.web); // create the webserver
