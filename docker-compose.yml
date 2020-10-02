@@ -2,6 +2,7 @@
 version: "3"
 services:
    2bored2wait:
+      build: .
       image: dsetareh/2bored2wait:latest
       container_name: 2bored2wait
       stdin_open: true
