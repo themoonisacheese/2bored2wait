@@ -148,7 +148,11 @@ function join() {
 						ETAhour = totalWaitTime - timepassed;
 						webserver.ETA = Math.floor(ETAhour) + "h " + Math.round((ETAhour % 1) * 60) + "m";
 						server.motd = `Place in queue: ${positioninqueue} ETA: ${webserver.ETA}`; // set the MOTD because why not
-						logActivity("Pos: " + webserver.queuePlace + " ETA: " + webserver.ETA); //set the Discord Activity
+						if (config.notification.userStatus === true) { //set the Discord Activity
+							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA + " - " + options.username);
+						} else {
+							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA);
+						}
 						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
 								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
@@ -371,7 +375,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					break;
 				case "calcTime":
 					let calcMsg = 
-					msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can paly at " + starttimestring);
+					msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can play at " + starttimestring);
 					break;
 			}
 			break;
