@@ -142,11 +142,13 @@ function join() {
 					webserver.queuePlace = positioninqueue; // update info on the web page
 					if (webserver.queuePlace !== "None" && lastQueuePlace !== webserver.queuePlace) {
 						if (!totalWaitTime) {
-							totalWaitTime = Math.pow(positioninqueue / 35.4, 2 / 3);
+							// totalWaitTime = Math.pow(positioninqueue / 35.4, 2 / 3); // disabled for testing corrected ETA
+							totalWaitTime = positioninqueue / 2;
 						}
-						timepassed = -Math.pow(positioninqueue / 35.4, 2 / 3) + totalWaitTime;
+						// timepassed = -Math.pow(positioninqueue / 35.4, 2 / 3) + totalWaitTime; //disabled for testing corrected ETA
+						timepassed = -(positioninqueue / 2) + totalWaitTime;
 						ETAhour = totalWaitTime - timepassed;
-						webserver.ETA = Math.floor(ETAhour) + "h " + Math.round((ETAhour % 1) * 60) + "m";
+						webserver.ETA = Math.floor(ETAhour / 60) + "h " + Math.round(ETAhour % 60) + "m";
 						server.motd = `Place in queue: ${positioninqueue} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						if (config.notification.userStatus === true) { //set the Discord Activity
 							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA + " - " + options.username);
@@ -469,7 +471,8 @@ function calcTime(msg) {
 			});
 			resp.on("end", () => {
 				data = JSON.parse(data);
-				totalWaitTime = Math.pow(data[0][1] / 35.4, 2 / 3); // data[0][1] is the current queue length
+				// totalWaitTime = Math.pow(data[0][1] / 35.4, 2 / 3); // data[0][1] is the current queue length
+				totalWaitTime = data[0][1] / 2;
 				playTime = timeStringtoDateTime(msg);
 				if (playTime.toSeconds() - DateTime.local().toSeconds() < totalWaitTime * 3600) {
 					startQueuing();
