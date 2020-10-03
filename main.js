@@ -423,6 +423,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 
 function stopMsg(discordOrigin, discordMsg, stoppedThing) {
 	msg(discordOrigin, discordMsg, stoppedThing, stoppedThing + " is **stopped**");
+	dc.user.setActivity(stoppedThing + " is stopped.");
 }
 
 function msg(discordOrigin, msg, titel, content) {
