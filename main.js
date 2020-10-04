@@ -148,7 +148,7 @@ function join() {
 						// timepassed = -Math.pow(positioninqueue / 35.4, 2 / 3) + totalWaitTime; //disabled for testing corrected ETA
 						timepassed = -(positioninqueue / 2) + totalWaitTime;
 						ETAhour = totalWaitTime - timepassed;
-						webserver.ETA = Math.floor(ETAhour / 60) + "h " + Math.round(ETAhour % 60) + "m";
+						webserver.ETA = Math.floor(ETAhour / 60) + "h " + Math.floor(ETAhour % 60) + "m";
 						server.motd = `Place in queue: ${positioninqueue} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						if (config.notification.userStatus === true) { //set the Discord Activity
 							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA + " - " + options.username);
@@ -426,12 +426,12 @@ function stopMsg(discordOrigin, discordMsg, stoppedThing) {
 	dc.user.setActivity(stoppedThing + " is stopped.");
 }
 
-function msg(discordOrigin, msg, titel, content) {
-	if(discordOrigin) sendDiscordMsg(msg.channel, titel, content);
+function msg(discordOrigin, msg, title, content) {
+	if(discordOrigin) sendDiscordMsg(msg.channel, title, content);
 	else console.log(content);
 }
 
-function sendDiscordMsg(channel, titel, content) {
+function sendDiscordMsg(channel, title, content) {
 	channel.send({
 		embed: {
 			color: 3447003,
@@ -440,7 +440,7 @@ function sendDiscordMsg(channel, titel, content) {
 				icon_url: dc.user.avatarURL
 			},
 			fields: [{
-				name: titel,
+				name: title,
 				value: content
 			}
 			],
