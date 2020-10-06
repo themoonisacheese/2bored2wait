@@ -13,6 +13,18 @@ module.exports = {
 				res.writeHead(200, {'Content-type': 'text/css'});
 				res.write(fs.readFileSync('index.css'));
 				res.end();
+			} else if(req.url === "/particles.js") { 
+				res.writeHead(200, {'Content-type': 'text/js'});
+				res.write(fs.readFileSync('particles.js'));
+				res.end();
+			} else if(req.url === "/app.js") { 
+				res.writeHead(200, {'Content-type': 'text/js'});
+				res.write(fs.readFileSync('app.js'));
+				res.end();
+			} else if(req.url === "/particles.min.js") { 
+				res.writeHead(200, {'Content-type': 'text/js'});
+				res.write(fs.readFileSync('particles.min.js'));
+				res.end();
 			} else if (module.exports.password == "" || req.headers.xpassword == module.exports.password) { //before doing any action, test if the provided password is correct.
 				if(req.url === "/update") { //API endpoint to get position, ETA, and status in JSON format      
 					res.writeHead(200, {'Content-type': 'text/json'});
