@@ -46,6 +46,7 @@ try {
 
 var stoppedByPlayer = false;
 var timedStart;
+var positioninqueue = lastQueuePlace + 1;
 var lastQueuePlace;
 var chunkData = new Map();
 var loginpacket;
