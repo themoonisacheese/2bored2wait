@@ -8,16 +8,14 @@ A proxy to wait out 2b2t.org's way too long queue.
 2. Download this repository with the green button (top right of this page). If you downloaded it as zip, unzip it.
 3. Open a terminal and navigate to the folder you downloaded it in.
 4. Run `npm install`
-5. If you want to save your Minecraft login information in a file for automatic login, proceed to step 6. If not, ignore step 6 and proceed to step 7. However, you will need to re-enter your Minecraft login information into the console each time you start the program.
-6. Copy secrets.json.example and name it secrets.json. Fill out your Minecraft information in the file. Note that you must use your email address and not your Minecraft username.
-7. Copy config.json.example and name it config.json. Replace DISCORDBOT_FLAG and WEBSERVER_FLAG with true or false to your liking, then replace MINECRAFT_PROXY_PORT and WEB_UI_PORT with valid ports. Edit other values to your preference.
-8. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
+5. Copy config.json.example and name it config.json. Replace DISCORDBOT_FLAG and WEBSERVER_FLAG with true or false to your liking, then replace MINECRAFT_PROXY_PORT and WEB_UI_PORT with valid ports. Edit other values to your preference.
+6. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 # How to use
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. Run `npm start`
-3. If you created the secrets.json during the installation, you can ignore this or you have to enter your login data now.
-4. A browser window should open. You can close it if you want at any moment, and you can access it again at address http://localhost
+3. It will now ask for your Minecraft email and password. If you are using the discord bot you need to add your token. Then answer Y or N if you want to save your Minecraft email, password. If you answer N you will need to re-enter your Minecraft login information into the console each time you start the program.
+4. Now open a browser and navigate to http://localhost: your port here.
 5. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 6. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
