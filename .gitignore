@@ -70,5 +70,7 @@ saveid
 .project
 minecraft_token.json
 .eslintrc.js
+#config
+config.json
 
 docker-compose.yml

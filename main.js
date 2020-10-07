@@ -4,7 +4,6 @@ const fs = require('fs');
 const mc = require('minecraft-protocol'); // to handle minecraft login session
 const webserver = require('./webserver.js'); // to serve the webserver
 const opn = require('open'); //to open a browser window
-var config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // read the config
 const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
@@ -13,6 +12,13 @@ const save = "./saveid";
 var mc_username;
 var mc_password;
 var secrets;
+var config;
+try {
+  config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
+} catch (err) {
+  console.log("No config file, Please create one."); // If no config exsists
+	process.exit()
+}
 let finishedQueue = !config.minecraftserver.is2b2t;
 const rl = require("readline").createInterface({
 	input: process.stdin,
