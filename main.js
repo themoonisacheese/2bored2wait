@@ -483,6 +483,8 @@ function calcTime(msg) {
 	}, 60000);
 
 }
+
+
 function stopQueing() {
 	stoppedByPlayer = true;
 	stop();

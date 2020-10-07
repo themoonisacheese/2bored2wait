@@ -5,6 +5,9 @@ const fs = require('fs'); //to read the webpages from disk
 module.exports = {
 	createServer : (port) => {
 		http.createServer((req, res) => {
+			if (queuePlace == 'undefined') {
+				var queuePlace = "None"
+			}        
 			if (req.url === "/") { //main page of the web app
 				res.writeHead(200, {'Content-type': 'text/html'});
 				res.write(fs.readFileSync('index.html'));
@@ -27,7 +30,6 @@ module.exports = {
 					res.writeHead(200, {'Content-type': 'text/json'});
 					let json = module.exports;
 					json.place = json.queuePlace;
-					delete json.queuePlace;
 					res.write(JSON.stringify(json));
 					res.end();
 				} else if(req.url === "/start") { //API endpoint to start queuing
@@ -56,8 +58,8 @@ module.exports = {
 	onstop: (callback) => { //same but to stop
 		module.exports.onstopcallback = callback;
 	},
-	queuePlace : "None", //our place in queue
 	ETA: "None", //ETA
+	queuePlace : "None", //our place in queue
 	isInQueue: false, //are we in queue?
 	onstartcallback: null, //a save of the action to start
 	onstopcallback: null, //same but to stop
