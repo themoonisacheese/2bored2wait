@@ -11,6 +11,8 @@ const tokens = require('prismarine-tokens-fixed');
 const save = "./saveid";
 var mc_username;
 var mc_password;
+var discordBotToken;
+var savelogin;
 var secrets;
 var config;
 try {
@@ -29,19 +31,37 @@ try {
 	secrets = require('./secrets.json');
 	mc_username = secrets.username;
 	mc_password = secrets.password;
+  discordBotToken = secrets.BotToken
 	cmdInput();
 } catch {
 	config.discordBot = false;
 	if(config.minecraftserver.onlinemode) {
-		rl.question("Username: ", function(username) {
+    console.log("Please enter your credentials.");
+		rl.question("Email: ", function(username) {
 			rl.question("Password: ", function(userpassword) {
-				mc_username = username;
-				mc_password = userpassword;
-				console.clear();
-				cmdInput();
-			});
-		});
-	}
+        rl.question("BotToken, leave blank if not using discord: ", function(discordBotToken) {
+          rl.question("Save login for next use? Y or N:", function(savelogin) {
+    				mc_username = username;
+    				mc_password = userpassword;
+            if (savelogin === "Y" || savelogin === "y") {
+              if (discordBotToken === "") {
+                discordBotToken = "DiscordBotToken"
+              }
+              fs.writeFile('./secrets.json', `
+              {
+                  "username":"${username}",
+                  "password":"${userpassword}",
+                  "BotToken":"${discordBotToken}"
+              }`, function (err) {
+                if (err) return console.log(err);});
+            };
+    				console.clear();
+    				cmdInput();
+    			});
+    		});
+      });
+  	});
+  }
 }
 
 var stoppedByPlayer = false;
@@ -326,7 +346,7 @@ if (config.discordBot) {
 		}
 	});
 
-	dc.login(secrets.BotToken);
+	dc.login(discordBotToken);
 }
 
 function userInput(cmd, DiscordOrigin, discordMsg) {
