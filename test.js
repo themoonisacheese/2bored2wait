@@ -2,6 +2,7 @@
 var childProcess = require('child_process');
 const fs = require("fs");
 const jsonminify = require("node-json-minify");
+const mc = require("minecraft-protocol");
 
 function runScript(scriptPath, callback) {
 
@@ -20,6 +21,14 @@ function runScript(scriptPath, callback) {
 	config.minecraftserver.is2b2t = false;
 	fs.writeFileSync("./config.json", JSON.stringify(config));
     var process = childProcess.fork("./main.js");
+	// connect with a test client to 2b2w
+	setTimeout(function () {
+		let client = mc.createClient({port: config.ports.minecraft, username: config.minecraftserver.username, version: config.minecraftserver.version});
+		client.on("error", (err) => {
+			throw err;
+		});
+	}, 7000);
+	
 
     // listen for errors as they may prevent the exit event from firing
     process.on('error', function (err) {
