@@ -4,19 +4,32 @@
         <link rel="stylesheet" href="index.css">
     </head>
     <body>
+
+        <div id="particles-js">
+            <script type="text/javascript" src="/particles.js"></script>
+            <script type="text/javascript" src="/app.js"></script>
+         </div>
+
+
         <div class="content">
-            <h1>Place in queue: <div class="place">None</div> </h1>
-            <h1>ETA: <div class="ETA">None</div> </h1>
-            Password (leave blank if none) : <input type="password" class="password"><br>
-            <button id="queueButton" class="start" onclick="start()">Start queuing</button><br><br>
-            <input type="checkbox" class="restartQueue" onchange="toggleRestartQueue()"> Restart the queue if you're not connected at the end of it?
+            <h1><center>Place in queue: <div class="place">None</div> </center></h1>
+            <h1><center>ETA: <div class="ETA">None</div> </center></h1>
+            <br>
+            <center>Webserver Password: </center><center><input type="password" class="password"></center>
+            <center>(Leave blank if none)</center><br>
+            <center><button id="queueButton" class="start" onclick="start()">Start queuing</button><br></center><br>
+            <center><input type="checkbox" class="restartQueue" onchange="toggleRestartQueue()"> Restart the queue if you're not connected at the end of it? </center>
         </div>
         <script>
             setInterval(() => { //each second, update the info.
+                
                 const xhr = new XMLHttpRequest();
                 xhr.open("GET", "/update", true);
                 xhr.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
+                        if (place == 'undefined') {
+                            var place = "None"
+                        }        
                         const response = JSON.parse(this.responseText);
                         document.getElementsByClassName("place")[0].innerHTML = response.place;
                         document.title = "2Bored2Wait - " + response.place;
@@ -34,10 +47,13 @@
                         }
                     }
                 }
+        
+
                 xhr.setRequestHeader('XPassword', document.getElementsByClassName('password')[0].value)
                 xhr.send();
 
             }, 1000);
+            
 
             function start() {
                 const xhr = new XMLHttpRequest();
@@ -70,6 +86,8 @@
                 xhr.setRequestHeader('XPassword', document.getElementsByClassName('password')[0].value)
                 xhr.send();
             }
+
+
 
         </script>
     </body>

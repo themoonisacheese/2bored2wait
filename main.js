@@ -66,6 +66,7 @@ try {
 
 var stoppedByPlayer = false;
 var timedStart;
+var positioninqueue = lastQueuePlace + 1;
 var lastQueuePlace;
 var chunkData = new Map();
 var loginpacket;
@@ -173,7 +174,7 @@ function join() {
 						timepassed = -Math.pow(positioninqueue / 35.4, 2 / 3) + totalWaitTime;
 						ETAhour = totalWaitTime - timepassed;
 						webserver.ETA = Math.floor(ETAhour) + "h " + Math.round((ETAhour % 1) * 60) + "m";
-						server.motd = `Place in queue: ${positioninqueue} ETA: ${webserver.ETA}`; // set the MOTD because why not
+						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						logActivity("Pos: " + webserver.queuePlace + " ETA: " + webserver.ETA); //set the Discord Activity
 						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
 								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
@@ -502,6 +503,8 @@ function calcTime(msg) {
 	}, 60000);
 
 }
+
+
 function stopQueing() {
 	stoppedByPlayer = true;
 	stop();
