@@ -1,11 +1,19 @@
 
 var childProcess = require('child_process');
+const fs = require("fs");
+const jsonminify = require("node-json-minify");
 
 function runScript(scriptPath, callback) {
 
     // keep track of whether callback has been invoked to prevent multiple invocations
     var invoked = false;
-
+	let config = fs.readFileSync("./config.json.example", "utf-8");
+	config = config.replace("DISCORDBOT_FLAG", "true");
+	config = config.replace("WEBSERVER_FLAG", "true");
+	config = config.replace("MINECRAFT_PROXY_PORT", "25565");
+	config = config.replace("WEB_UI_PORT", "9080");
+	config = JSON.parse(jsonminify(config));
+	fs.writeFileSync("./config.json", JSON.stringify(config));
     var process = childProcess.fork("./main.js");
 
     // listen for errors as they may prevent the exit event from firing
