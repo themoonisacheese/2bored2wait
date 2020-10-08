@@ -33,6 +33,7 @@ try {
 	mc_password = secrets.password;
   discordBotToken = secrets.BotToken
 	cmdInput();
+	joinOnStart();
 } catch {
 	config.discordBot = false;
 	if(config.minecraftserver.onlinemode) {
@@ -57,6 +58,7 @@ try {
             };
     				console.clear();
     				cmdInput();
+		  joinOnStart();
     			});
     		});
       });
@@ -513,6 +515,10 @@ function stopQueing() {
 function logActivity(update) {
 	activity(update);
 	log(update);
+}
+
+function joinOnStart() {
+	if(config.joinOnStart) setTimeout(startQueuing, 1000);
 }
 module.exports = {
 	startQueue: function () {
