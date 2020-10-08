@@ -27,7 +27,7 @@ function runScript(scriptPath, callback) {
 		client.on("error", (err) => {
 			throw err;
 		});
-	}, 19000);
+	}, 15000);
 	
 
     // listen for errors as they may prevent the exit event from firing
