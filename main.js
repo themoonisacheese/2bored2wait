@@ -18,7 +18,7 @@ var config;
 try {
   config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
-  console.log("No config file, Please create one."); // If no config exsists
+  console.log("No config file, Please create one."); // If no config exists
 	process.exit()
 }
 let finishedQueue = !config.minecraftserver.is2b2t;
@@ -179,7 +179,7 @@ function join() {
 						ETAhour = totalWaitTime - timepassed;
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						webserver.ETA = Math.floor(ETAhour / 60) + "h " + Math.floor(ETAhour % 60) + "m";
-						if (config.notification.userStatus === true) { //set the Discord Activity
+						if (config.userStatus === true) { //set the Discord Activity
 							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA + " - " + options.username);
 						} else {
 							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA);
@@ -452,7 +452,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 
 function stopMsg(discordOrigin, discordMsg, stoppedThing) {
 	msg(discordOrigin, discordMsg, stoppedThing, stoppedThing + " is **stopped**");
-	dc.user.setActivity(stoppedThing + " is stopped.");
+	activity(stoppedThing + " is stopped.");
 }
 
 function msg(discordOrigin, msg, title, content) {
