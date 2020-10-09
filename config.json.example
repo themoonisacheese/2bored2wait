@@ -24,7 +24,7 @@
     "notification": { // sends a message via discord if the place in the queue reaches the specified number
         "enabled": true, // you must send the bot a message once.
         "queuePlace": 20
-    }
+    },
     "userStatus": true, // show username in discord bot status, in case of alts
     "antiAntiAFK": true, // to bypass antiAFK plugins
     "chunkCaching": true,
