@@ -16,9 +16,9 @@ var savelogin;
 var secrets;
 var config;
 try {
-  config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
+	config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
-  console.log("No config file, Please create one."); // If no config exists
+	console.log("No config file, Please create one."); // If no config exists
 	process.exit()
 }
 let finishedQueue = !config.minecraftserver.is2b2t;
@@ -31,39 +31,39 @@ try {
 	secrets = require('./secrets.json');
 	mc_username = secrets.username;
 	mc_password = secrets.password;
-  discordBotToken = secrets.BotToken
+	discordBotToken = secrets.BotToken
 	cmdInput();
 	joinOnStart();
 } catch {
 	config.discordBot = false;
 	if(config.minecraftserver.onlinemode) {
-    console.log("Please enter your credentials.");
+		console.log("Please enter your credentials.");
 		rl.question("Email: ", function(username) {
 			rl.question("Password: ", function(userpassword) {
-        rl.question("BotToken, leave blank if not using discord: ", function(discordBotToken) {
-          rl.question("Save login for next use? Y or N:", function(savelogin) {
-    				mc_username = username;
-    				mc_password = userpassword;
-            if (savelogin === "Y" || savelogin === "y") {
-              if (discordBotToken === "") {
-                discordBotToken = "DiscordBotToken"
-              }
-              fs.writeFile('./secrets.json', `
-              {
-                  "username":"${username}",
-                  "password":"${userpassword}",
-                  "BotToken":"${discordBotToken}"
-              }`, function (err) {
-                if (err) return console.log(err);});
-            };
-    				console.clear();
-    				cmdInput();
-		  joinOnStart();
-    			});
-    		});
-      });
-  	});
-  }
+				rl.question("BotToken, leave blank if not using discord: ", function(discordBotToken) {
+					rl.question("Save login for next use? Y or N:", function(savelogin) {
+						mc_username = username;
+						mc_password = userpassword;
+						if (savelogin === "Y" || savelogin === "y") {
+							if (discordBotToken === "") {
+								discordBotToken = "DiscordBotToken"
+							}
+							fs.writeFile('./secrets.json', `
+	      {
+		  "username":"${username}",
+		  "password":"${userpassword}",
+		  "BotToken":"${discordBotToken}"
+	      }`, function (err) {
+		      if (err) return console.log(err);});
+						};
+						console.clear();
+						cmdInput();
+						joinOnStart();
+					});
+				});
+			});
+		});
+	}
 }
 
 var stoppedByPlayer = false;
@@ -185,7 +185,7 @@ function join() {
 							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA);
 						}
 						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
-								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
+							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
 					}
@@ -309,7 +309,7 @@ function reconnectLoop() {
 	mc.ping({host: config.minecraftserver.hostname, port: config.minecraftserver.port}, (err) => {
 		if(err) setTimeout(reconnectLoop, 3000);
 		else startQueuing();
-		});
+	});
 }
 
 //function to filter out some packets that would make us disconnect otherwise.
@@ -406,7 +406,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					break;
 				case "calcTime":
 					let calcMsg = 
-					msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can play at " + starttimestring);
+						msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can play at " + starttimestring);
 					break;
 			}
 			break;
