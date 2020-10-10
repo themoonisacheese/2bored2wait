@@ -18,7 +18,7 @@ var config;
 try {
   config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
-  console.log("No config file, Please create one."); // If no config exsists
+  console.log("No config file, Please create one."); // If no config exists
 	process.exit()
 }
 let finishedQueue = !config.minecraftserver.is2b2t;
@@ -171,13 +171,19 @@ function join() {
 					webserver.queuePlace = positioninqueue; // update info on the web page
 					if (webserver.queuePlace !== "None" && lastQueuePlace !== webserver.queuePlace) {
 						if (!totalWaitTime) {
-							totalWaitTime = Math.pow(positioninqueue / 35.4, 2 / 3);
+							// totalWaitTime = Math.pow(positioninqueue / 35.4, 2 / 3); // disabled for testing corrected ETA
+							totalWaitTime = positioninqueue / 2;
 						}
-						timepassed = -Math.pow(positioninqueue / 35.4, 2 / 3) + totalWaitTime;
+						// timepassed = -Math.pow(positioninqueue / 35.4, 2 / 3) + totalWaitTime; //disabled for testing corrected ETA
+						timepassed = -(positioninqueue / 2) + totalWaitTime;
 						ETAhour = totalWaitTime - timepassed;
-						webserver.ETA = Math.floor(ETAhour) + "h " + Math.round((ETAhour % 1) * 60) + "m";
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
-						logActivity("Pos: " + webserver.queuePlace + " ETA: " + webserver.ETA); //set the Discord Activity
+						webserver.ETA = Math.floor(ETAhour / 60) + "h " + Math.floor(ETAhour % 60) + "m";
+						if (config.userStatus === true) { //set the Discord Activity
+							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA + " - " + options.username);
+						} else {
+							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA);
+						}
 						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
 								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
@@ -400,7 +406,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					break;
 				case "calcTime":
 					let calcMsg = 
-					msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can paly at " + starttimestring);
+					msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can play at " + starttimestring);
 					break;
 			}
 			break;
@@ -446,14 +452,15 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 
 function stopMsg(discordOrigin, discordMsg, stoppedThing) {
 	msg(discordOrigin, discordMsg, stoppedThing, stoppedThing + " is **stopped**");
+	activity(stoppedThing + " is stopped.");
 }
 
-function msg(discordOrigin, msg, titel, content) {
-	if(discordOrigin) sendDiscordMsg(msg.channel, titel, content);
+function msg(discordOrigin, msg, title, content) {
+	if(discordOrigin) sendDiscordMsg(msg.channel, title, content);
 	else console.log(content);
 }
 
-function sendDiscordMsg(channel, titel, content) {
+function sendDiscordMsg(channel, title, content) {
 	channel.send({
 		embed: {
 			color: 3447003,
@@ -462,7 +469,7 @@ function sendDiscordMsg(channel, titel, content) {
 				icon_url: dc.user.avatarURL
 			},
 			fields: [{
-				name: titel,
+				name: title,
 				value: content
 			}
 			],
@@ -494,7 +501,8 @@ function calcTime(msg) {
 			});
 			resp.on("end", () => {
 				data = JSON.parse(data);
-				totalWaitTime = Math.pow(data[0][1] / 35.4, 2 / 3); // data[0][1] is the current queue length
+				// totalWaitTime = Math.pow(data[0][1] / 35.4, 2 / 3); // data[0][1] is the current queue length
+				totalWaitTime = data[0][1] / 2;
 				playTime = timeStringtoDateTime(msg);
 				if (playTime.toSeconds() - DateTime.local().toSeconds() < totalWaitTime * 3600) {
 					startQueuing();
