@@ -159,7 +159,7 @@ function join() {
 	client.on("packet", (data, meta, rawData) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "map_chunk":
-				if(config.chunkCaching) chunkData.set(data.x + "_" + data.z, data);
+				if(config.chunkCaching) chunkData.set(data.x + "_" + data.z, rawData);
 				break;
 			case "unload_chunk":
 				if(config.chunkCaching) chunkData.delete(data.chunkX + "_" + data.chunkZ);
@@ -278,7 +278,7 @@ function join() {
 
 function sendChunks() {
 	if(config.chunkCaching) chunkData.forEach((data) => {
-		proxyClient.write("map_chunk", data);
+		proxyClient.writeRaw(data);
 	});
 }
 
