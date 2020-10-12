@@ -156,10 +156,10 @@ function join() {
 	doing = "queue"
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
-	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
+	client.on("packet", (data, meta, rawData) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "map_chunk":
-				if(config.chunkCaching) chunkData.set(data.x + "_" + data.z, data);
+				if(config.chunkCaching) chunkData.set(data.x + "_" + data.z, rawData);
 				break;
 			case "unload_chunk":
 				if(config.chunkCaching) chunkData.delete(data.chunkX + "_" + data.chunkZ);
@@ -220,7 +220,7 @@ function join() {
 				break;
 		}
 		if (proxyClient) { // if we are connected to the proxy, forward the packet we recieved to our game.
-			filterPacketAndSend(data, meta, proxyClient);
+			filterPacketAndSend(rawData, meta, proxyClient);
 		}
 	});
 
@@ -269,8 +269,8 @@ function join() {
 			flags: 0x00
 		});
 
-		newProxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t
-			filterPacketAndSend(data, meta, client);
+		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
+			filterPacketAndSend(rawData, meta, client);
 		});
 		proxyClient = newProxyClient;
 	});
@@ -278,7 +278,7 @@ function join() {
 
 function sendChunks() {
 	if(config.chunkCaching) chunkData.forEach((data) => {
-		proxyClient.write("map_chunk", data);
+		proxyClient.writeRaw(data);
 	});
 }
 
@@ -316,7 +316,7 @@ function reconnectLoop() {
 //this is where you could filter out packets with sign data to prevent chunk bans.
 function filterPacketAndSend(data, meta, dest) {
 	if (meta.name !== "keep_alive" && meta.name !== "update_time") { //keep alive packets are handled by the client we created, so if we were to forward them, the minecraft client would respond too and the server would kick us for responding twice.
-		dest.write(meta.name, data);
+		dest.writeRaw(data);
 	}
 }
 
