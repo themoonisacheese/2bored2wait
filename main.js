@@ -249,7 +249,7 @@ function join() {
 	});
 
 	server = mc.createServer({ // create a server for us to connect to
-		'online-mode': false,
+		'online-mode': config.whitelist,
 		encryption: true,
 		host: '0.0.0.0',
 		port: config.ports.minecraft,
@@ -258,6 +258,10 @@ function join() {
 	});
 
 	server.on('login', (newProxyClient) => { // handle login
+		if(config.whitelist && client.uuid !== newProxyClient.uuid) {
+			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
+			return;
+		}
 		setTimeout(sendChunks, 1000)
 		newProxyClient.write('login', loginpacket);
 		newProxyClient.write('position', {
