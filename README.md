@@ -23,7 +23,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 All commands can be used through discord or the cli.
 - `start` will start the queue. It takes between 15-30 seconds for the bot to update with the queue position.
 - `start 14:00` will start at 2pm.
-- `play 8:00` will try to calculate the right time to join so you can at 8:00
+- `play 8:00` will try to calculate the right time to join so you can play at 8:00
 - `update` will send an update to the current channel with your position and ETA.
 - `stop` will stop the queue.
 
