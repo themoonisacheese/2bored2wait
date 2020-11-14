@@ -18,8 +18,7 @@ var config;
 try {
 	config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
-	console.log("No config file, Please create one."); // If no config exists
-	process.exit()
+	throw("error loading config file:\n" + err);
 }
 let finishedQueue = !config.minecraftserver.is2b2t;
 const rl = require("readline").createInterface({
