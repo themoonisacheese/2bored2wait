@@ -17,7 +17,8 @@ A proxy to wait out 2b2t.org's way too long queue.
 3. It will now ask for your Minecraft email and password. If you are using the discord bot you need to add your token. Then answer Y or N if you want to save your Minecraft email, password. If you answer N you will need to re-enter your Minecraft login information into the console each time you start the program.
 4. Now open a browser and navigate to http://localhost: your port here.
 5. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-6. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+6. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
+7. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
 # Commands
 All commands can be used through discord or the cli.
