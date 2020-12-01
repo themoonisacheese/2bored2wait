@@ -8,6 +8,7 @@ const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
 const tokens = require('prismarine-tokens-fixed');
+const cachePackets = require('./cachePackets.js');
 const save = "./saveid";
 var mc_username;
 var mc_password;
@@ -15,7 +16,6 @@ var discordBotToken;
 var savelogin;
 var secrets;
 var config;
-var abilitiesPacket;
 try {
 	config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
@@ -70,8 +70,6 @@ var stoppedByPlayer = false;
 var timedStart;
 var positioninqueue = lastQueuePlace + 1;
 var lastQueuePlace;
-var chunkData = new Map();
-var loginpacket;
 let dcUser; // discord user that controlls the bot
 var totalWaitTime;
 var starttimestring;
@@ -156,14 +154,9 @@ function join() {
 	doing = "queue"
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
+	cachePackets.init(client, config.chunkCaching);
 	client.on("packet", (data, meta, rawData) => { // each time 2b2t sends a packet
 		switch (meta.name) {
-			case "map_chunk":
-				if(config.chunkCaching) chunkData.set(data.x + "_" + data.z, rawData);
-				break;
-			case "unload_chunk":
-				if(config.chunkCaching) chunkData.delete(data.chunkX + "_" + data.chunkZ);
-				break;
 			case "playerlist_header":
 				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
 					let headermessage = JSON.parse(data.header);
@@ -207,19 +200,6 @@ function join() {
 						}
 					}
 				}
-				break;
-			case "respawn":
-				Object.assign(loginpacket, data);
-				chunkData = new Map();
-				break;
-			case "login":
-				loginpacket = data;
-				break;
-			case "game_state_change":
-				loginpacket.gameMode = data.gameMode;
-				break;
-			case "abilities":
-				abilitiesPacket = rawData;
 				break;
 		}
 		if (proxyClient) { // if we are connected to the proxy, forward the packet we recieved to our game.
@@ -265,30 +245,14 @@ function join() {
 			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
 			return;
 		}
-		setTimeout(sendChunks, 1000)
-		newProxyClient.write('login', loginpacket);
-		newProxyClient.write('position', {
-			x: 0,
-			y: 1.62,
-			z: 0,
-			yaw: 0,
-			pitch: 0,
-			flags: 0x00
-		});
-
-		newProxyClient.writeRaw(abilitiesPacket);
 		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
+		cachePackets.join(newProxyClient);
 		proxyClient = newProxyClient;
 	});
 }
 
-function sendChunks() {
-	if(config.chunkCaching) chunkData.forEach((data) => {
-		proxyClient.writeRaw(data);
-	});
-}
 
 function log(logmsg) {
 	if (config.logging) {
