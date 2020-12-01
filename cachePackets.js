@@ -2,6 +2,7 @@ var chunkData = new Map();
 var abilitiesPacket;
 var loginpacket;
 var gChunkCaching;
+var positionPacket;
 module.exports = {
 	init: (client, chunkCaching) => {
 		gChunkCaching = chunkCaching;
@@ -26,20 +27,16 @@ module.exports = {
 				case "abilities":
 					abilitiesPacket = rawData;
 					break;
+				case "position":
+					positionPacket = rawData;
+					break;
 			}
 		});
 
 	},
 	join: (proxyClient) => {
 		proxyClient.write('login', loginpacket);
-		proxyClient.write('position', {
-			x: 0,
-			y: 1.62,
-			z: 0,
-			yaw: 0,
-			pitch: 0,
-			flags: 0x00
-		});
+		proxyClient.writeRaw(positionPacket);
 
 		proxyClient.writeRaw(abilitiesPacket);
 		setTimeout( () => {
