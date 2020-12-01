@@ -3,6 +3,7 @@ var abilitiesPacket;
 var loginpacket;
 var gChunkCaching;
 var positionPacket;
+var inventory = [45];
 module.exports = {
 	init: (client, chunkCaching) => {
 		gChunkCaching = chunkCaching;
@@ -30,6 +31,10 @@ module.exports = {
 				case "position":
 					positionPacket = rawData;
 					break;
+				case "set_slot":
+					if(data.windowId == 0) { // windowId 0 is the inventory
+						inventory[data.slot] = data;
+					}
 			}
 		});
 
@@ -37,8 +42,14 @@ module.exports = {
 	join: (proxyClient) => {
 		proxyClient.write('login', loginpacket);
 		proxyClient.writeRaw(positionPacket);
-
 		proxyClient.writeRaw(abilitiesPacket);
+		console.log(inventory);
+		inventory.forEach( (slot) => {
+			if(slot != null) {
+				proxyClient.write("set_slot", slot);
+				console.log(slot);
+			}
+		});
 		setTimeout( () => {
 			if(gChunkCaching) chunkData.forEach((data) => {
 				proxyClient.writeRaw(data);
