@@ -15,6 +15,7 @@ var discordBotToken;
 var savelogin;
 var secrets;
 var config;
+var abilitiesPacket;
 try {
 	config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
@@ -217,6 +218,9 @@ function join() {
 			case "game_state_change":
 				loginpacket.gameMode = data.gameMode;
 				break;
+			case "abilities":
+				abilitiesPacket = rawData;
+				break;
 		}
 		if (proxyClient) { // if we are connected to the proxy, forward the packet we recieved to our game.
 			filterPacketAndSend(rawData, meta, proxyClient);
@@ -272,6 +276,7 @@ function join() {
 			flags: 0x00
 		});
 
+		newProxyClient.writeRaw(abilitiesPacket);
 		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
