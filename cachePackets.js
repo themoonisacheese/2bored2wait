@@ -18,6 +18,7 @@ module.exports = {
 				case "respawn":
 					Object.assign(loginpacket, data);
 					chunkData = new Map();
+					inventory = [];
 					break;
 				case "login":
 					loginpacket = data;
