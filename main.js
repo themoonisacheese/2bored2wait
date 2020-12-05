@@ -411,7 +411,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 				doing = "timedStart"
 				timedStart = setTimeout(startQueuing, timeStringtoDateTime(cmd).toMillis() - DateTime.local().toMillis());
 				activity("Starting at " + starttimestring);
-				msg(DiscordOrigin, msg, "Timer", "Queue is starting at " + starttimestring);
+				msg(DiscordOrigin, discordMsg, "Timer", "Queue is starting at " + starttimestring);
 			} else if (/^play (\d|[0-1]\d|2[0-3]):[0-5]\d$/.test(cmd)) {
 				timeStringtoDateTime(cmd);
 				calcTime(cmd);
