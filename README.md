@@ -7,18 +7,20 @@ A proxy to wait out 2b2t.org's way too long queue.
 1. Download and install node.js and git. You need git even if you download the repository as zip because it is to install the dependencies via npm. On non-windows platforms, you also need npm.
 2. Download this repository with the green button (top right of this page). If you downloaded it as zip, unzip it.
 3. Open a terminal and navigate to the folder you downloaded it in.
-4. Run `npm install`
-5. Copy config.json.example and name it config.json. Replace DISCORDBOT_FLAG and WEBSERVER_FLAG with true or false to your liking, then replace MINECRAFT_PROXY_PORT and WEB_UI_PORT with valid ports. Edit other values to your preference.
-6. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
+4. Open the src folder
+5. Run `npm install`
+6. Copy config.json.example and name it config.json. Replace DISCORDBOT_FLAG and WEBSERVER_FLAG with true or false to your liking, then replace MINECRAFT_PROXY_PORT and WEB_UI_PORT with valid ports. Edit other values to your preference.
+7. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 # How to use
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-2. Run `npm start`
-3. It will now ask for your Minecraft email and password. If you are using the discord bot you need to add your token. Then answer Y or N if you want to save your Minecraft email, password. If you answer N you will need to re-enter your Minecraft login information into the console each time you start the program.
-4. Now open a browser and navigate to http://localhost: your port here.
-5. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-6. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
-7. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+2. Open the src folder
+3. Run `npm start`
+4. It will now ask for your Minecraft email and password. If you are using the discord bot you need to add your token. Then answer Y or N if you want to save your Minecraft email, password. If you answer N you will need to re-enter your Minecraft login information into the console each time you start the program.
+5. Now open a browser and navigate to http://localhost: your port here.
+6. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
+7. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
+8. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
 # Commands
 All commands can be used through discord or the cli.
@@ -29,9 +31,10 @@ All commands can be used through discord or the cli.
 - `stop` will stop the queue.
 
 # Video guide
-Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
+Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4
 
 # Docker usage guide (if you know how to use docker)
+All Docker code is in /Docker.
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. Edit docker-compose.yml and start the container
 ```
