@@ -16,6 +16,7 @@ var discordBotToken;
 var savelogin;
 var secrets;
 var config;
+var accountType
 try {
 	config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
@@ -27,32 +28,36 @@ const rl = require("readline").createInterface({
 	output: process.stdout
 });
 try {
-	fs.accessSync("./secrets.json", fs.constants.R_OK);
-	secrets = require('./secrets.json');
+	secrets = JSON.parse(jsonminify(fs.readFileSync("./secrets.json", "utf8")));
 	mc_username = secrets.username;
 	mc_password = secrets.password;
+	accountType = secrets.accountType
 	discordBotToken = secrets.BotToken
 	cmdInput();
 	joinOnStart();
-} catch {
+} catch (err) {
+	if(err.code !== 'ENOENT') throw "error loading secrets.json:\n" +  err;
 	config.discordBot = false;
 	if(config.minecraftserver.onlinemode) {
 		console.log("Please enter your credentials.");
-		rl.question("Email: ", function(username) {
-			rl.question("Password: ", function(userpassword) {
-				rl.question("BotToken, leave blank if not using discord: ", function(discordBotToken) {
-					rl.question("Save login for next use? Y or N:", function(savelogin) {
-						mc_username = username;
-						mc_password = userpassword;
-						if (savelogin === "Y" || savelogin === "y") {
-							if (discordBotToken === "") {
-								discordBotToken = "DiscordBotToken"
-							}
-							fs.writeFile('./secrets.json', `
+		rl.question("account type, mojang or microsoft: ", function(type) {
+			accountType = type;
+			rl.question("Email: ", function(username) {
+				rl.question("Password: ", function(userpassword) {
+					rl.question("BotToken, leave blank if not using discord: ", function(discordBotToken) {
+						rl.question("Save login for next use? Y or N:", function(savelogin) {
+							mc_username = username;
+							mc_password = userpassword;
+							if (savelogin === "Y" || savelogin === "y") {
+								if (discordBotToken === "") {
+									discordBotToken = "DiscordBotToken"
+								}
+								fs.writeFile('./secrets.json', `
 	      {
 		  "username":"${username}",
 		  "password":"${userpassword}",
-		  "BotToken":"${discordBotToken}"
+		  "BotToken":"${discordBotToken}",
+		  "authType":"${type}"
 	      }`, function (err) {
 		      if (err) return console.log(err);});
 						};
@@ -62,6 +67,7 @@ try {
 					});
 				});
 			});
+		});
 		});
 	}
 }
@@ -131,15 +137,19 @@ function startQueuing() {
 	if (config.minecraftserver.onlinemode) {
 		options.username = mc_username;
 		options.password = mc_password;
-		options.tokensLocation = "./minecraft_token.json"
-		options.tokensDebug = false;
-		tokens.use(options, function (_err, _opts) {
-
-			if (_err) throw _err;
-
-			client = mc.createClient(_opts);
-			join();
-		});
+		if(accountType === 'mojang') {
+			options.tokensLocation = "./minecraft_token.json"
+			options.tokensDebug = false;
+			tokens.use(options, function (_err, _opts) {
+				if (_err) throw _err;
+				client = mc.createClient(_opts);
+				join();
+			});
+		}
+		else {
+			options.auth = authType;
+			client = mc.createClient(options);
+		}
 	} else {
 		options.username = config.minecraftserver.username;
 		client = mc.createClient(options);// connect to 2b2t
