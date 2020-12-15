@@ -9,7 +9,8 @@ A proxy to wait out 2b2t.org's way too long queue.
 3. Open a terminal and navigate to the folder you downloaded it in.
 4. Run `npm install`
 5. Copy config.json.example and name it config.json. Replace DISCORDBOT_FLAG and WEBSERVER_FLAG with true or false to your liking, then replace MINECRAFT_PROXY_PORT and WEB_UI_PORT with valid ports. Edit other values to your preference.
-6. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
+6. Set the minecraftserver settings to the sever you want to connect to. (Default is a test sever)
+7. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 # How to use
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
