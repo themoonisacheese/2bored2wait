@@ -1,6 +1,6 @@
-FROM node:13.12-stretch-slim
+FROM node:alpine
 
-LABEL mantainer="edofullin"
+LABEL mantainer="mrgeorgen"
 LABEL name="2bored2wait"
 
 # copy application
@@ -10,11 +10,11 @@ WORKDIR "/srv/app"
 COPY . "/srv/app"
 
 # install requirements
-RUN apt-get update && apt-get install -y \
-    git\
-    && rm -rf /var/lib/apt/lists/*
-
-RUN ["npm", "install"]
+RUN apk --update add git && \
+npm install && \
+apk del git && \
+rm -rf /var/lib/apt/lists/* && \
+rm /var/cache/apk/*
 
 
 # exposing 8080 (webui), 25566 (mc proxy)
