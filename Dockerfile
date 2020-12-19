@@ -10,11 +10,9 @@ WORKDIR "/srv/app"
 COPY . "/srv/app"
 
 # install requirements
-RUN apk --update add git && \
-npm install && \
-apk del git && \
-rm -rf /var/lib/apt/lists/* && \
-rm /var/cache/apk/*
+RUN apk add --no-cache git;\
+npm install;\
+apk del --no-cache git || true
 
 
 # exposing 8080 (webui), 25566 (mc proxy)
