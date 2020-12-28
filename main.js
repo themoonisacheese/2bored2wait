@@ -147,7 +147,7 @@ function startQueuing() {
 			});
 		}
 		else {
-			options.auth = authType;
+			options.auth = accountType;
 			client = mc.createClient(options);
 		}
 	} else {
