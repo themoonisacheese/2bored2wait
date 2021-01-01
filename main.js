@@ -341,6 +341,8 @@ if (config.discordBot) {
 }
 
 function userInput(cmd, DiscordOrigin, discordMsg) {
+	 cmd = cmd.toLowerCase();
+	
 	switch (cmd) {
 		case "start":
 			startQueuing();
