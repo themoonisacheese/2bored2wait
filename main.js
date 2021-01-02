@@ -149,6 +149,7 @@ function startQueuing() {
 		else {
 			options.auth = accountType;
 			client = mc.createClient(options);
+			join();
 		}
 	} else {
 		options.username = config.minecraftserver.username;
