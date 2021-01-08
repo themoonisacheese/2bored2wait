@@ -7,7 +7,6 @@ const opn = require('open'); //to open a browser window
 const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
-const tokens = require('prismarine-tokens-fixed');
 const cachePackets = require('./cachePackets.js');
 const save = "./saveid";
 var mc_username;
@@ -108,7 +107,7 @@ options = {
 	version: config.minecraftserver.version
 }
 if (config.antiAntiAFK) setInterval(function () {
-	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "/msg RusherB0t !que", position: 1 })
+	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "!que", position: 1 })
 }, 50000)
 
 function cmdInput() {
@@ -137,25 +136,12 @@ function startQueuing() {
 	if (config.minecraftserver.onlinemode) {
 		options.username = mc_username;
 		options.password = mc_password;
-		if(accountType === 'mojang') {
-			options.tokensLocation = "./minecraft_token.json"
-			options.tokensDebug = false;
-			tokens.use(options, function (_err, _opts) {
-				if (_err) throw _err;
-				client = mc.createClient(_opts);
-				join();
-			});
-		}
-		else {
-			options.auth = accountType;
-			client = mc.createClient(options);
-			join();
-		}
+		options.auth = accountType;
 	} else {
 		options.username = config.minecraftserver.username;
-		client = mc.createClient(options);// connect to 2b2t
-		join();
 	}
+	client = mc.createClient(options);// connect to 2b2t
+	join();
 }
 
 function join() {
