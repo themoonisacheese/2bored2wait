@@ -24,7 +24,6 @@
     "moment": "^2.29.1",
     "node-json-minify": "^1.0.0",
     "open": "^6.0.0",
-    "particles.js": "^2.0.0",
-    "prismarine-tokens-fixed": "^1.1.2"
+    "particles.js": "^2.0.0"
   }
 }
