@@ -8,6 +8,7 @@ const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
 const cachePackets = require('./cachePackets.js');
+const queueData = require("./queue.json");
 const save = "./saveid";
 var mc_username;
 var mc_password;
@@ -82,6 +83,8 @@ var playTime;
 var options;
 var doing;
 let interval = {};
+let queueStartPlace;
+let queueStartTime;
 webserver.restartQueue = config.reconnect.notConnectedQueueEnd;
 if (config.webserver) {
 	webserver.createServer(config.ports.web); // create the webserver
@@ -148,6 +151,7 @@ function join() {
 	let ETAhour;
 	let timepassed;
 	let notisend = false;
+	lastQueuePlace = undefined;
 	doing = "queue"
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
@@ -159,7 +163,11 @@ function join() {
 					let headermessage = JSON.parse(data.header);
 					let positioninqueue = headermessage.text.split("\n")[5].substring(25);
 					webserver.queuePlace = positioninqueue; // update info on the web page
-					if (webserver.queuePlace !== "None" && lastQueuePlace !== webserver.queuePlace) {
+					if(lastQueuePlace === undefined) {
+						queueStartPlace = positioninqueue;
+						queueStartTime = DateTime.local();
+					}
+					if (positioninqueue !== "None" && lastQueuePlace !== positioninqueue) {
 						if (!totalWaitTime) {
 							// totalWaitTime = Math.pow(positioninqueue / 35.4, 2 / 3); // disabled for testing corrected ETA
 							totalWaitTime = positioninqueue / 2;
@@ -170,16 +178,16 @@ function join() {
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						webserver.ETA = Math.floor(ETAhour / 60) + "h " + Math.floor(ETAhour % 60) + "m";
 						if (config.userStatus === true) { //set the Discord Activity
-							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA + " - " + options.username);
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
 						} else {
-							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA);
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
 						}
-						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
+						if (config.notification.enabled && positioninqueue <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
 							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
 					}
-					lastQueuePlace = webserver.queuePlace;
+					lastQueuePlace = positioninqueue;
 				}
 				break;
 			case "chat":
@@ -187,6 +195,12 @@ function join() {
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 					let chatMessage = JSON.parse(data.message);
 					if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
+						queueData.place.append(queueStartPlace);
+						let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSecond();
+						let c = 150;
+						let b = Math.pow((0 + c)/(queueStartPlace + c), 1/timeQueueTook);
+						queueData.waitTime.append(b);
+						fs.writeFile("queue.json", JSON.stringify(queueData), "utf-8", () => {});
 						if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
 							stop();
 						} else {
