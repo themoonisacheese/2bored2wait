@@ -195,11 +195,11 @@ function join() {
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 					let chatMessage = JSON.parse(data.message);
 					if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
-						queueData.place.append(queueStartPlace);
+						queueData.place.push(queueStartPlace);
 						let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSecond();
 						let c = 150;
 						let b = Math.pow((0 + c)/(queueStartPlace + c), 1/timeQueueTook);
-						queueData.waitTime.append(b);
+						queueData.waitTime.push(b);
 						fs.writeFile("queue.json", JSON.stringify(queueData), "utf-8", () => {});
 						if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
 							stop();
