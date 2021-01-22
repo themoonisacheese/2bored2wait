@@ -163,7 +163,7 @@ function join() {
 					let headermessage = JSON.parse(data.header);
 					let positioninqueue = headermessage.text.split("\n")[5].substring(25);
 					webserver.queuePlace = positioninqueue; // update info on the web page
-					if(lastQueuePlace === undefined) {
+					if(lastQueuePlace === "None" && positioninqueue !== "None") {
 						queueStartPlace = positioninqueue;
 						queueStartTime = DateTime.local();
 					}
@@ -196,7 +196,7 @@ function join() {
 					let chatMessage = JSON.parse(data.message);
 					if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
 						queueData.place.push(queueStartPlace);
-						let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSecond();
+						let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSeconds();
 						let c = 150;
 						let b = Math.pow((0 + c)/(queueStartPlace + c), 1/timeQueueTook);
 						queueData.waitTime.push(b);
