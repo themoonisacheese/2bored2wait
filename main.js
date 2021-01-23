@@ -74,8 +74,6 @@ try {
 
 var stoppedByPlayer = false;
 var timedStart;
-var positioninqueue = lastQueuePlace + 1;
-var lastQueuePlace;
 let dcUser; // discord user that controlls the bot
 var totalWaitTime;
 var starttimestring;
@@ -148,6 +146,8 @@ function startQueuing() {
 }
 
 function join() {
+	let positioninqueue = "None";
+	let lastQueuePlace = "None";
 	let ETAhour;
 	let timepassed;
 	let notisend = false;
@@ -162,6 +162,7 @@ function join() {
 				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
 					let headermessage = JSON.parse(data.header);
 					let positioninqueue = headermessage.text.split("\n")[5].substring(25);
+					if(positioninqueue !== "None") positioninqueue = Number(positioninqueue);
 					webserver.queuePlace = positioninqueue; // update info on the web page
 					if(lastQueuePlace === "None" && positioninqueue !== "None") {
 						queueStartPlace = positioninqueue;
@@ -199,7 +200,7 @@ function join() {
 						let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSeconds();
 						let c = 150;
 						let b = Math.pow((0 + c)/(queueStartPlace + c), 1/timeQueueTook);
-						queueData.waitTime.push(b);
+						queueData.factor.push(b);
 						fs.writeFile("queue.json", JSON.stringify(queueData), "utf-8", () => {});
 						if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
 							stop();
