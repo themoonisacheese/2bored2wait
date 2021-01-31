@@ -151,7 +151,6 @@ function join() {
 	let ETAhour;
 	let timepassed;
 	let notisend = false;
-	lastQueuePlace = undefined;
 	doing = "queue"
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
