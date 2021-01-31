@@ -212,7 +212,7 @@ function join() {
 		}
 		stop();
 		if (!stoppedByPlayer) log("Connection reset by 2b2t server. Reconnecting...");
-		if (config.reconnect.onError) setTimeout(reconnect, 6000);
+		if (config.reconnect.onError) setTimeout(reconnect, 30000);
 	});
 
 	client.on('error', (err) => {
@@ -223,8 +223,7 @@ function join() {
 		stop();
 		log(`Connection error by 2b2t server. Error message: ${err} Reconnecting...`);
 		if (config.reconnect.onError) {
-			if (err == "Error: Invalid credentials. Invalid username or password.") setTimeout(reconnect, 60000);
-			else setTimeout(reconnect, 4000);
+			setTimeout(reconnect, 30000);
 		}
 	});
 
