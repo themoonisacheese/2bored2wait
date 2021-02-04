@@ -22,7 +22,6 @@
     "everpolate": "0.0.3",
     "luxon": "^1.25.0",
     "minecraft-protocol": "^1.19.0",
-    "moment": "^2.29.1",
     "node-json-minify": "^1.0.0",
     "open": "^6.0.0",
     "particles.js": "^2.0.0"
