@@ -7,7 +7,9 @@ const opn = require('open'); //to open a browser window
 const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
+const everpolate = require("everpolate");
 const cachePackets = require('./cachePackets.js');
+const queueData = require("./queue.json");
 const save = "./saveid";
 var mc_username;
 var mc_password;
@@ -15,7 +17,8 @@ var discordBotToken;
 var savelogin;
 var secrets;
 var config;
-var accountType
+var accountType;
+let c = 150;
 try {
 	config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
@@ -73,15 +76,14 @@ try {
 
 var stoppedByPlayer = false;
 var timedStart;
-var positioninqueue = lastQueuePlace + 1;
-var lastQueuePlace;
 let dcUser; // discord user that controlls the bot
 var totalWaitTime;
 var starttimestring;
-var playTime;
 var options;
 var doing;
 let interval = {};
+let queueStartPlace;
+let queueStartTime;
 webserver.restartQueue = config.reconnect.notConnectedQueueEnd;
 if (config.webserver) {
 	webserver.createServer(config.ports.web); // create the webserver
@@ -145,8 +147,8 @@ function startQueuing() {
 }
 
 function join() {
-	let ETAhour;
-	let timepassed;
+	let positioninqueue = "None";
+	let lastQueuePlace = "None";
 	let notisend = false;
 	doing = "queue"
 	webserver.isInQueue = true;
@@ -158,28 +160,29 @@ function join() {
 				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
 					let headermessage = JSON.parse(data.header);
 					let positioninqueue = headermessage.text.split("\n")[5].substring(25);
+					if(positioninqueue !== "None") positioninqueue = Number(positioninqueue);
 					webserver.queuePlace = positioninqueue; // update info on the web page
-					if (webserver.queuePlace !== "None" && lastQueuePlace !== webserver.queuePlace) {
-						if (!totalWaitTime) {
-							// totalWaitTime = Math.pow(positioninqueue / 35.4, 2 / 3); // disabled for testing corrected ETA
-							totalWaitTime = positioninqueue / 2;
-						}
-						// timepassed = -Math.pow(positioninqueue / 35.4, 2 / 3) + totalWaitTime; //disabled for testing corrected ETA
-						timepassed = -(positioninqueue / 2) + totalWaitTime;
-						ETAhour = totalWaitTime - timepassed;
+					if(lastQueuePlace === "None" && positioninqueue !== "None") {
+						queueStartPlace = positioninqueue;
+						queueStartTime = DateTime.local();
+					}
+					if (positioninqueue !== "None" && lastQueuePlace !== positioninqueue) {
+						let totalWaitTime = getWaitTime(queueStartPlace, 0);
+						let timepassed = getWaitTime(queueStartPlace, positioninqueue);
+						let ETAmin = (totalWaitTime - timepassed) / 60;
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
-						webserver.ETA = Math.floor(ETAhour / 60) + "h " + Math.floor(ETAhour % 60) + "m";
+						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
 						if (config.userStatus === true) { //set the Discord Activity
-							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA + " - " + options.username);
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
 						} else {
-							logActivity("P: " + webserver.queuePlace + " E: " + webserver.ETA);
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
 						}
-						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
+						if (config.notification.enabled && positioninqueue <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
 							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
 					}
-					lastQueuePlace = webserver.queuePlace;
+					lastQueuePlace = positioninqueue;
 				}
 				break;
 			case "chat":
@@ -187,6 +190,11 @@ function join() {
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 					let chatMessage = JSON.parse(data.message);
 					if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
+						queueData.place.push(queueStartPlace);
+						let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSeconds();
+						let b = Math.pow((0 + c)/(queueStartPlace + c), 1/timeQueueTook);
+						queueData.factor.push(b);
+						fs.writeFile("queue.json", JSON.stringify(queueData), "utf-8", () => {});
 						if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
 							stop();
 						} else {
@@ -471,12 +479,13 @@ function calcTime(msg) {
 			});
 			resp.on("end", () => {
 				data = JSON.parse(data);
-				// totalWaitTime = Math.pow(data[0][1] / 35.4, 2 / 3); // data[0][1] is the current queue length
-				totalWaitTime = data[0][1] / 2;
-				playTime = timeStringtoDateTime(msg);
-				if (playTime.toSeconds() - DateTime.local().toSeconds() < totalWaitTime * 3600) {
+				let queueLength = data[0][1];
+				let playTime = timeStringtoDateTime(msg);
+				let waitTime = getWaitTime(queueLength, 0);
+				if (playTime.toSeconds() - DateTime.local().toSeconds() < waitTime) {
 					startQueuing();
 					clearInterval(interval.calc);
+					console.log(waitTime);
 				}
 			});
 		});
@@ -497,6 +506,11 @@ function logActivity(update) {
 
 function joinOnStart() {
 	if(config.joinOnStart) setTimeout(startQueuing, 1000);
+}
+
+function getWaitTime(queueLength, queuePos) {
+	let b = everpolate.linear(queueLength, queueData.place, queueData.factor)[0];
+	return Math.log((queuePos + c)/(queueLength + c)) / Math.log(b); // see issue 141
 }
 module.exports = {
 	startQueue: function () {
