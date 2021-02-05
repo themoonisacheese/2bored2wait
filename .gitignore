@@ -73,3 +73,4 @@ saveid
 config.json
 launcher_profiles.json
 queue-time.ggb
+.dockerignore

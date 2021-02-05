@@ -1,0 +1,9 @@
+Dockerfile
+.git
+.gitignore
+*.md
+dockerignore_template
+docker-compose.yml
+LICENSE
+gen_dockerignore.sh
+.github

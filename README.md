@@ -61,7 +61,9 @@ You can also easily change which port to map from the docker-compose, for exampl
 
 # Docker build guide
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-2. Clone the repo and run `docker build -t 2bored2wait .` to build the image.
+2. Clone the repo
+3. run `./gen_dockerignore.sh` to generate the .dockerignore
+3. `docker build -t 2bored2wait .` to build the image.
 3. Once the image has built, you can start it with:
 ```
 docker run --name 2bored2wait -d -p 80:8080 -p 25565:25566 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" -e BOT_TOKEN="mydiscordbottoken" -e DISCORD_BOT="true" -e WEBSERVER="true" -e MINECRAFT_PORT=25566 -e WEBUI_PORT=8080 2bored2wait
