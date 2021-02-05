@@ -4,7 +4,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/themoonisacheese?locale.x=fr_FR)
 
 # How to install
-1. Download and install node.js and git. You need git even if you download the repository as zip because it is to install the dependencies via npm. On non-windows platforms, you also need npm.
+1. Download and install node.js version 14 or above and git. You need git even if you download the repository as zip because it is to install the dependencies via npm. On non-windows platforms, you also need npm.
 2. Download this repository with the green button (top right of this page). If you downloaded it as zip, unzip it.
 3. Open a terminal and navigate to the folder you downloaded it in.
 4. Run `npm install`
