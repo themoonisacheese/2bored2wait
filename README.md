@@ -63,17 +63,17 @@ You can also easily change which port to map from the docker-compose, for exampl
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. Clone the repo
 3. run `./gen_dockerignore.sh` to generate the .dockerignore
-3. `docker build -t 2bored2wait .` to build the image.
-3. Once the image has built, you can start it with:
+4. `docker build -t 2bored2wait .` to build the image.
+5. Once the image has built, you can start it with:
 ```
 docker run --name 2bored2wait -d -p 80:8080 -p 25565:25566 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" -e BOT_TOKEN="mydiscordbottoken" -e DISCORD_BOT="true" -e WEBSERVER="true" -e MINECRAFT_PORT=25566 -e WEBUI_PORT=8080 2bored2wait
 ```
 ** Remember to change user@domain.com and myverysecretpassword with your actual Minecraft credentials, as well as mydiscordbottoken with your actual Discord Bot Token **
 
-4. Open a browser and navigate to http://localhost
-5. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-6. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
-7. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+6. Open a browser and navigate to http://localhost
+7. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
+8. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
+9. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
 If you want to change the configuration you will have to mount config.json manually, you can also mount secrets.json manually if you don't want your credentials in the bash history.
 
