@@ -238,7 +238,7 @@ function join() {
 	server = mc.createServer({ // create a server for us to connect to
 		'online-mode': config.whitelist,
 		encryption: true,
-		host: '0.0.0.0',
+		host: '127.0.0.1',
 		port: config.ports.minecraft,
 		version: config.MCversion,
 		'max-players': maxPlayers = 1
