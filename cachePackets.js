@@ -4,6 +4,12 @@ var loginpacket;
 var gChunkCaching;
 var positionPacket;
 var inventory = [];
+
+function deleteCache() {
+	chunkData = new Map();
+	inventory = [];
+}
+
 module.exports = {
 	init: (client, chunkCaching) => {
 		gChunkCaching = chunkCaching;
@@ -17,8 +23,7 @@ module.exports = {
 					break;
 				case "respawn":
 					Object.assign(loginpacket, data);
-					chunkData = new Map();
-					inventory = [];
+					deleteCache();
 					break;
 				case "login":
 					loginpacket = data;
@@ -38,6 +43,8 @@ module.exports = {
 					}
 			}
 		});
+		client.on("end", deleteCache);
+		client.on("error", deleteCache);
 
 	},
 	join: (proxyClient) => {
