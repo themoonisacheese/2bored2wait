@@ -86,7 +86,7 @@ let queueStartPlace;
 let queueStartTime;
 webserver.restartQueue = config.reconnect.notConnectedQueueEnd;
 if (config.webserver) {
-	webserver.createServer(config.ports.web); // create the webserver
+	webserver.createServer(config.ports.web, config.address.web); // create the webserver
 	webserver.password = config.password
 }
 webserver.onstart(() => { // set up actions for the webserver
@@ -238,7 +238,7 @@ function join() {
 	server = mc.createServer({ // create a server for us to connect to
 		'online-mode': config.whitelist,
 		encryption: true,
-		host: '0.0.0.0',
+		host: config.address.minecraft,
 		port: config.ports.minecraft,
 		version: config.MCversion,
 		'max-players': maxPlayers = 1

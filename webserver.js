@@ -3,7 +3,7 @@ const http = require('http'); //to serve the pages
 const fs = require('fs'); //to read the webpages from disk
 
 module.exports = {
-	createServer : (port) => {
+	createServer : (port, address) => {
 		http.createServer((req, res) => {
 			if (queuePlace == 'undefined') {
 				var queuePlace = "None"
@@ -50,7 +50,7 @@ module.exports = {
 				res.writeHead(403);
 				res.end()
 			}
-		}).listen(port);
+		}).listen(port, address);
 	},
 	onstart: (callback) => { //function to set the action to do when starting
 		module.exports.onstartcallback = callback;
