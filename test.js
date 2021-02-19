@@ -3,6 +3,7 @@ var childProcess = require('child_process');
 const fs = require("fs");
 const jsonminify = require("node-json-minify");
 const mc = require("minecraft-protocol");
+const crypto = require("crypto");
 
 function runScript(scriptPath, callback) {
 
@@ -19,6 +20,7 @@ function runScript(scriptPath, callback) {
 	config.minecraftserver.hostname = "twerion.net"; // a random server which allows cracked accounts to join
 	config.minecraftserver.onlinemode = false;
 	config.minecraftserver.is2b2t = false;
+	config.minecraftserver.username = crypto.randomBytes(10).toString("hex");
 	fs.writeFileSync("./config.json", JSON.stringify(config));
     var process = childProcess.fork("./main.js");
 	// connect with a test client to 2b2w
