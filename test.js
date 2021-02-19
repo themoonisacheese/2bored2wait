@@ -28,7 +28,7 @@ function runScript(scriptPath, callback) {
 		client.on("error", (err) => {
 			throw err;
 		});
-	}, 7000);
+	}, 20000);
 	
 	// listen for errors as they may prevent the exit event from firing
 	process.on('error', function (err) {
@@ -46,7 +46,7 @@ function runScript(scriptPath, callback) {
 	});
 	setTimeout(function () {
 		process.kill();
-	}, 10000);
+	}, 25000);
 
 }
 
