@@ -8,7 +8,7 @@ const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
 const everpolate = require("everpolate");
-const cachePackets = require('./cachePackets.js');
+const mcproxy = require("mcproxy");
 const queueData = require("./queue.json");
 const save = "./saveid";
 var mc_username;
@@ -99,9 +99,10 @@ if (config.openBrowserOnStart && config.webserver) {
 	opn('http://localhost:' + config.ports.web); //open a browser window
 }
 // lets
-var proxyClient; // a reference to the client that is the actual minecraft game
+let proxyClient; // a reference to the client that is the actual minecraft game
 let client; // the client to connect to 2b2t
 let server; // the minecraft server to pass packets
+let conn; // connection object from mcproxy for the client variable
 
 options = {
 	host: config.minecraftserver.hostname,
@@ -142,7 +143,8 @@ function startQueuing() {
 	} else {
 		options.username = config.minecraftserver.username;
 	}
-	client = mc.createClient(options);// connect to 2b2t
+	conn = new mcproxy.Conn(options);// connect to 2b2t
+	client = conn.bot._client;
 	join();
 }
 
@@ -153,8 +155,7 @@ function join() {
 	doing = "queue"
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
-	cachePackets.init(client, config.chunkCaching);
-	client.on("packet", (data, meta, rawData) => { // each time 2b2t sends a packet
+	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "playerlist_header":
 				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
@@ -207,9 +208,6 @@ function join() {
 				}
 				break;
 		}
-		if (proxyClient) { // if we are connected to the proxy, forward the packet we recieved to our game.
-			filterPacketAndSend(rawData, meta, proxyClient);
-		}
 	});
 
 	// set up actions in case we get disconnected.
@@ -252,7 +250,8 @@ function join() {
 		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
-		cachePackets.join(newProxyClient);
+		conn.sendPackets(newProxyClient);
+		conn.link(newProxyClient);
 		proxyClient = newProxyClient;
 	});
 }

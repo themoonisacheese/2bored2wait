@@ -19,9 +19,11 @@
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
     "discord.js": "^12.5.1",
+    "esm": "^3.2.25",
     "everpolate": "0.0.3",
-    "luxon": "^1.25.0",
-    "minecraft-protocol": "^1.19.0",
+    "luxon": "^1.26.0",
+    "mcproxy": "git+https://github.com/MrGeorgen/mcproxy.git#2b2w",
+    "minecraft-protocol": "^1.23.1",
     "node-json-minify": "^1.0.0",
     "open": "^6.0.0",
     "particles.js": "^2.0.0"
