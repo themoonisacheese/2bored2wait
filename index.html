@@ -36,7 +36,7 @@
                         document.getElementsByClassName("ETA")[0].innerHTML = response.ETA;
                         document.getElementsByClassName("restartQueue")[0].checked = response.restartQueue
                         const queueButton = document.getElementById('queueButton');
-                        if(response.inQueue){
+                        if(response.isInQueue){
                             queueButton.innerHTML = "Stop queuing";
                             queueButton.setAttribute('onclick', 'stop()');
                             queueButton.className = 'stop';

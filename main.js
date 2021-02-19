@@ -7,7 +7,9 @@ const opn = require('open'); //to open a browser window
 const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
-const tokens = require('prismarine-tokens-fixed');
+const everpolate = require("everpolate");
+const cachePackets = require('./cachePackets.js');
+const queueData = require("./queue.json");
 const save = "./saveid";
 var mc_username;
 var mc_password;
@@ -15,11 +17,12 @@ var discordBotToken;
 var savelogin;
 var secrets;
 var config;
+var accountType;
+let c = 150;
 try {
-  config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
+	config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
-  console.log("No config file, Please create one."); // If no config exsists
-	process.exit()
+	throw("error loading config file:\n" + err);
 }
 let finishedQueue = !config.minecraftserver.is2b2t;
 const rl = require("readline").createInterface({
@@ -27,61 +30,63 @@ const rl = require("readline").createInterface({
 	output: process.stdout
 });
 try {
-	fs.accessSync("./secrets.json", fs.constants.R_OK);
-	secrets = require('./secrets.json');
+	secrets = JSON.parse(jsonminify(fs.readFileSync("./secrets.json", "utf8")));
 	mc_username = secrets.username;
 	mc_password = secrets.password;
-  discordBotToken = secrets.BotToken
+	accountType = secrets.accountType
+	discordBotToken = secrets.BotToken
 	cmdInput();
 	joinOnStart();
-} catch {
+} catch (err) {
+	if(err.code !== 'ENOENT') throw "error loading secrets.json:\n" +  err;
 	config.discordBot = false;
 	if(config.minecraftserver.onlinemode) {
-    console.log("Please enter your credentials.");
-		rl.question("Email: ", function(username) {
-			rl.question("Password: ", function(userpassword) {
-        rl.question("BotToken, leave blank if not using discord: ", function(discordBotToken) {
-          rl.question("Save login for next use? Y or N:", function(savelogin) {
-    				mc_username = username;
-    				mc_password = userpassword;
-            if (savelogin === "Y" || savelogin === "y") {
-              if (discordBotToken === "") {
-                discordBotToken = "DiscordBotToken"
-              }
-              fs.writeFile('./secrets.json', `
-              {
-                  "username":"${username}",
-                  "password":"${userpassword}",
-                  "BotToken":"${discordBotToken}"
-              }`, function (err) {
-                if (err) return console.log(err);});
-            };
-    				console.clear();
-    				cmdInput();
-		  joinOnStart();
-    			});
-    		});
-      });
-  	});
-  }
+		console.log("Please enter your credentials.");
+		rl.question("account type, mojang or microsoft: ", function(type) {
+			accountType = type;
+			rl.question("Email: ", function(username) {
+				rl.question("Password: ", function(userpassword) {
+					rl.question("BotToken, leave blank if not using discord: ", function(discordBotToken) {
+						rl.question("Save login for next use? Y or N:", function(savelogin) {
+							mc_username = username;
+							mc_password = userpassword;
+							if (savelogin === "Y" || savelogin === "y") {
+								if (discordBotToken === "") {
+									discordBotToken = "DiscordBotToken"
+								}
+								fs.writeFile('./secrets.json', `
+	      {
+		  "username":"${username}",
+		  "password":"${userpassword}",
+		  "BotToken":"${discordBotToken}",
+		  "authType":"${type}"
+	      }`, function (err) {
+		      if (err) return console.log(err);});
+						};
+						console.clear();
+						cmdInput();
+						joinOnStart();
+					});
+				});
+			});
+		});
+		});
+	}
 }
 
 var stoppedByPlayer = false;
 var timedStart;
-var positioninqueue = lastQueuePlace + 1;
-var lastQueuePlace;
-var chunkData = new Map();
-var loginpacket;
 let dcUser; // discord user that controlls the bot
 var totalWaitTime;
 var starttimestring;
-var playTime;
 var options;
 var doing;
 let interval = {};
+let queueStartPlace;
+let queueStartTime;
 webserver.restartQueue = config.reconnect.notConnectedQueueEnd;
 if (config.webserver) {
-	webserver.createServer(config.ports.web); // create the webserver
+	webserver.createServer(config.ports.web, config.address.web); // create the webserver
 	webserver.password = config.password
 }
 webserver.onstart(() => { // set up actions for the webserver
@@ -104,7 +109,7 @@ options = {
 	version: config.minecraftserver.version
 }
 if (config.antiAntiAFK) setInterval(function () {
-	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "/msg RusherB0t !que", position: 1 })
+	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "!que", position: 1 })
 }, 50000)
 
 function cmdInput() {
@@ -133,57 +138,51 @@ function startQueuing() {
 	if (config.minecraftserver.onlinemode) {
 		options.username = mc_username;
 		options.password = mc_password;
-		options.tokensLocation = "./minecraft_token.json"
-		options.tokensDebug = false;
-		tokens.use(options, function (_err, _opts) {
-
-			if (_err) throw _err;
-
-			client = mc.createClient(_opts);
-			join();
-		});
+		options.auth = accountType;
 	} else {
 		options.username = config.minecraftserver.username;
-		client = mc.createClient(options);// connect to 2b2t
-		join();
 	}
+	client = mc.createClient(options);// connect to 2b2t
+	join();
 }
 
 function join() {
-	let ETAhour;
-	let timepassed;
+	let positioninqueue = "None";
+	let lastQueuePlace = "None";
 	let notisend = false;
 	doing = "queue"
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
-	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
+	cachePackets.init(client, config.chunkCaching);
+	client.on("packet", (data, meta, rawData) => { // each time 2b2t sends a packet
 		switch (meta.name) {
-			case "map_chunk":
-				if(config.chunkCaching) chunkData.set(data.x + "_" + data.z, data);
-				break;
-			case "unload_chunk":
-				if(config.chunkCaching) chunkData.delete(data.chunkX + "_" + data.chunkZ);
-				break;
 			case "playerlist_header":
 				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
 					let headermessage = JSON.parse(data.header);
 					let positioninqueue = headermessage.text.split("\n")[5].substring(25);
+					if(positioninqueue !== "None") positioninqueue = Number(positioninqueue);
 					webserver.queuePlace = positioninqueue; // update info on the web page
-					if (webserver.queuePlace !== "None" && lastQueuePlace !== webserver.queuePlace) {
-						if (!totalWaitTime) {
-							totalWaitTime = Math.pow(positioninqueue / 35.4, 2 / 3);
-						}
-						timepassed = -Math.pow(positioninqueue / 35.4, 2 / 3) + totalWaitTime;
-						ETAhour = totalWaitTime - timepassed;
-						webserver.ETA = Math.floor(ETAhour) + "h " + Math.round((ETAhour % 1) * 60) + "m";
+					if(lastQueuePlace === "None" && positioninqueue !== "None") {
+						queueStartPlace = positioninqueue;
+						queueStartTime = DateTime.local();
+					}
+					if (positioninqueue !== "None" && lastQueuePlace !== positioninqueue) {
+						let totalWaitTime = getWaitTime(queueStartPlace, 0);
+						let timepassed = getWaitTime(queueStartPlace, positioninqueue);
+						let ETAmin = (totalWaitTime - timepassed) / 60;
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
-						logActivity("Pos: " + webserver.queuePlace + " ETA: " + webserver.ETA); //set the Discord Activity
-						if (config.notification.enabled && webserver.queuePlace <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
-								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
+						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
+						if (config.userStatus === true) { //set the Discord Activity
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
+						} else {
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
+						}
+						if (config.notification.enabled && positioninqueue <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
+							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
 					}
-					lastQueuePlace = webserver.queuePlace;
+					lastQueuePlace = positioninqueue;
 				}
 				break;
 			case "chat":
@@ -191,6 +190,11 @@ function join() {
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 					let chatMessage = JSON.parse(data.message);
 					if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
+						queueData.place.push(queueStartPlace);
+						let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSeconds();
+						let b = Math.pow((0 + c)/(queueStartPlace + c), 1/timeQueueTook);
+						queueData.factor.push(b);
+						fs.writeFile("queue.json", JSON.stringify(queueData), "utf-8", () => {});
 						if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
 							stop();
 						} else {
@@ -202,19 +206,9 @@ function join() {
 					}
 				}
 				break;
-			case "respawn":
-				Object.assign(loginpacket, data);
-				chunkData = new Map();
-				break;
-			case "login":
-				loginpacket = data;
-				break;
-			case "game_state_change":
-				loginpacket.gameMode = data.gameMode;
-				break;
 		}
 		if (proxyClient) { // if we are connected to the proxy, forward the packet we recieved to our game.
-			filterPacketAndSend(data, meta, proxyClient);
+			filterPacketAndSend(rawData, meta, proxyClient);
 		}
 	});
 
@@ -226,7 +220,7 @@ function join() {
 		}
 		stop();
 		if (!stoppedByPlayer) log("Connection reset by 2b2t server. Reconnecting...");
-		if (config.reconnect.onError) setTimeout(reconnect, 6000);
+		if (config.reconnect.onError) setTimeout(reconnect, 30000);
 	});
 
 	client.on('error', (err) => {
@@ -237,44 +231,32 @@ function join() {
 		stop();
 		log(`Connection error by 2b2t server. Error message: ${err} Reconnecting...`);
 		if (config.reconnect.onError) {
-			if (err == "Error: Invalid credentials. Invalid username or password.") setTimeout(reconnect, 60000);
-			else setTimeout(reconnect, 4000);
+			setTimeout(reconnect, 30000);
 		}
 	});
 
 	server = mc.createServer({ // create a server for us to connect to
-		'online-mode': false,
+		'online-mode': config.whitelist,
 		encryption: true,
-		host: '0.0.0.0',
+		host: config.address.minecraft,
 		port: config.ports.minecraft,
 		version: config.MCversion,
 		'max-players': maxPlayers = 1
 	});
 
 	server.on('login', (newProxyClient) => { // handle login
-		setTimeout(sendChunks, 1000)
-		newProxyClient.write('login', loginpacket);
-		newProxyClient.write('position', {
-			x: 0,
-			y: 1.62,
-			z: 0,
-			yaw: 0,
-			pitch: 0,
-			flags: 0x00
+		if(config.whitelist && client.uuid !== newProxyClient.uuid) {
+			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
+			return;
+		}
+		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
+			filterPacketAndSend(rawData, meta, client);
 		});
-
-		newProxyClient.on('packet', (data, meta) => { // redirect everything we do to 2b2t
-			filterPacketAndSend(data, meta, client);
-		});
+		cachePackets.join(newProxyClient);
 		proxyClient = newProxyClient;
 	});
 }
 
-function sendChunks() {
-	if(config.chunkCaching) chunkData.forEach((data) => {
-		proxyClient.write("map_chunk", data);
-	});
-}
 
 function log(logmsg) {
 	if (config.logging) {
@@ -303,14 +285,14 @@ function reconnectLoop() {
 	mc.ping({host: config.minecraftserver.hostname, port: config.minecraftserver.port}, (err) => {
 		if(err) setTimeout(reconnectLoop, 3000);
 		else startQueuing();
-		});
+	});
 }
 
 //function to filter out some packets that would make us disconnect otherwise.
 //this is where you could filter out packets with sign data to prevent chunk bans.
 function filterPacketAndSend(data, meta, dest) {
 	if (meta.name !== "keep_alive" && meta.name !== "update_time") { //keep alive packets are handled by the client we created, so if we were to forward them, the minecraft client would respond too and the server would kick us for responding twice.
-		dest.write(meta.name, data);
+		dest.writeRaw(data);
 	}
 }
 
@@ -353,6 +335,8 @@ if (config.discordBot) {
 }
 
 function userInput(cmd, DiscordOrigin, discordMsg) {
+	 cmd = cmd.toLowerCase();
+	
 	switch (cmd) {
 		case "start":
 			startQueuing();
@@ -400,7 +384,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					break;
 				case "calcTime":
 					let calcMsg = 
-					msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can paly at " + starttimestring);
+						msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can play at " + starttimestring);
 					break;
 			}
 			break;
@@ -433,7 +417,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 				doing = "timedStart"
 				timedStart = setTimeout(startQueuing, timeStringtoDateTime(cmd).toMillis() - DateTime.local().toMillis());
 				activity("Starting at " + starttimestring);
-				msg(DiscordOrigin, msg, "Timer", "Queue is starting at " + starttimestring);
+				msg(DiscordOrigin, discordMsg, "Timer", "Queue is starting at " + starttimestring);
 			} else if (/^play (\d|[0-1]\d|2[0-3]):[0-5]\d$/.test(cmd)) {
 				timeStringtoDateTime(cmd);
 				calcTime(cmd);
@@ -446,14 +430,15 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 
 function stopMsg(discordOrigin, discordMsg, stoppedThing) {
 	msg(discordOrigin, discordMsg, stoppedThing, stoppedThing + " is **stopped**");
+	activity(stoppedThing + " is stopped.");
 }
 
-function msg(discordOrigin, msg, titel, content) {
-	if(discordOrigin) sendDiscordMsg(msg.channel, titel, content);
+function msg(discordOrigin, msg, title, content) {
+	if(discordOrigin) sendDiscordMsg(msg.channel, title, content);
 	else console.log(content);
 }
 
-function sendDiscordMsg(channel, titel, content) {
+function sendDiscordMsg(channel, title, content) {
 	channel.send({
 		embed: {
 			color: 3447003,
@@ -462,7 +447,7 @@ function sendDiscordMsg(channel, titel, content) {
 				icon_url: dc.user.avatarURL
 			},
 			fields: [{
-				name: titel,
+				name: title,
 				value: content
 			}
 			],
@@ -494,11 +479,13 @@ function calcTime(msg) {
 			});
 			resp.on("end", () => {
 				data = JSON.parse(data);
-				totalWaitTime = Math.pow(data[0][1] / 35.4, 2 / 3); // data[0][1] is the current queue length
-				playTime = timeStringtoDateTime(msg);
-				if (playTime.toSeconds() - DateTime.local().toSeconds() < totalWaitTime * 3600) {
+				let queueLength = data[0][1];
+				let playTime = timeStringtoDateTime(msg);
+				let waitTime = getWaitTime(queueLength, 0);
+				if (playTime.toSeconds() - DateTime.local().toSeconds() < waitTime) {
 					startQueuing();
 					clearInterval(interval.calc);
+					console.log(waitTime);
 				}
 			});
 		});
@@ -519,6 +506,11 @@ function logActivity(update) {
 
 function joinOnStart() {
 	if(config.joinOnStart) setTimeout(startQueuing, 1000);
+}
+
+function getWaitTime(queueLength, queuePos) {
+	let b = everpolate.linear(queueLength, queueData.place, queueData.factor)[0];
+	return Math.log((queuePos + c)/(queueLength + c)) / Math.log(b); // see issue 141
 }
 module.exports = {
 	startQueue: function () {

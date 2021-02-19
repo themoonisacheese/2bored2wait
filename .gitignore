@@ -68,7 +68,9 @@ saveid
 #hiden files
 .idea
 .project
-minecraft_token.json
 .eslintrc.js
 #config
 config.json
+launcher_profiles.json
+queue-time.ggb
+.dockerignore

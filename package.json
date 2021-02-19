@@ -18,13 +18,12 @@
   },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
-    "discord.js": "^12.3.1",
+    "discord.js": "^12.5.1",
+    "everpolate": "0.0.3",
     "luxon": "^1.25.0",
-    "minecraft-protocol": "^1.8.3",
-    "moment": "^2.28.0",
+    "minecraft-protocol": "^1.19.0",
     "node-json-minify": "^1.0.0",
     "open": "^6.0.0",
-    "prismarine-tokens-fixed": "^1.1.2",
     "particles.js": "^2.0.0"
   }
 }

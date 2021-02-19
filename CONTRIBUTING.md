@@ -18,6 +18,9 @@ Pull requests are the best way to propose changes to the codebase (we use [Githu
 3. Add a descriptive commit message!
 4. Issue that pull request!
 
+## Formating
+please use tabs for indentation
+
 
 ## Report bugs using Github's [issues](https://github.com/briandk/transcriptase-atom/issues)
 We use GitHub issues to track public bugs. Report a bug by [opening a new issue](); it's that easy!
