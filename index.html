@@ -68,6 +68,8 @@
             }
 
             function stop() {
+                if(!confirm("Are you sure you want to stop queuing?")) return;
+
                 const xhr = new XMLHttpRequest();
                 xhr.open("GET", "/stop", true);
                 xhr.setRequestHeader('XPassword', document.getElementsByClassName('password')[0].value)
