@@ -5,7 +5,7 @@
         "minecraft":MINECRAFT_PROXY_PORT, // port for the proxy server
        "web":WEB_UI_PORT
     },
-    "address":{ // address 2b2w listens on
+    "address":{ // address 2b2w listens on. if you leave it on 0.0.0.0 you can via all IPs
     	"minecraft": "0.0.0.0",
 	"web": "0.0.0.0"
     },
