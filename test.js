@@ -8,7 +8,7 @@ function runScript(scriptPath, callback) {
 	var invoked = false;
 	// basic config to join a test server
 	let config = fs.readFileSync("./config.json.example", "utf-8");
-	config = config.replace("DISCORDBOT_FLAG", "true");
+	config = config.replace("DISCORDBOT_FLAG", "false");
 	config = config.replace("WEBSERVER_FLAG", "true");
 	config = config.replace("MINECRAFT_PROXY_PORT", "25565");
 	config = config.replace("WEB_UI_PORT", "9080");
