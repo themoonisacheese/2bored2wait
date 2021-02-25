@@ -29,7 +29,8 @@ const rl = require("readline").createInterface({
 	input: process.stdin,
 	output: process.stdout
 });
-try {
+if(!config.minecraftserver.onlinemode) cmdInput();
+else try {
 	secrets = JSON.parse(jsonminify(fs.readFileSync("./secrets.json", "utf8")));
 	mc_username = secrets.username;
 	mc_password = secrets.password;
@@ -40,28 +41,28 @@ try {
 } catch (err) {
 	if(err.code !== 'ENOENT') throw "error loading secrets.json:\n" +  err;
 	config.discordBot = false;
-	if(config.minecraftserver.onlinemode) {
-		console.log("Please enter your credentials.");
-		rl.question("account type, mojang or microsoft: ", function(type) {
-			accountType = type;
-			rl.question("Email: ", function(username) {
-				rl.question("Password: ", function(userpassword) {
-					rl.question("BotToken, leave blank if not using discord: ", function(discordBotToken) {
-						rl.question("Save login for next use? Y or N:", function(savelogin) {
-							mc_username = username;
-							mc_password = userpassword;
-							if (savelogin === "Y" || savelogin === "y") {
-								if (discordBotToken === "") {
-									discordBotToken = "DiscordBotToken"
-								}
-								fs.writeFile('./secrets.json', `
+	console.log("Please enter your credentials.");
+	rl.question("account type, mojang or microsoft: ", function(type) {
+		accountType = type;
+		rl.question("Email: ", function(username) {
+			rl.question("Password: ", function(userpassword) {
+				rl.question("BotToken, leave blank if not using discord: ", function(discordBotToken) {
+					rl.question("Save login for next use? Y or N:", function(savelogin) {
+						mc_username = username;
+						mc_password = userpassword;
+						if (savelogin === "Y" || savelogin === "y") {
+							if (discordBotToken === "") {
+								discordBotToken = "DiscordBotToken"
+							}
+							fs.writeFile('./secrets.json', `
 	      {
 		  "username":"${username}",
 		  "password":"${userpassword}",
 		  "BotToken":"${discordBotToken}",
 		  "authType":"${type}"
 	      }`, function (err) {
-		      if (err) return console.log(err);});
+		      if (err) return console.log(err);
+	      });
 						};
 						console.clear();
 						cmdInput();
@@ -70,8 +71,7 @@ try {
 				});
 			});
 		});
-		});
-	}
+	});
 }
 
 var stoppedByPlayer = false;
