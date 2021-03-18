@@ -84,7 +84,7 @@ All additional configurations from the Docker usage guide apply here as well.
 
 # ETA
 
-2b2w does not show ETA from 2b2t. the ETA is calculated based on position in the queue. This results in better ETA most of the time.
+2b2w does not show ETA from 2b2t. The ETA is calculated based on position in the queue. This results in better ETA most of the time.
 
 # Known issues
 - Starting the queue will revoke your Minecraft token. this means that you will not be able to join normal Minecraft servers until you restart the game
