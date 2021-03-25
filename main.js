@@ -18,6 +18,7 @@ var savelogin;
 var secrets;
 var config;
 var accountType;
+let launcherPath;
 let c = 150;
 try {
 	config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
@@ -29,11 +30,61 @@ const rl = require("readline").createInterface({
 	input: process.stdin,
 	output: process.stdout
 });
+const promisedQuestion = (text) => {
+	return new Promise((resolve) => rl.question(text, resolve))
+}
+const guessLauncherPath = () => {
+	const appdata = process.env.APPDATA
+	return appdata ? `${appdata}/.minecraft` : (process.platform == 'darwin' ? `${process.env.HOME}/Library/Application Support/minecraft` : `${process.env.HOME}/.minecraft`)
+}
+const askForSecrets = async () => {
+	let secretsLocal = null
+	shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
+
+	if (!shouldUseTokens) {
+		accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
+		mc_username = await promisedQuestion("Email: ");
+		mc_password = await promisedQuestion("Password: ");
+		discordBotToken = await promisedQuestion("BotToken, leave blank if not using discord []: ");
+
+		secretsLocal = {
+			username: mc_username,
+			password: mc_password,
+			BotToken: discordBotToken,
+			authType: accountType
+		}
+	} else {
+		mc_username = await promisedQuestion("Nickname (NOT an email!): ");
+		launcherPath = (await promisedQuestion("Path to Minecraft Launcher data folder, leave blank to autodetect []: ")) || guessLauncherPath();
+		discordBotToken = await promisedQuestion("BotToken, leave blank if not using discord []: ");
+	
+		secretsLocal = {
+			username: mc_username,
+			profilesFolder: launcherPath,
+			BotToken: discordBotToken
+		}
+	}
+
+	savelogin = await promisedQuestion("Save login for later use? Y or N [N]: ");
+	if (savelogin.toLowerCase() === "y") {
+		if (discordBotToken === "") discordBotToken = "DiscordBotToken"
+
+		fs.writeFile('./secrets.json', JSON.stringify(secretsLocal, null, 2), (err) => {
+			if (err) console.log(err);
+		});
+	};
+
+	console.clear();
+	cmdInput();
+	joinOnStart();
+}
+
 if(!config.minecraftserver.onlinemode) cmdInput();
 else try {
 	secrets = JSON.parse(jsonminify(fs.readFileSync("./secrets.json", "utf8")));
 	mc_username = secrets.username;
 	mc_password = secrets.password;
+	launcherPath = secrets.profilesFolder;
 	accountType = secrets.accountType
 	discordBotToken = secrets.BotToken
 	cmdInput();
@@ -42,36 +93,7 @@ else try {
 	if(err.code !== 'ENOENT') throw "error loading secrets.json:\n" +  err;
 	config.discordBot = false;
 	console.log("Please enter your credentials.");
-	rl.question("account type, mojang or microsoft: ", function(type) {
-		accountType = type;
-		rl.question("Email: ", function(username) {
-			rl.question("Password: ", function(userpassword) {
-				rl.question("BotToken, leave blank if not using discord: ", function(discordBotToken) {
-					rl.question("Save login for next use? Y or N:", function(savelogin) {
-						mc_username = username;
-						mc_password = userpassword;
-						if (savelogin === "Y" || savelogin === "y") {
-							if (discordBotToken === "") {
-								discordBotToken = "DiscordBotToken"
-							}
-							fs.writeFile('./secrets.json', `
-	      {
-		  "username":"${username}",
-		  "password":"${userpassword}",
-		  "BotToken":"${discordBotToken}",
-		  "authType":"${type}"
-	      }`, function (err) {
-		      if (err) return console.log(err);
-	      });
-						};
-						console.clear();
-						cmdInput();
-						joinOnStart();
-					});
-				});
-			});
-		});
-	});
+	askForSecrets();
 }
 
 var stoppedByPlayer = false;
@@ -139,6 +161,7 @@ function startQueuing() {
 	if (config.minecraftserver.onlinemode) {
 		options.username = mc_username;
 		options.password = mc_password;
+		options.profilesFolder = launcherPath;
 		options.auth = accountType;
 	} else {
 		options.username = config.minecraftserver.username;
