@@ -14,7 +14,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 # How to use
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. Run `npm start`
-3. It will now ask for your Minecraft email and password. If you are using the discord bot you need to add your token. Then answer Y or N if you want to save your Minecraft email, password. If you answer N you will need to re-enter your Minecraft login information into the console each time you start the program.
+3. It will now ask for your Minecraft email and password (or permission to use saved launcher data instead). If you are using the discord bot you need to add your token. Then answer Y or N if you want to save your Minecraft credentials. If you answer N you will need to re-enter your Minecraft login information into the console each time you start the program.
 4. Now open a browser and navigate to http://localhost: your port here.
 5. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 6. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
