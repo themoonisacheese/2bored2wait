@@ -25,6 +25,7 @@
         "onlinemode": true,
         "username": "lol" // the username to use if onlinemode is false
     },
+    "favicon": true, // custom server icon
     "notification": { // sends a message via discord if the place in the queue reaches the specified number
         "enabled": true, // you must send the bot a message once.
         "queuePlace": 20

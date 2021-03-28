@@ -10,6 +10,7 @@ const https = require("https");
 const everpolate = require("everpolate");
 const mcproxy = require("mcproxy");
 const queueData = require("./queue.json");
+let favicon;
 const save = "./saveid";
 var mc_username;
 var mc_password;
@@ -25,6 +26,7 @@ try {
 } catch (err) {
 	throw("error loading config file:\n" + err);
 }
+if(config.favicon) favicon = require("./favicon.json").faviconString;
 let finishedQueue = !config.minecraftserver.is2b2t;
 const rl = require("readline").createInterface({
 	input: process.stdin,
@@ -250,6 +252,14 @@ function join() {
 			proxyClient = null
 		}
 		stop();
+		if (err.message == "Request blocked by CloudFlare") {
+			console.log("Stoping to prevent Cloudflare ban")
+			process.exit(-1)
+		}
+		if (err.message == "Invalid credentials. Invalid username or password.") {
+			console.log("Invalid account " + mc_username)
+			process.exit(-1)
+		}
 		log(`Connection error by 2b2t server. Error message: ${err} Reconnecting...`);
 		if (config.reconnect.onError) {
 			setTimeout(reconnect, 30000);
@@ -262,7 +272,11 @@ function join() {
 		host: config.address.minecraft,
 		port: config.ports.minecraft,
 		version: config.MCversion,
-		'max-players': maxPlayers = 1
+		'max-players': maxPlayers = 1,
+		beforePing: reponse => {
+			reponse.favicon = favicon;
+		},
+		favicon: favicon
 	});
 
 	server.on('login', (newProxyClient) => { // handle login
