@@ -191,8 +191,10 @@ function join() {
 						queueStartTime = DateTime.local();
 					}
 					if (positioninqueue !== "None" && lastQueuePlace !== positioninqueue) {
+						let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSeconds();
+						let b = Math.pow((positioninqueue + c)/(queueStartPlace + c), 1/timeQueueTook);
 						let totalWaitTime = getWaitTime(queueStartPlace, 0);
-						let timepassed = getWaitTime(queueStartPlace, positioninqueue);
+						let timepassed = Math.log((positioninqueue + c)/(queueStartPlace + c)) / Math.log(b); // see issue 141
 						let ETAmin = (totalWaitTime - timepassed) / 60;
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
