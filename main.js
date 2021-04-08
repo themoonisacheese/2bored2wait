@@ -512,6 +512,8 @@ function calcTime(msg) {
 					console.log(waitTime);
 				}
 			});
+		}).on("error", (err) => {
+			log(err)
 		});
 	}, 60000);
 
