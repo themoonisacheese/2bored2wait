@@ -23,7 +23,11 @@ let c = 150;
 try {
 	config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
-	throw("error loading config file:\n" + err);
+	if(String(err).includes("SyntaxError: ")) {
+		console.error("The syntax in your config.json is not correct. Make sure you replaced all values as the README says under 'How to Install' step 5. If it still does not work, check that all quotes are closed. You can look up the json syntax online. Please note that the comments are no problem although comments are normally not allowed in json.")
+		process.exit(1);
+	}
+	else throw("error loading config file:\n" + err);
 }
 let finishedQueue = !config.minecraftserver.is2b2t;
 const rl = require("readline").createInterface({
