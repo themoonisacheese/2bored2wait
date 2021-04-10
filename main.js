@@ -12,21 +12,26 @@ const mcproxy = require("mcproxy");
 const queueData = require("./queue.json");
 let favicon;
 const save = "./saveid";
-var mc_username;
-var mc_password;
-var discordBotToken;
-var savelogin;
-var secrets;
-var config;
-var accountType;
+let mc_username;
+let mc_password;
+let discordBotToken;
+let savelogin;
+let shouldUseTokens
+let secrets;
+let config;
+let accountType;
 let launcherPath;
 let c = 150;
 try {
 	config = JSON.parse(jsonminify(fs.readFileSync("./config.json", "utf8"))); // Read the config
 } catch (err) {
-	throw("error loading config file:\n" + err);
+	if(String(err).includes("SyntaxError: ")) {
+		console.error("The syntax in your config.json is not correct. Make sure you replaced all values as the README says under 'How to Install' step 5. If it still does not work, check that all quotes are closed. You can look up the json syntax online. Please note that the comments are no problem although comments are normally not allowed in json.")
+		process.exit(1);
+	}
+	else throw("error loading config file:\n" + err);
 }
-if(config.favicon) favicon = require("./favicon.json").faviconString;
+if(config.favicon == true) favicon = JSON.parse(fs.readFileSync(`./favicon.json`, "utf-8")).faviconString;
 let finishedQueue = !config.minecraftserver.is2b2t;
 const rl = require("readline").createInterface({
 	input: process.stdin,
@@ -194,7 +199,7 @@ function join() {
 					}
 					if (positioninqueue !== "None" && lastQueuePlace !== positioninqueue) {
 						let totalWaitTime = getWaitTime(queueStartPlace, 0);
-						let timepassed = getWaitTime(queueStartPlace, positioninqueue);
+						let timepassed = Math.log((positioninqueue + c)/(queueStartPlace + c)) / Math.log(b); // see issue 141
 						let ETAmin = (totalWaitTime - timepassed) / 60;
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
@@ -524,6 +529,8 @@ function calcTime(msg) {
 					console.log(waitTime);
 				}
 			});
+		}).on("error", (err) => {
+			log(err)
 		});
 	}, 60000);
 
