@@ -7,7 +7,7 @@ function runScript(scriptPath, callback) {
 	// keep track of whether callback has been invoked to prevent multiple invocations
 	var invoked = false;
 	// basic config to join a test server
-	let config = fs.readFileSync("./config.json.example", "utf-8");
+	let config = fs.readFileSync("./config/config.json.example", "utf-8");
 	config = config.replace("DISCORDBOT_FLAG", "false");
 	config = config.replace("WEBSERVER_FLAG", "true");
 	config = config.replace("MINECRAFT_PROXY_PORT", "25565");
@@ -17,7 +17,7 @@ function runScript(scriptPath, callback) {
 	config.minecraftserver.hostname = "twerion.net"; // a random server which allows cracked accounts to join
 	config.minecraftserver.onlinemode = false;
 	config.minecraftserver.is2b2t = false;
-	fs.writeFileSync("./config.json", JSON.stringify(config));
+	fs.writeFileSync("./config/config.json", JSON.stringify(config));
 	var process = childProcess.fork("./main.js");
 
 	// listen for errors as they may prevent the exit event from firing
