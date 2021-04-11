@@ -8,7 +8,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 2. Download this repository with the green button (top right of this page). If you downloaded it as zip, unzip it.
 3. Open a terminal and navigate to the folder you downloaded it in.
 4. Run `npm install`
-5. Copy config.json.example and name it config.json. Replace DISCORDBOT_FLAG and WEBSERVER_FLAG with true or false to your liking, then replace MINECRAFT_PROXY_PORT and WEB_UI_PORT with valid ports. Edit other values to your preference.
+5. Copy config/config.json.example and name it config.json. Replace DISCORDBOT_FLAG and WEBSERVER_FLAG with true or false to your liking, then replace MINECRAFT_PROXY_PORT and WEB_UI_PORT with valid ports. Edit other values to your preference.
 6. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 # How to use
@@ -62,7 +62,7 @@ You can also easily change which port to map from the docker-compose, for exampl
 # Docker build guide
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. Clone the repo
-3. run `./gen_dockerignore.sh` to generate the .dockerignore
+3. run `scripts/gen_dockerignore.sh` to generate the .dockerignore
 4. `docker build -t 2bored2wait .` to build the image.
 5. Once the image has built, you can start it with:
 ```
