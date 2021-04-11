@@ -60,7 +60,7 @@ typings/
 # next.js build output
 .next
 #secrets
-secrets.json
+config/secrets.json
 #package-lock
 package-lock.json
 #discord user id
@@ -70,7 +70,7 @@ saveid
 .project
 .eslintrc.js
 #config
-config.json
+config/config.json
 launcher_profiles.json
 queue-time.ggb
 .dockerignore

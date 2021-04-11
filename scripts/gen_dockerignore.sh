@@ -1,5 +1,3 @@
-#!/bin/bash
-
-cd ..
+#!/bin/sh
 
 cat .gitignore dockerignore_template > .dockerignore
