@@ -61,7 +61,7 @@ typings/
 .next
 
 # Secrets
-secrets.json
+config/secrets.json
 
 # Package-lock
 package-lock.json
@@ -75,7 +75,7 @@ saveid
 .eslintrc.js
 
 # Config
-config.json
+config/config.json
 launcher_profiles.json
 queue-time.ggb
 .dockerignore

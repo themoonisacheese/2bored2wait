@@ -1,12 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
 # Author: dsetareh
 
 # script used to set the config values in the docker image
 
 # if file already exists it means it has been mounted, I'll use that one
-
-cd ..
 
 if [ ! -f /srv/app/config/config.json ]; then
 

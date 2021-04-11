@@ -1,12 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
 # Author: edofullo
 
 # script used to set the credentials in the docker image
 
 # if file already exists it means it has been mounted, I'll use that one
-
-cd ..
 
 if [ ! -f /srv/app/secrets.json ]; then
 
