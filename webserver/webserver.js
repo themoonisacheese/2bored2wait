@@ -10,11 +10,11 @@ module.exports = {
 			}        
 			if (req.url === "/") { //main page of the web app
 				res.writeHead(200, {'Content-type': 'text/html'});
-				res.write(fs.readFileSync('index.html'));
+				res.write(fs.readFileSync('webserver/index.html'));
 				res.end();
 			} else if(req.url === "/index.css") { //css file to make it not look like too much shit
 				res.writeHead(200, {'Content-type': 'text/css'});
-				res.write(fs.readFileSync('index.css'));
+				res.write(fs.readFileSync('webserver/index.css'));
 				res.end();
 			} else if(req.url === "/particles.js") { 
 				res.writeHead(200, {'Content-type': 'text/javascript'});
