@@ -5,7 +5,9 @@
   "main": "main.js",
   "scripts": {
     "test": "node test.js",
-    "start": "node main.js"
+    "start": "node main.js",
+    "new-site": "cd new-webserver && react-scripts start",
+    "build-new-site": "cd new-webserver && react-scripts build"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,14 @@
     "minecraft-protocol": "^1.24.1",
     "node-json-minify": "^1.0.0",
     "open": "^6.0.0",
-    "particles.js": "^2.0.0"
+    "particles.js": "^2.0.0",
+    "@testing-library/jest-dom": "^5.11.10",
+    "@testing-library/react": "^11.2.6",
+    "@testing-library/user-event": "^12.8.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-particles-js": "^3.4.1",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.1.1"
   }
 }
