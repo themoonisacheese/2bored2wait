@@ -7,9 +7,7 @@ const opn = require('open'); //to open a browser window
 const discord = require('discord.js');
 const {DateTime} = require("luxon");
 const https = require("https");
-const everpolate = require("everpolate");
 const mcproxy = require("mcproxy");
-const queueData = require("./queue.json");
 const save = "./saveid";
 var mc_username;
 var mc_password;
@@ -159,8 +157,10 @@ function stop() {
 	server.close(); // close the server
 }
 
-// function to start the whole thing
-function startQueuing() {
+/* function to start the whole thing
+joinTime is an optional paramenter for time the player would like to join the main server.
+This is used for the play command. The Type is the luxon time object */
+function startQueuing(joinTime) {
 	doing = "auth";
 	if (config.minecraftserver.onlinemode) {
 		options.username = mc_username;
@@ -172,13 +172,10 @@ function startQueuing() {
 	}
 	conn = new mcproxy.Conn(options);// connect to 2b2t
 	client = conn.bot._client;
-	join();
-}
-
-function join() {
 	let positioninqueue = "None";
 	let lastQueuePlace = "None";
 	let notisend = false;
+	let checkJoinTime = false;
 	doing = "queue"
 	webserver.isInQueue = true;
 	activity("Starting the queue...");
@@ -197,19 +194,30 @@ function join() {
 					if (positioninqueue !== "None" && lastQueuePlace !== positioninqueue) {
 						let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSeconds();
 						let b = Math.pow((positioninqueue + c)/(queueStartPlace + c), 1/timeQueueTook);
-						let totalWaitTime = getWaitTime(queueStartPlace, 0);
+						let totalWaitTime = Math.log((0 + c)/(queueStartPlace + c)) / Math.log(b); // see issue 141
 						let timepassed = Math.log((positioninqueue + c)/(queueStartPlace + c)) / Math.log(b); // see issue 141
-						let ETAmin = (totalWaitTime - timepassed) / 60;
-						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
-						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
-						if (config.userStatus === true) { //set the Discord Activity
-							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
-						} else {
-							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
+						if(joinTime && !checkJoinTime && queueStartPlace - positioninqueue > 10) {
+							if(queueStartTime.toSeconds() + totalWaitTime - timepassed < joinTime.toSeconds()) {
+								stopQueing();
+								setTimeout(() => {
+									startQueuing(joinTime);
+								}, 40000);
+							}
+							checkJoinTime = true;
 						}
-						if (config.notification.enabled && positioninqueue <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
-							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
-							notisend = true;
+						if(!joinTime || checkJoinTime) {
+							let ETAmin = (totalWaitTime - timepassed) / 60;
+							server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
+							webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
+							if (config.userStatus) { //set the Discord Activity
+								logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
+							} else {
+								logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
+							}
+							if (config.notification.enabled && positioninqueue <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
+								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
+								notisend = true;
+							}
 						}
 					}
 					lastQueuePlace = positioninqueue;
@@ -220,11 +228,6 @@ function join() {
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 					let chatMessage = JSON.parse(data.message);
 					if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
-						queueData.place.push(queueStartPlace);
-						let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSeconds();
-						let b = Math.pow((0 + c)/(queueStartPlace + c), 1/timeQueueTook);
-						queueData.factor.push(b);
-						fs.writeFile("queue.json", JSON.stringify(queueData), "utf-8", () => {});
 						if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
 							stop();
 						} else {
@@ -441,14 +444,13 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			}
 			break;
 		default:
-			if (/start (\d|[0-1]\d|2[0-3]):[0-5]\d$/.test(cmd)) {
+			if (/^start (\d|[0-1]\d|2[0-3]):[0-5]\d$/.test(cmd)) {
 				doing = "timedStart"
 				timedStart = setTimeout(startQueuing, timeStringtoDateTime(cmd).toMillis() - DateTime.local().toMillis());
 				activity("Starting at " + starttimestring);
 				msg(DiscordOrigin, discordMsg, "Timer", "Queue is starting at " + starttimestring);
 			} else if (/^play (\d|[0-1]\d|2[0-3]):[0-5]\d$/.test(cmd)) {
-				timeStringtoDateTime(cmd);
-				calcTime(cmd);
+				startQueuing(timeStringtoDateTime(cmd));
 				msg(DiscordOrigin, discordMsg, "Time calculator", "The perfect time to start the queue will be calculated, so you can play at " + starttimestring);
 				activity("You can play at " + starttimestring);
 			}
@@ -497,33 +499,6 @@ function timeStringtoDateTime(time) {
 	return startdt;
 }
 
-function calcTime(msg) {
-	doing = "calcTime"
-	interval.calc = setInterval(function () {
-		https.get("https://2b2t.io/api/queue", (resp) => {
-			let data = '';
-			resp.on('data', (chunk) => {
-				data += chunk;
-			});
-			resp.on("end", () => {
-				data = JSON.parse(data);
-				let queueLength = data[0][1];
-				let playTime = timeStringtoDateTime(msg);
-				let waitTime = getWaitTime(queueLength, 0);
-				if (playTime.toSeconds() - DateTime.local().toSeconds() < waitTime) {
-					startQueuing();
-					clearInterval(interval.calc);
-					console.log(waitTime);
-				}
-			});
-		}).on("error", (err) => {
-			log(err)
-		});
-	}, 60000);
-
-}
-
-
 function stopQueing() {
 	stoppedByPlayer = true;
 	stop();
@@ -542,6 +517,7 @@ function getWaitTime(queueLength, queuePos) {
 	let b = everpolate.linear(queueLength, queueData.place, queueData.factor)[0];
 	return Math.log((queuePos + c)/(queueLength + c)) / Math.log(b); // see issue 141
 }
+
 module.exports = {
 	startQueue: function () {
 		startQueuing();
