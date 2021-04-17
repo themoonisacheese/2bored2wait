@@ -190,8 +190,9 @@ function join() {
                                         let positioninqueue = "None";
                                         try{	
                                             positioninqueue = headermessage.text.split("\n")[5].substring(25);
-				        }catch(TypeError e){
-                                            console.log("Reading position in queue from tab failed! Is the queue empty, or the server isn't 2b2t?");
+				        }catch(e){
+                                            if (e instanceof TypeError)
+                                                console.log("Reading position in queue from tab failed! Is the queue empty, or the server isn't 2b2t?");
                                         }
 					if(positioninqueue !== "None") positioninqueue = Number(positioninqueue);
 					webserver.queuePlace = positioninqueue; // update info on the web page
