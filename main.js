@@ -187,7 +187,13 @@ function join() {
 			case "playerlist_header":
 				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
 					let headermessage = JSON.parse(data.header);
-					let positioninqueue = headermessage.text.split("\n")[5].substring(25);
+                                        let positioninqueue = "None";
+                                        try{	
+                                            positioninqueue = headermessage.text.split("\n")[5].substring(25);
+				        }catch(e){
+                                            if (e instanceof TypeError)
+                                                console.log("Reading position in queue from tab failed! Is the queue empty, or the server isn't 2b2t?");
+                                        }
 					if(positioninqueue !== "None") positioninqueue = Number(positioninqueue);
 					webserver.queuePlace = positioninqueue; // update info on the web page
 					if(lastQueuePlace === "None" && positioninqueue !== "None") {
