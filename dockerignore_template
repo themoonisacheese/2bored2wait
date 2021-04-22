@@ -5,5 +5,5 @@ Dockerfile
 dockerignore_template
 docker-compose.yml
 LICENSE
-gen_dockerignore.sh
+scripts/gen_dockerignore.sh
 .github
