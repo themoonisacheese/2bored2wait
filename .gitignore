@@ -79,6 +79,3 @@ config/config.json
 launcher_profiles.json
 queue-time.ggb
 .dockerignore
-
-# Queue Data
-queue.json
