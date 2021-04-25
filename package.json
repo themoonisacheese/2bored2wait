@@ -26,5 +26,8 @@
     "node-json-minify": "^1.0.0",
     "open": "^6.0.0",
     "particles.js": "^2.0.0"
+  },
+  "devDependencies": {
+    "nexe": "^4.0.0-beta.18"
   }
 }
