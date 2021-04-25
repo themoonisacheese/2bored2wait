@@ -7,3 +7,5 @@ docker-compose.yml
 LICENSE
 scripts/gen_dockerignore.sh
 .github
+test.js
+build.js
