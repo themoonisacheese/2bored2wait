@@ -144,7 +144,7 @@ function startAntiAntiAFK(){
 
 		setTimeout(()=>{
 			if(conn.bot._client.state != "play"){
-				antiAntiAFK(); return;
+				startAntiAntiAFK(); return;
 			}
 
 			var rotation, jump, walk;
