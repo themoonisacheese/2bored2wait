@@ -140,16 +140,19 @@ const walkActions = [ 'forward', 'back', 'left', 'right'];
 function startAntiAntiAFK(){
 	if(!config.antiAntiAFK) return;
 	if(proxyClient == null && webserver.isInQueue && finishedQueue){
-		var rotation, jump, walk;
-		while(!rotation && !jump && !walk){
-			rotation = (Math.random() < 0.75);
-			jump = (Math.random() < 0.75);
-			walk = (Math.random() < 0.75);
-		}
-
 		conn.bot.clearControlStates();
 
 		setTimeout(()=>{
+			if(conn.bot._client.state != "play"){
+				antiAntiAFK(); return;
+			}
+
+			var rotation, jump, walk;
+			while(!rotation && !jump && !walk){
+				rotation = (Math.random() < 0.75);
+				jump = (Math.random() < 0.75);
+				walk = (Math.random() < 0.75);
+			}
 			if(rotation){
 				var yaw = Math.random()*Math.PI - (0.5*Math.PI);
 				var pitch = Math.random()*Math.PI - (0.5*Math.PI);
