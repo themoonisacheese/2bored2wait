@@ -135,9 +135,40 @@ options = {
 	port: config.minecraftserver.port,
 	version: config.minecraftserver.version
 }
-if (config.antiAntiAFK) setInterval(function () {
-	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "!que", position: 1 })
-}, 50000)
+
+const walkActions = [ 'forward', 'back', 'left', 'right'];
+function startAntiAntiAFK(){
+	if(!config.antiAntiAFK) return;
+	if(proxyClient == null && webserver.isInQueue && finishedQueue){
+		var rotation, jump, walk;
+		while(!rotation && !jump && !walk){
+			rotation = (Math.random() < 0.75);
+			jump = (Math.random() < 0.75);
+			walk = (Math.random() < 0.75);
+		}
+
+		conn.bot.clearControlStates();
+
+		setTimeout(()=>{
+			if(rotation){
+				var yaw = Math.random()*Math.PI - (0.5*Math.PI);
+				var pitch = Math.random()*Math.PI - (0.5*Math.PI);
+				conn.bot.look(yaw,pitch,false);
+			}
+			if(walk){
+				lastaction = walkActions[Math.floor(Math.random() * walkActions.length)];
+				conn.bot.setControlState(lastaction,true);
+			}
+			if(jump){
+				conn.bot.setControlState('jump', true)
+				conn.bot.setControlState('jump', false)
+			}
+			setTimeout(startAntiAntiAFK, walk ? 1500+5000*Math.random() : 0);//walking timeout
+		}, 4000*Math.random()); //standing timeout
+	}
+}
+
+startAntiAntiAFK();
 
 function cmdInput() {
 	rl.question("$ ", (cmd) => {
@@ -181,6 +212,7 @@ function join() {
 	let notisend = false;
 	doing = "queue"
 	webserver.isInQueue = true;
+	startAntiAntiAFK(); //for non-2b2t servers
 	activity("Starting the queue...");
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
@@ -237,6 +269,7 @@ function join() {
 							stop();
 						} else {
 							finishedQueue = true;
+							startAntiAntiAFK();
 							webserver.queuePlace = "FINISHED";
 							webserver.ETA = "NOW";
 							logActivity("Queue is finished");
@@ -287,6 +320,10 @@ function join() {
 		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
+		newProxyClient.on("end", ()=>{
+			proxyClient = null;
+			startAntiAntiAFK();
+		})
 		conn.sendPackets(newProxyClient);
 		conn.link(newProxyClient);
 		proxyClient = newProxyClient;
