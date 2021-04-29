@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
+    "config": "^3.3.6",
     "discord.js": "^12.5.1",
     "everpolate": "0.0.3",
     "luxon": "^1.26.0",
