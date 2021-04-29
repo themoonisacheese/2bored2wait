@@ -11,25 +11,25 @@ const everpolate = require("everpolate");
 const mcproxy = require("mcproxy");
 const queueData = require("./queue.json");
 const save = "./saveid";
+var config;
+try {
+	config = require("config");
+} catch(err) {
+	if(String(err).includes("SyntaxError: ")) {
+		console.error("The syntax in your config file is not correct. Make sure you replaced all values as the README says under 'How to Install' step 5. If it still does not work, check that all quotes are closed. You can look up the json syntax online. Please note that the comments are no problem although comments are normally not allowed in json. " + err)
+		process.exit(1);
+	}
+}
 var mc_username;
 var mc_password;
 var discordBotToken;
 var savelogin;
 var secrets;
-var config;
 var accountType;
 let launcherPath;
 let c = 150;
-try {
-	config = JSON.parse(jsonminify(fs.readFileSync("./config/config.json", "utf8"))); // Read the config
-} catch (err) {
-	if(String(err).includes("SyntaxError: ")) {
-		console.error("The syntax in your config.json is not correct. Make sure you replaced all values as the README says under 'How to Install' step 5. If it still does not work, check that all quotes are closed. You can look up the json syntax online. Please note that the comments are no problem although comments are normally not allowed in json.")
-		process.exit(1);
-	}
-	else throw("error loading config file:\n" + err);
-}
-let finishedQueue = !config.minecraftserver.is2b2t;
+let finishedQueue = !config.get("minecraftserver.is2b2t");
+let dc;
 const rl = require("readline").createInterface({
 	input: process.stdin,
 	output: process.stdout
@@ -42,61 +42,80 @@ const guessLauncherPath = () => {
 	return appdata ? `${appdata}/.minecraft` : (process.platform == 'darwin' ? `${process.env.HOME}/Library/Application Support/minecraft` : `${process.env.HOME}/.minecraft`)
 }
 const askForSecrets = async () => {
-	let secretsLocal = null
-	shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
+	let localConf = JSON.parse(jsonminify(fs.readFileSync("config/local.json", "utf8")));
+	let canSave = false;
+	if(!(config.has("username") && config.has("password") || config.has("profilesFolder"))) {
+		canSave = true;
+		shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
 
-	if (!shouldUseTokens) {
-		accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
-		mc_username = await promisedQuestion("Email: ");
-		mc_password = await promisedQuestion("Password: ");
-		discordBotToken = await promisedQuestion("BotToken, leave blank if not using discord []: ");
+		if (!shouldUseTokens) {
+			accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
+			mc_username = await promisedQuestion("Email: ");
+			mc_password = await promisedQuestion("Password: ");
+			localConf.password = mc_password;
 
-		secretsLocal = {
-			username: mc_username,
-			password: mc_password,
-			BotToken: discordBotToken,
-			authType: accountType
+		} else {
+			mc_username = await promisedQuestion("Nickname (NOT an email!): ");
+			launcherPath = (await promisedQuestion("Path to Minecraft Launcher data folder, leave blank to autodetect []: ")) || guessLauncherPath();
+			localConf.launcherPath = launcherPath;
+
 		}
-	} else {
-		mc_username = await promisedQuestion("Nickname (NOT an email!): ");
-		launcherPath = (await promisedQuestion("Path to Minecraft Launcher data folder, leave blank to autodetect []: ")) || guessLauncherPath();
+		localConf.username = mc_username;
+	}
+	if(config.get("discordBot") && !config.has("BotToken")) {
+		canSave = true;
 		discordBotToken = await promisedQuestion("BotToken, leave blank if not using discord []: ");
-	
-		secretsLocal = {
-			username: mc_username,
-			profilesFolder: launcherPath,
-			BotToken: discordBotToken
-		}
+		localConf.BotToken = discordBotToken;
 	}
 
-	savelogin = await promisedQuestion("Save login for later use? Y or N [N]: ");
-	if (savelogin.toLowerCase() === "y") {
-		if (discordBotToken === "") discordBotToken = "DiscordBotToken"
+	if(canSave) {
+		savelogin = await promisedQuestion("Save login for later use? Y or N [N]: ");
+		if (savelogin.toLowerCase() === "y") {
+			fs.writeFile('config/local.json', JSON.stringify(localConf, null, 2), (err) => {
+				if (err) console.log(err);
+			});
+		};
+		console.clear();
+	}
 
-		fs.writeFile('./config/secrets.json', JSON.stringify(secretsLocal, null, 2), (err) => {
-			if (err) console.log(err);
+	if (config.get("discordBot")) {
+		dc = new discord.Client()
+		dc.on('ready', () => {
+			dc.user.setActivity("Queue is stopped.");
+			fs.readFile(save, "utf8", (err, id) => {
+				if(!err) dc.users.fetch(id).then(user => {
+					dcUser = user;
+				});
+			});
 		});
-	};
 
-	console.clear();
+		dc.on('message', msg => {
+			if (msg.author.username !== dc.user.username) {
+				userInput(msg.content, true, msg);
+				if (dcUser == null || msg.author.id !== dcUser.id) {
+					fs.writeFile(save, msg.author.id, function (err) {
+						if (err) {
+							throw err;
+						}
+				});
+			}
+			dcUser = msg.author;
+		}
+	});
+
+	dc.login(discordBotToken);
+}
 	cmdInput();
 	joinOnStart();
 }
 
-if(!config.minecraftserver.onlinemode) cmdInput();
-else try {
-	secrets = JSON.parse(jsonminify(fs.readFileSync("./config/secrets.json", "utf8")));
-	mc_username = secrets.username;
-	mc_password = secrets.password;
-	launcherPath = secrets.profilesFolder;
-	accountType = secrets.accountType
-	discordBotToken = secrets.BotToken
-	cmdInput();
-	joinOnStart();
-} catch (err) {
-	if(err.code !== 'ENOENT') throw "error loading secrets.json:\n" +  err;
-	config.discordBot = false;
-	console.log("Please enter your credentials.");
+if(!config.get("minecraftserver.onlinemode")) cmdInput();
+else {
+	mc_username = config.username;
+	mc_password = config.password;
+	launcherPath = config.profilesFolder;
+	accountType = config.get("accountType");
+	discordBotToken = config.BotToken
 	askForSecrets();
 }
 
@@ -110,19 +129,18 @@ var doing;
 let interval = {};
 let queueStartPlace;
 let queueStartTime;
-webserver.restartQueue = config.reconnect.notConnectedQueueEnd;
-if (config.webserver) {
-	webserver.createServer(config.ports.web, config.address.web); // create the webserver
-	webserver.password = config.password
-}
+webserver.restartQueue = config.get("reconnect.notConnectedQueueEnd");
 webserver.onstart(() => { // set up actions for the webserver
 	startQueuing();
 });
 webserver.onstop(() => {
 	stopQueing();
 });
-if (config.openBrowserOnStart && config.webserver) {
-	opn('http://localhost:' + config.ports.web); //open a browser window
+if (config.get("webserver")) {
+	let webPort = config.get("ports.web");
+	webserver.createServer(webPort, config.get("address.web")); // create the webserver
+	webserver.password = config.password
+	if(config.get("openBrowserOnStart")) opn('http://localhost:' + webPort); //open a browser window
 }
 // lets
 let proxyClient; // a reference to the client that is the actual minecraft game
@@ -131,11 +149,11 @@ let server; // the minecraft server to pass packets
 let conn; // connection object from mcproxy for the client variable
 
 options = {
-	host: config.minecraftserver.hostname,
-	port: config.minecraftserver.port,
-	version: config.minecraftserver.version
+	host: config.get("minecraftserver.hostname"),
+	port: config.get("minecraftserver.port"),
+	version: config.get("minecraftserver.version")
 }
-if (config.antiAntiAFK) setInterval(function () {
+if (config.get("antiAntiAFK")) setInterval(function () {
 	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "!que", position: 1 })
 }, 50000)
 
@@ -162,13 +180,13 @@ function stop() {
 // function to start the whole thing
 function startQueuing() {
 	doing = "auth";
-	if (config.minecraftserver.onlinemode) {
+	if (config.get("minecraftserver.onlinemode")) {
 		options.username = mc_username;
 		options.password = mc_password;
 		options.profilesFolder = launcherPath;
 		options.auth = accountType;
 	} else {
-		options.username = config.minecraftserver.username;
+		options.username = config.get("minecraftserver.username");
 	}
 	conn = new mcproxy.Conn(options);// connect to 2b2t
 	client = conn.bot._client;
@@ -206,12 +224,12 @@ function join() {
 						let ETAmin = (totalWaitTime - timepassed) / 60;
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
-						if (config.userStatus === true) { //set the Discord Activity
+						if (config.get("userStatus")) { //set the Discord Activity
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
 						} else {
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
 						}
-						if (config.notification.enabled && positioninqueue <= config.notification.queuePlace && !notisend && config.discordBot && dcUser != null) {
+						if (config.get("notification.enabled") && positioninqueue <= config.get("notification.queuePlace") && !notisend && config.discordBot && dcUser != null) {
 							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
@@ -224,7 +242,7 @@ function join() {
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 					let chatMessage = JSON.parse(data.message);
 					if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
-						if(config.expandQueueData) {
+						if(config.get("expandQueueData")) {
 							queueData.place.push(queueStartPlace);
 							let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSeconds();
 							let b = Math.pow((0 + c)/(queueStartPlace + c), 1/timeQueueTook);
@@ -271,10 +289,10 @@ function join() {
 	});
 
 	server = mc.createServer({ // create a server for us to connect to
-		'online-mode': config.whitelist,
+		'online-mode': config.get("whitelist"),
 		encryption: true,
-		host: config.address.minecraft,
-		port: config.ports.minecraft,
+		host: config.get("address.minecraft"),
+		port: config.get("ports.minecraft"),
 		version: config.MCversion,
 		'max-players': maxPlayers = 1
 	});
@@ -295,7 +313,7 @@ function join() {
 
 
 function log(logmsg) {
-	if (config.logging) {
+	if (config.get("logging")) {
 		fs.appendFile('2bored2wait.log', DateTime.local().toLocaleString({
 			hour: '2-digit',
 			minute: '2-digit',
@@ -342,33 +360,6 @@ function activity(string) {
 }
 
 //the discordBot part starts here.
-if (config.discordBot) {
-	var dc = new discord.Client()
-	dc.on('ready', () => {
-		dc.user.setActivity("Queue is stopped.");
-		fs.readFile(save, "utf8", (err, id) => {
-			if(!err) dc.users.fetch(id).then(user => {
-				dcUser = user;
-			});
-		});
-	});
-
-	dc.on('message', msg => {
-		if (msg.author.username !== dc.user.username) {
-			userInput(msg.content, true, msg);
-			if (dcUser == null || msg.author.id !== dcUser.id) {
-				fs.writeFile(save, msg.author.id, function (err) {
-					if (err) {
-						throw err;
-					}
-				});
-			}
-			dcUser = msg.author;
-		}
-	});
-
-	dc.login(discordBotToken);
-}
 
 function userInput(cmd, DiscordOrigin, discordMsg) {
 	 cmd = cmd.toLowerCase();
@@ -543,7 +534,7 @@ function logActivity(update) {
 }
 
 function joinOnStart() {
-	if(config.joinOnStart) setTimeout(startQueuing, 1000);
+	if(config.get("joinOnStart")) setTimeout(startQueuing, 1000);
 }
 
 function getWaitTime(queueLength, queuePos) {

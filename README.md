@@ -8,7 +8,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 2. Download this repository with the green button (top right of this page). If you downloaded it as zip, unzip it.
 3. Open a terminal and navigate to the folder you downloaded it in.
 4. Run `npm install`
-5. Copy config/config.json.example and name it config.json. Replace DISCORDBOT_FLAG and WEBSERVER_FLAG with true or false to your liking, then replace MINECRAFT_PROXY_PORT and WEB_UI_PORT with valid ports. Edit other values to your preference.
+5. Copy config/default.json and name it config/local.json. Edit the values to your preference.
 6. For trust reasons, this tool does not update automatically. Check back here once in a while to see if there are any updates.
 
 # How to use
@@ -44,7 +44,7 @@ docker-compose up -d
 
 ## Additional configuration
 
-If you want to change the configuration you will have to mount config.json manually, you can also mount secrets.json manually if you don't want your credentials in the bash history
+If you want to change the configuration or you don't want your credentials in the bash history you will have to mount config/local.json manually.
 
 To access logs you can just do
 ```
@@ -75,7 +75,7 @@ docker run --name 2bored2wait -d -p 80:8080 -p 25565:25566 -e MOJANG_USERNAME="u
 8. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
 9. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
-If you want to change the configuration you will have to mount config.json manually, you can also mount secrets.json manually if you don't want your credentials in the bash history.
+If you want to change the configuration or you don't want your credentials in the bash history you will have to mount config/local.json manually.
 
 All additional configurations from the Docker usage guide apply here as well.
 

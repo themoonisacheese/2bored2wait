@@ -60,9 +60,6 @@ typings/
 # next.js build output
 .next
 
-# Secrets
-config/secrets.json
-
 # Package-lock
 package-lock.json
 
@@ -75,7 +72,7 @@ saveid
 .eslintrc.js
 
 # Config
-config/config.json
+config/local.json
 launcher_profiles.json
 queue-time.ggb
 .dockerignore
