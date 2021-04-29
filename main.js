@@ -1,4 +1,3 @@
-
 // imports
 const mc = require('minecraft-protocol'); // to handle minecraft login session
 const webserver = require('./webserver.js'); // to serve the webserver
@@ -26,8 +25,7 @@ let transport = nodemailer.createTransport({
 
 var mc_username;
 var mc_password;
-
-mailsend = false;
+var emailSend = "false";
 
 if(fs.existsSync("./secrets.json")) {
 	const secrets = require('./secrets.json');
@@ -120,15 +118,18 @@ function startQueuing() {
 		}
 
 		if(config.useEmailFeature) {
-			if(module.exports.isInQueue == true && module.exports.positioninqueue == 10 && mailsend == false) {
-				mailsend = true;
-				transport.sendMail(message, function(err, info) {
-					if(err) {
-						console.log(err)
-					}else{
-						console.log(info);
-					}
-				});
+			if(module.exports.positioninqueue == 10) {
+				trigger = false;
+				if(trigger == false){
+					trigger = true;
+					transport.sendMail(message, function(err, info) {
+						if(err) {
+							console.log(err)
+						}else{
+							console.log(info);
+						}
+					});
+				}
 			}
 		}
 
