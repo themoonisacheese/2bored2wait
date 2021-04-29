@@ -147,24 +147,19 @@ function startAntiAntiAFK(){
 				startAntiAntiAFK(); return;
 			}
 
-			var rotation, jump, walk;
-			while(!rotation && !jump && !walk){
+			let rotation, walk;
+			while(!rotation && !walk){
 				rotation = (Math.random() < 0.75);
-				jump = (Math.random() < 0.75);
 				walk = (Math.random() < 0.75);
 			}
 			if(rotation){
-				var yaw = Math.random()*Math.PI - (0.5*Math.PI);
-				var pitch = Math.random()*Math.PI - (0.5*Math.PI);
+				let yaw = Math.random()*Math.PI - (0.5*Math.PI);
+				let pitch = Math.random()*Math.PI - (0.5*Math.PI);
 				conn.bot.look(yaw,pitch,false);
 			}
 			if(walk){
 				lastaction = walkActions[Math.floor(Math.random() * walkActions.length)];
 				conn.bot.setControlState(lastaction,true);
-			}
-			if(jump){
-				conn.bot.setControlState('jump', true)
-				conn.bot.setControlState('jump', false)
 			}
 			setTimeout(startAntiAntiAFK, walk ? 1500+5000*Math.random() : 0);//walking timeout
 		}, 4000*Math.random()); //standing timeout
