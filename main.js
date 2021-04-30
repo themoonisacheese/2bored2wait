@@ -80,6 +80,7 @@ const askForSecrets = async () => {
 
 	if (config.get("discordBot")) {
 		dc = new discord.Client()
+		dc.login(discordBotToken);
 		dc.on('ready', () => {
 			dc.user.setActivity("Queue is stopped.");
 			fs.readFile(save, "utf8", (err, id) => {
@@ -102,8 +103,6 @@ const askForSecrets = async () => {
 			dcUser = msg.author;
 		}
 	});
-
-	dc.login(discordBotToken);
 }
 	cmdInput();
 	joinOnStart();
