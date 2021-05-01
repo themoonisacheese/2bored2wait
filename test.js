@@ -1,41 +1,38 @@
 var childProcess = require('child_process');
-const fs = require("fs");
-const jsonminify = require("node-json-minify");
+const util = require("./util");
 
 function runScript(scriptPath, callback) {
 
 	// keep track of whether callback has been invoked to prevent multiple invocations
 	var invoked = false;
 	// basic config to join a test server
-	let config = fs.readFileSync("./config/config.json.example", "utf-8");
-	config = config.replace("DISCORDBOT_FLAG", "false");
-	config = config.replace("WEBSERVER_FLAG", "true");
-	config = config.replace("MINECRAFT_PROXY_PORT", "25565");
-	config = config.replace("WEB_UI_PORT", "9080");
-	config = JSON.parse(jsonminify(config));
+	let config = util.readJSON("config/default.json");
+	config.discordBot = false;
 	config.joinOnStart = true;
 	config.minecraftserver.hostname = "twerion.net"; // a random server which allows cracked accounts to join
 	config.minecraftserver.onlinemode = false;
 	config.minecraftserver.is2b2t = false;
-	fs.writeFileSync("./config/config.json", JSON.stringify(config));
-	var process = childProcess.fork("./main.js");
+	config.ports.minecraft = 52157 // use uncommon ports to avoid listen on an already used port
+	config.ports.web = 52156
+	process.env.NODE_CONFIG = JSON.stringify(config);
+	let mainProcess = childProcess.fork("./main.js");
 
 	// listen for errors as they may prevent the exit event from firing
-	process.on('error', function (err) {
+	mainProcess.on('error', function (err) {
 		if (invoked) return;
 		invoked = true;
 		callback(err);
 	});
 
 	// execute the callback once the process has finished running
-	process.on('exit', function (code) {
+	mainProcess.on('exit', function (code) {
 		if (invoked) return;
 		invoked = true;
 		var err = code === 0 ? null : new Error('exit code ' + code);
 		callback(err);
 	});
 	setTimeout(function () {
-		process.kill();
+		mainProcess.kill();
 	}, 10000);
 
 }
