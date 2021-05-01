@@ -155,20 +155,65 @@ options = {
 }
 
 const walkActions = [ 'forward', 'back', 'left', 'right'];
+
+var isFishing = false;
+var wasFishing = false;
+async function startFishing (first) {
+	if(!conn.bot.entity || !conn.bot.blockAtCursor() || conn.bot.blockAtCursor().name != 'water'){
+		if(wasFishing)
+			logActivity('Fishing finished - not looking at water');
+		wasFishing = false;
+		if(!first) startAntiAntiAFK();
+		return false; 
+	}
+	try {
+	  await conn.bot.equip(346, 'hand');
+	} catch (err) {
+  	  if(wasFishing)
+		logActivity('Fishing finished - cannod equip fishing_rod: '+err.message);
+	  wasFishing = false;
+	  if(!first) startAntiAntiAFK();
+	  return false; 
+	}
+	try {
+	  isFishing = true;
+	  if(!wasFishing){
+		logActivity('Started fishing');
+		wasFishing = true;
+	  }
+	  await conn.bot.fish();
+	  isFishing = false;
+	} catch (err) {
+  	  if(wasFishing)
+		logActivity('Fishing finished: '+err.message);
+	  wasFishing = false;
+	  isFishing = false;
+	  if(!first) startAntiAntiAFK();
+	  return false;
+	}
+	setTimeout(()=>startFishing(), 1500*Math.random());
+	return true;
+}
 function startAntiAntiAFK(){
 	if (!config.get("antiAntiAFK")) return;
 	if(proxyClient == null && webserver.isInQueue && finishedQueue){
 		conn.bot.clearControlStates();
+		//conn.bot.deactivateItem();//TODO check if it doesn't happen with clearControlStates
 
-		setTimeout(()=>{
+		setTimeout(async ()=>{
 			if(conn.bot._client.state != "play"){
 				startAntiAntiAFK(); return;
 			}
+			
+			if (config.get("AFKfishing")){
+				if(await startFishing(true)) return;
+			}
 
-			let rotation, walk;
-			while(!rotation && !walk){
+			let rotation, walk, click;
+			while(!rotation && !walk && !click){
 				rotation = (Math.random() < 0.75);
 				walk = (Math.random() < 0.75);
+				click = (Math.random() < 0.75);
 			}
 			if(rotation){
 				let yaw = Math.random()*Math.PI - (0.5*Math.PI);
@@ -179,12 +224,19 @@ function startAntiAntiAFK(){
 				lastaction = walkActions[Math.floor(Math.random() * walkActions.length)];
 				conn.bot.setControlState(lastaction,true);
 			}
+			if(click){
+				try{
+					await conn.bot.unequip('hand');
+					conn.bot.activateItem();
+				}catch(err){
+					console.log(err.message);
+				}
+			}
 			setTimeout(startAntiAntiAFK, walk ? 1500+5000*Math.random() : 0);//walking timeout
 		}, 4000*Math.random()); //standing timeout
 	}
 }
 
-startAntiAntiAFK();
 
 function cmdInput() {
 	rl.question("$ ", (cmd) => {
@@ -333,6 +385,8 @@ function join() {
 			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
 			return;
 		}
+		if(isFishing)
+			conn.bot.activateItem(); //stop fishing(required for mineflyer to not get bugged)
 		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
