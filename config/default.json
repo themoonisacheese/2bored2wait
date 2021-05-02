@@ -31,7 +31,20 @@
         "queuePlace": 20
     },
     "userStatus": true, // show username in discord bot status, in case of alts
-    "antiAntiAFK": true, // to bypass antiAFK plugins
+    "antiAntiAFK": { 
+        "enabled": true, // master switch for all bypass antiAFK plugins
+        "fishing": true, // working only when fishing rod in inventory and looking at water. When fishing, no other actions are performed
+        //Normal mode(not fishing) actions:
+        "minWalkingTime": 2000, // walking in one random direction time, in miliseconds,
+        "maxWalkingTime": 10000, // (0 to disable walking)
+        "rotating": true,
+        "jumping": true,
+        "arm": true, // swings arm
+        "placing": [3],  // block IDs, allowed to be placed
+        "breaking": [3], // block IDs, allowed to be breaked
+        "minActionsInterval": 500, // interval between performed actions
+        "maxActionsInterval": 5000
+    },
     "joinOnStart": false, // join the server when 2b2w is started
     "whitelist": false, // only let the same minecraft account join 2b2w as the one connected to 2b2t
     "expandQueueData": false // enlarge the dataset in queue.json for better ETA calculation

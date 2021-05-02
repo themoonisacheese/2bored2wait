@@ -2,6 +2,7 @@
 const jsonminify = require("node-json-minify"); // to remove comments from the config.json, because normally comments in json are not allowed
 const fs = require('fs');
 const mc = require('minecraft-protocol'); // to handle minecraft login session
+const Vec3 = require('vec3');
 const webserver = require('./webserver/webserver.js'); // to serve the webserver
 const opn = require('open'); //to open a browser window
 const discord = require('discord.js');
@@ -154,37 +155,135 @@ options = {
 	version: config.get("minecraftserver.version")
 }
 
-const walkActions = [ 'forward', 'back', 'left', 'right'];
-function startAntiAntiAFK(){
-	if (!config.get("antiAntiAFK")) return;
-	if(proxyClient == null && webserver.isInQueue && finishedQueue){
-		conn.bot.clearControlStates();
-
-		setTimeout(()=>{
-			if(conn.bot._client.state != "play"){
-				startAntiAntiAFK(); return;
-			}
-
-			let rotation, walk;
-			while(!rotation && !walk){
-				rotation = (Math.random() < 0.75);
-				walk = (Math.random() < 0.75);
-			}
-			if(rotation){
-				let yaw = Math.random()*Math.PI - (0.5*Math.PI);
-				let pitch = Math.random()*Math.PI - (0.5*Math.PI);
-				conn.bot.look(yaw,pitch,false);
-			}
-			if(walk){
-				lastaction = walkActions[Math.floor(Math.random() * walkActions.length)];
-				conn.bot.setControlState(lastaction,true);
-			}
-			setTimeout(startAntiAntiAFK, walk ? 1500+5000*Math.random() : 0);//walking timeout
-		}, 4000*Math.random()); //standing timeout
+var isFishing = false;
+async function fishingObjections(){
+	if(!conn.bot.entity || !conn.bot.blockAtCursor() || conn.bot.blockAtCursor().name != 'water'){
+		return 'not looking at water'; 
 	}
+	try {
+	  await conn.bot.equip(346, 'hand');
+	} catch (err) {
+  	  return 'cannod equip fishing_rod: '+err.message;
+	}
+
+	return false;//can fish
+}
+async function startFishing() {
+	let obj = await fishingObjections();
+	if(obj){
+		logActivity('Fishing finished - '+obj);
+		startAntiAntiAFK();
+		return;
+	}
+	try {
+	  isFishing = true;
+	  await conn.bot.fish();
+	  isFishing = false;
+	} catch (err) {
+	  isFishing = false;
+	  logActivity('Fishing finished: '+err.message);
+	  startAntiAntiAFK();
+	  return false;
+	}
+	setTimeout(startFishing, 1500*Math.random());
+	return true;
+}
+function AFKwalk(time){
+	return new Promise((resolve, reject) => {
+		const walkActions = [ 'forward', 'back', 'left', 'right'];
+		lastaction = walkActions[Math.floor(Math.random() * walkActions.length)];
+		conn.bot.setControlState(lastaction,true);
+		setTimeout(() => {
+			conn.bot.clearControlStates();
+			if(conn.bot.entity.isInWater)
+				conn.bot.setControlState('jump', true);
+			resolve();
+		}, time);
+	});
+}
+async function startAntiAntiAFK(){
+	let antiAFKConfig = config.get("antiAntiAFK");
+	if (!antiAFKConfig.get("enabled")) return;
+
+	if(proxyClient != null || !webserver.isInQueue || !finishedQueue) return;
+
+	if(conn.bot._client.state != "play"){
+		conn.bot.once("spawn", startAntiAntiAFK); 
+		return;
+	}
+
+	if (antiAFKConfig.get("fishing")){
+		if(!await fishingObjections()){
+			logActivity('Starting fishing...');
+			startFishing();
+			return;
+		}
+	}
+
+	let rotation, walk, jump, arm, placeBlock, breakBlock;
+	//random chance (3/4) for every type of performed action
+	rotation = antiAFKConfig.get("rotating") && Math.random() < 0.75;
+	walk = antiAFKConfig.get("maxWalkingTime") && Math.random() < 0.75;
+	jump =  antiAFKConfig.get("jumping") && Math.random() < 0.75;
+	arm = antiAFKConfig.get("arm") && Math.random() < 0.75;
+	placeBlock = antiAFKConfig.get("placing") && Math.random() < 0.75;
+	breakBlock = antiAFKConfig.get("breaking") && Math.random() < 0.75;
+	
+	//bot performs all chosen actions sequentially 
+
+	if(rotation){
+		let yaw = 2*Math.random()*Math.PI - (0.5*Math.PI);
+		let pitch = Math.random()*Math.PI - (0.5*Math.PI);
+		await conn.bot.look(yaw,pitch,false);
+	}
+	if(walk){
+		let time = antiAFKConfig.get("minWalkingTime");
+		time = time + Math.random()*(antiAFKConfig.get("maxWalkingTime") - time);
+		await AFKwalk(time);
+	}
+	if(jump){
+		conn.bot.setControlState('jump',true);
+		conn.bot.setControlState('jump',false);
+	}
+	if(arm){
+		let arm = Math.random() < 0.5 ? 'right' : 'left';
+		conn.bot.swingArm(hand=arm);
+	}
+	if(placeBlock){
+		let availableItems = conn.bot.inventory.items()
+			.map((i)=>i.type)
+			.filter(v => antiAFKConfig.get("placing").includes(v));
+		let block = availableItems[Math.floor(Math.random() * availableItems.length)];
+		try{
+			await conn.bot.equip(block, 'hand');
+			let refBlock = conn.bot.blockAtCursor();
+			if(refBlock){
+				const faces = {
+					0: new Vec3(0, -1, 0),
+					1: new Vec3(0, 1, 0),
+					2: new Vec3(0, 0, -1),
+					3: new Vec3(0, 0, 1),
+					4: new Vec3(-1, 0, 0),
+					5: new Vec3(1, 0, 0),
+				}
+				let face = faces[refBlock.face];
+				
+				await conn.bot.placeBlock(refBlock, face);
+			}
+		}catch(err){}
+	}
+	if(breakBlock){
+		try{
+			let block = conn.bot.blockAtCursor();
+			if(block && antiAFKConfig.get("breaking").includes(block.type))
+				await conn.bot.dig(block);
+		}catch(err){}
+	}
+	let time = antiAFKConfig.get("minActionsInterval");
+	time = time + Math.random()*(antiAFKConfig.get("maxActionsInterval") - time);
+	setTimeout(startAntiAntiAFK, time);
 }
 
-startAntiAntiAFK();
 
 function cmdInput() {
 	rl.question("$ ", (cmd) => {
@@ -333,6 +432,8 @@ function join() {
 			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
 			return;
 		}
+		if(isFishing)
+			conn.bot.activateItem(); //stop fishing(required for mineflyer to not get bugged)
 		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
