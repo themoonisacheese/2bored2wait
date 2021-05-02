@@ -150,7 +150,7 @@ let conn; // connection object from mcproxy for the client variable
 options = {
 	host: config.get("minecraftserver.hostname"),
 	port: config.get("minecraftserver.port"),
-	version: config.get("minecraftserver.version")
+	version: config.get("minecraftserver.version"),
 	favicon: config.get("minecraftserver.favicon")
 }
 if (config.get("antiAntiAFK")) setInterval(function () {
