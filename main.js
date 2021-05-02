@@ -44,7 +44,7 @@ const guessLauncherPath = () => {
 const askForSecrets = async () => {
 	let localConf = JSON.parse(jsonminify(fs.readFileSync("config/local.json", "utf8")));
 	let canSave = false;
-	if(!(config.has("username") && config.has("password") || config.has("profilesFolder"))) {
+	if(!(config.has("username") && config.has("mcPassword") || config.has("profilesFolder"))) {
 		canSave = true;
 		shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
 
@@ -52,7 +52,7 @@ const askForSecrets = async () => {
 			accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
 			mc_username = await promisedQuestion("Email: ");
 			mc_password = await promisedQuestion("Password: ");
-			localConf.password = mc_password;
+			localConf.mcPassword = mc_password;
 
 		} else {
 			mc_username = await promisedQuestion("Nickname (NOT an email!): ");
@@ -111,7 +111,7 @@ const askForSecrets = async () => {
 if(!config.get("minecraftserver.onlinemode")) cmdInput();
 else {
 	mc_username = config.username;
-	mc_password = config.password;
+	mc_password = config.mcPassword;
 	launcherPath = config.profilesFolder;
 	accountType = config.get("accountType");
 	discordBotToken = config.BotToken
