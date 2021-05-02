@@ -151,6 +151,7 @@ options = {
 	host: config.get("minecraftserver.hostname"),
 	port: config.get("minecraftserver.port"),
 	version: config.get("minecraftserver.version")
+	favicon: config.get("minecraftserver.favicon")
 }
 if (config.get("antiAntiAFK")) setInterval(function () {
 	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "!que", position: 1 })
@@ -221,7 +222,7 @@ function join() {
 						let totalWaitTime = getWaitTime(queueStartPlace, 0);
 						let timepassed = getWaitTime(queueStartPlace, positioninqueue);
 						let ETAmin = (totalWaitTime - timepassed) / 60;
-						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
+						server.motd = `\u00a77\u00a7l\u00a7o2B \u00a76Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA} Join at: ${jointime}\u00a77\u00a7l\u00a7o\n2W`; // set the MOTD because why not
 						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
 						if (config.get("userStatus")) { //set the Discord Activity
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
