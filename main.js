@@ -222,16 +222,32 @@ function join() {
 						let totalWaitTime = getWaitTime(queueStartPlace, 0);
 						let timepassed = getWaitTime(queueStartPlace, positioninqueue);
 						let ETAmin = (totalWaitTime - timepassed) / 60;
+						let queuenum = Number(webserver.queuePlace);
+						let jointimeu = new Date(DateTime.local().plus({ minutes: ETAmin }));
+						let minutes = "0" + jointimeu.getMinutes();
+						let jointime = jointimeu.getHours() + ':' + minutes.substr(-2);
 						server.motd = `\u00a77\u00a7l\u00a7o2B \u00a76Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA} Join at: ${jointime}\u00a77\u00a7l\u00a7o\n2W`; // set the MOTD because why not
 						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
 						if (config.get("userStatus")) { //set the Discord Activity
-							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " T: " + jointime + " - " + config.minecraftserver.username);
 						} else {
-							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " T: " + jointime);
 						}
-						if (config.get("notification.enabled") && positioninqueue <= config.get("notification.queuePlace") && !notisend && config.discordBot && dcUser != null) {
-							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
-							notisend = true;
+						if (config.notification.enabled && positioninqueue <= config.notification.queuePlace && config.discordBot && dcUser != null) {
+							if (notisend != true) {
+								notifqueue = config.notification.queuePlace;
+								sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
+							}
+							else {
+								try {
+									if(notifqueue - 5 >= queuenum) {
+									    sendDiscordMsg(dcUser, "Queue", "You are in Position: " + queuenum);
+									    notifqueue = notifqueue - 5;
+									    }
+									}
+								catch( e ) {}	
+							}
+						notisend = true;			
 						}
 					}
 					lastQueuePlace = positioninqueue;
