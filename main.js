@@ -10,6 +10,7 @@ const https = require("https");
 const everpolate = require("everpolate");
 const mcproxy = require("mcproxy");
 const queueData = require("./queue.json");
+const util = require("./util");
 const save = "./saveid";
 var config;
 try {
@@ -42,7 +43,12 @@ const guessLauncherPath = () => {
 	return appdata ? `${appdata}/.minecraft` : (process.platform == 'darwin' ? `${process.env.HOME}/Library/Application Support/minecraft` : `${process.env.HOME}/.minecraft`)
 }
 const askForSecrets = async () => {
-	let localConf = JSON.parse(jsonminify(fs.readFileSync("config/local.json", "utf8")));
+	let localConf = {};
+	try {
+		localConf = util.readJSON("config/local.json");
+	} catch(err) {
+		if(err.code != "ENOENT") throw err;
+	}
 	let canSave = false;
 	if(!(config.has("username") && config.has("mcPassword") || config.has("profilesFolder"))) {
 		canSave = true;

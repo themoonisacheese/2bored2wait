@@ -77,3 +77,4 @@ launcher_profiles.json
 queue-time.ggb
 .dockerignore
 build
+nexe-conf
