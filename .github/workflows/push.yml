@@ -7,7 +7,7 @@ on:
 
 jobs:
   bump-version:
-    name: "Bump Version on master"
+    name: "automatic release"
     runs-on: ubuntu-latest
 
     steps:
@@ -32,5 +32,5 @@ jobs:
                 repo_token: "${{ secrets.GITHUB_TOKEN }}"
                 automatic_release_tag: "latest"
                 prerelease: false
-                title: "Development Build"
+                title: "Automatic Build"
                 files: build/*
