@@ -6,7 +6,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 # How to install
 
 ## Esay Guide
-1. Download the executable [here](releases/latest)
+1. Download the executable [here](/themoonisacheese/2bored2wait/releases/latest)
 2. (Optional) Take a look at `config/default.json`, edit your values and place the config under `Home directory of your user/.2bored2wait/config/local.json`
 
 ## Developer Guide
