@@ -6,7 +6,7 @@ module.exports = {
 	},
 	mkdir: (dir) => {
 		try {
-			fs.mkdirSync(dir);
+			fs.mkdirSync(dir, {recursive: true});
 		} catch(err) {
 			if(err.code !== 'EEXIST') throw err;
 		}
