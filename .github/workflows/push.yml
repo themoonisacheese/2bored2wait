@@ -25,11 +25,13 @@ jobs:
         uses: "phips28/gh-action-bump-version@master"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo "TAG=$(git describe --tags)" >> $GITHUB_ENV
       - name: "Build"
         run: node build.js
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
                 repo_token: "${{ secrets.GITHUB_TOKEN }}"
+                automatic_release_tag: "${{ env.TAG }}"
                 prerelease: false
-                title: "Automatic Build"
+                title: "${{ env.TAG }}"
                 files: build/*
