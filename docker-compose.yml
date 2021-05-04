@@ -2,19 +2,13 @@
 version: "3"
 services:
    2bored2wait:
-      image: mrgeorgen/2bored2wait:latest
+      image: 2bored2wait/2bored2wait:latest
       container_name: 2bored2wait
       stdin_open: true
       tty: true
       ports:
          - "80:8080"
-         - "25565:25566"
+         - "25565:25565"
       restart: unless-stopped
       environment:
-         MOJANG_USERNAME: Your Minecraft Username
-         MOJANG_PASSWORD: Your Minecraft Password
-         BOT_TOKEN: Your Discord Bot Token
-         DISCORD_BOT: "true"
-         WEBSERVER: "true"
-         MINECRAFT_PORT: 25566
-         WEBUI_PORT: 8080
+              NODE_CONFIG: '{"username": "mojang-email", "mcPassword": "your password", "BotToken": "your discord bot token"}'

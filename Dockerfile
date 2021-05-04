@@ -17,8 +17,7 @@ apk del --no-cache git || true
 
 # exposing 8080 (webui), 25566 (mc proxy)
 EXPOSE 8080/tcp
-EXPOSE 25566/tcp
-EXPOSE 25566/udp
+EXPOSE 25565/tcp
 
 # run container
-CMD /srv/app/scripts/replace_config.sh && /srv/app/scripts/replace_credentials.sh && npm start
+CMD npm start

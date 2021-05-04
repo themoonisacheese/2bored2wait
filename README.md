@@ -61,7 +61,7 @@ You can also easily change which port to map from the docker-compose, for exampl
 ```
       ports:
          - "8080:8080"
-         - "25000:25566"
+         - "25000:25565"
 ```
 
 
@@ -72,7 +72,7 @@ You can also easily change which port to map from the docker-compose, for exampl
 4. `docker build -t 2bored2wait .` to build the image.
 5. Once the image has built, you can start it with:
 ```
-docker run --name 2bored2wait -d -p 80:8080 -p 25565:25566 -e MOJANG_USERNAME="user@domain.com" -e MOJANG_PASSWORD="myverysecretpassword" -e BOT_TOKEN="mydiscordbottoken" -e DISCORD_BOT="true" -e WEBSERVER="true" -e MINECRAFT_PORT=25566 -e WEBUI_PORT=8080 2bored2wait
+docker run --name 2bored2wait -d -p 80:8080 -p 25565:25565 -e NODE_CONFIG='{"username": "user@domain.com", "mcPassword": "myverysecretpassword", "BotToken": "mydiscordbottoken"}' 2bored2wait
 ```
 ** Remember to change user@domain.com and myverysecretpassword with your actual Minecraft credentials, as well as mydiscordbottoken with your actual Discord Bot Token **
 
