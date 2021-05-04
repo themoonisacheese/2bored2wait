@@ -19,7 +19,7 @@
         "notConnectedQueueEnd": false // restart the queue if you are not connect at the end of it
     },
     "minecraftserver": { // the server you want to connect. Make not much sense to change it, was just added for development purpose
-        "hostname": "connect.2b2t.org",
+        "hostname": "2b2t.org",
 	"is2b2t": true, // to allow proxies inbetween 2bored2wait and 2b2t
         "port": 25565,
         "version": "1.12.2",
