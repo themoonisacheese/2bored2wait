@@ -1,4 +1,4 @@
-name: Build arm Docker image
+name: Build Docker image
 
 on:
   push:
@@ -32,3 +32,10 @@ jobs:
           platforms: linux/arm/v7,linux/arm64/v8,linux/arm/v6,linux/amd64,linux/ppc64le,linux/s390x
           push: true
           tags: 2bored2wait/2bored2wait:latest
+      -
+        name: Update repo description
+        uses: peter-evans/dockerhub-description@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: 2bored2wait/2bored2wait
