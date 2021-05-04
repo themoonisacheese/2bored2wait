@@ -15,7 +15,7 @@ function runScript(scriptPath, callback) {
 	config.ports.minecraft = 52157 // use uncommon ports to avoid listen on an already used port
 	config.ports.web = 52156
 	process.env.NODE_CONFIG = JSON.stringify(config);
-	let mainProcess = childProcess.fork("./main.js");
+	let mainProcess = childProcess.fork(scriptPath);
 
 	// listen for errors as they may prevent the exit event from firing
 	mainProcess.on('error', function (err) {
@@ -38,7 +38,7 @@ function runScript(scriptPath, callback) {
 }
 
 // Now we can run a script and invoke a callback when complete, e.g.
-runScript('./some-script.js', function (err) {
+runScript('./main.js', function (err) {
 	if (err && !String(err).includes("Error: exit code null")) throw err; // check if the error is caused by killing the process
 	console.log('Test successful');
 });
