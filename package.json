@@ -26,7 +26,7 @@
     "minecraft-protocol": "^1.24.1",
     "node-json-minify": "^1.0.0",
     "open": "^8.0.7",
-    "particles.js": "^2.0.0"
+    "particles.js": "^2.0.0",
     "rss-parser": "^3.12.0"
   },
   "devDependencies": {
