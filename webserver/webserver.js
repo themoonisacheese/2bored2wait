@@ -21,7 +21,7 @@ module.exports = {
 				res.write(fs.readFileSync('node_modules/particles.js/particles.js'));
 				res.end();
 			} else if(req.url === "/app.js") { 
-				res.writeHead(200, {'Content-type': 'text/js'});
+				res.writeHead(200, {'Content-type': 'text/javascript'});
 				res.write(fs.readFileSync('node_modules/particles.js/demo/js/app.js'));
 				res.end();
 				res.end();
