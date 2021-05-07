@@ -85,8 +85,10 @@ const askForSecrets = async () => {
 	}
 
 	if (config.get("discordBot")) {
-		dc = new discord.Client()
-		dc.login(discordBotToken);
+		dc = new discord.Client();
+		dc.login(discordBotToken).catch(()=>{
+			console.warn("There was an error when trying to log in using the provided Discord bot token."); //handle empty tokens gracefully
+		});
 		dc.on('ready', () => {
 			dc.user.setActivity("Queue is stopped.");
 			fs.readFile(save, "utf8", (err, id) => {
