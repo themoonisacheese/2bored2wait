@@ -363,7 +363,7 @@ function round(number) {
 }
 
 function activity(string) {
-	if (config.discordBot) dc.user.setActivity(string);
+	if (config.discordBot && dc.user !== null) dc.user.setActivity(string);
 }
 
 //the discordBot part starts here.
