@@ -5,7 +5,7 @@ A proxy to wait out 2b2t.org's way too long queue.
 
 # How to install
 
-## Esay Guide
+## Easy Guide
 1. Download the executable [here](https://github.com/themoonisacheese/2bored2wait/releases/latest)
 2. (Optional) Take a look at `config/default.json`, edit your values and place the config under `Home directory of your user/.2bored2wait/config/local.json`
 
@@ -37,7 +37,7 @@ All commands can be used through discord or the cli.
 # Video guide
 Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
 
-# Docker usage guide (if you know how to use docker)
+# Docker usage guide (self-compose)
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. Edit docker-compose.yml and start the container
 ```
@@ -63,7 +63,7 @@ You can also easily change which port to map from the docker-compose, for exampl
          - "8080:8080"
          - "25000:25565"
 ```
-# Docker install guide
+# Docker install guide (precomposed image)
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. `docker run 2bored2wait/2bored2wait:latest -d -p 80:8080 -p 25565:25565 -e NODE_CONFIG='{"username": "user@domain.com", "mcPassword": "myverysecretpassword", "BotToken": "mydiscordbottoken"}'`. The docker image is automatically up to date after each push to this repo. Docker images are available for `amd64` and `arm64`
 3. Open a browser and navigate to http://localhost
