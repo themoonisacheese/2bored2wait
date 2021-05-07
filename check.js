@@ -11,10 +11,9 @@ var cv = 'v' + cv1;
 	let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
 
 	feed.items.every(item => {
-		console.log(item.title);
 		var lv = (item.title);
 		if (cv != lv) {
-			console.log(boxen('New Update Available!', {padding: 1}));
+			console.log(boxen('New Update Available! → ' +lv, {padding: 1, margin: 1, align: 'center', borderColor: 'red', float: 'center', borderStyle: 'round'}));
 			console.log('Press enter to continue.');
 			process.stdin.once('data', function () {
 				console.log("Starting 2b2w");
@@ -34,4 +33,3 @@ var cv = 'v' + cv1;
 
 
 })();
-
