@@ -376,6 +376,11 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			startQueuing();
 			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
 			break;
+			
+		case "quit":
+			return process.exit(0);
+			break;
+			
 		case "update":
 			switch (doing) {
 				case "queue":
