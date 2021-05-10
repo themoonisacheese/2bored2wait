@@ -160,9 +160,12 @@ options = {
 	port: config.get("minecraftserver.port"),
 	version: config.get("minecraftserver.version")
 }
-if (config.get("antiAntiAFK")) setInterval(function () {
-	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "!que", position: 1 })
-}, 50000)
+
+function startAntiAntiAFK(){
+	if (!config.get("antiAntiAFK").get("enabled")) return;
+	if(proxyClient != null || !webserver.isInQueue || !finishedQueue) return;
+	conn.bot.afk.start();
+}
 
 function cmdInput() {
 	rl.question("$ ", (cmd) => {
@@ -197,6 +200,8 @@ function startQueuing() {
 	}
 	conn = new mcproxy.Conn(options);// connect to 2b2t
 	client = conn.bot._client;
+	conn.bot.loadPlugin(require("mineflayer-antiafk"));
+	conn.bot.afk.setOptions()
 	join();
 }
 
@@ -206,6 +211,7 @@ function join() {
 	let notisend = false;
 	doing = "queue"
 	webserver.isInQueue = true;
+	startAntiAntiAFK(); //for non-2b2t servers
 	activity("Starting the queue...");
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
@@ -262,6 +268,7 @@ function join() {
 							stop();
 						} else {
 							finishedQueue = true;
+							startAntiAntiAFK();
 							webserver.queuePlace = "FINISHED";
 							webserver.ETA = "NOW";
 							logActivity("Queue is finished");
@@ -309,9 +316,14 @@ function join() {
 			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
 			return;
 		}
+		conn.bot.afk.stop();
 		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
+		newProxyClient.on("end", ()=>{
+			proxyClient = null;
+			startAntiAntiAFK();
+		})
 		conn.sendPackets(newProxyClient);
 		conn.link(newProxyClient);
 		proxyClient = newProxyClient;
