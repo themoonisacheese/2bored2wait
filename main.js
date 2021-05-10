@@ -9,6 +9,7 @@ const {DateTime} = require("luxon");
 const https = require("https");
 const everpolate = require("everpolate");
 const mcproxy = require("mcproxy");
+const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
@@ -200,8 +201,8 @@ function startQueuing() {
 	}
 	conn = new mcproxy.Conn(options);// connect to 2b2t
 	client = conn.bot._client;
-	conn.bot.loadPlugin(require("mineflayer-antiafk"));
-	conn.bot.afk.setOptions()
+	conn.bot.loadPlugin(antiafk);
+	conn.bot.afk.setOptions(config.get("antiAntiAFK").get("config"));
 	join();
 }
 
