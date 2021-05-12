@@ -22,15 +22,16 @@ var updatemessage;
 
         let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
 
-        feed.items.every(item => {
+                feed.items.every(item => {
                 var lv = (item.title);
                 if (cv != lv) {
-                    if (updatemessage == "n") {
+                    if (updatemessage == "y") {
+
                         console.log("Starting 2b2w");
                         require('./main.js');
-                    }
-                    } else {               
-
+                        });
+                    } else {
+                                               
                         console.log(boxen('New Update Available! → ' + lv, {
                             padding: 1,
                             margin: 1,
@@ -43,20 +44,13 @@ var updatemessage;
                         process.stdin.once('data', function() {
                             console.log("Starting 2b2w");
                             require('./main.js');
-
-                        });
                     }
-                                
+
+
 
             } else {
                 console.log("Starting 2b2w");
                 require('./main.js');
-
             }
-
-
-
         });
-
-
 })();
