@@ -45,7 +45,8 @@ var updatemessage;
                 console.log("Starting 2b2w");
                 require('./main.js');
             });
-
+            
+        };
 
 
         } else {
