@@ -44,7 +44,7 @@ var updatemessage;
                         process.stdin.once('data', function() {
                             console.log("Starting 2b2w");
                             require('./main.js');
-                    }
+                    });
 
 
 
