@@ -25,7 +25,11 @@ var updatemessage;
         feed.items.every(item => {
                 var lv = (item.title);
                 if (cv != lv) {
-                    if (updatemessage == "y") {
+                    if (updatemessage == "n") {
+                        console.log("Starting 2b2w");
+                        require('./main.js');
+                    }
+                    } else {               
 
                         console.log(boxen('New Update Available! → ' + lv, {
                             padding: 1,
@@ -41,12 +45,8 @@ var updatemessage;
                             require('./main.js');
 
                         });
-                    } else {
-                        console.log("Starting 2b2w");
-                        require('./main.js');
                     }
-                
-
+                                
 
             } else {
                 console.log("Starting 2b2w");
