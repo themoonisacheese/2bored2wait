@@ -43,8 +43,6 @@ var updatemessage;
                         require('./main.js');
                     }
 
-
-
             } else {
                 console.log("Starting 2b2w");
                 require('./main.js');
