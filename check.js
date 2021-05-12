@@ -16,42 +16,38 @@ if (!config.get("minecraftserver.onlinemode")) cmdInput();
 else {
     updatemessage = config.updatemessage;
 }
-
 var updatemessage;
 (async () => {
+        let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
+        feed.items.every(item => {
+                var lv = (item.title);
+                if (cv != lv) {
+                    if (updatemessage == "y" || updatemessage != "n") {
 
-    let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
+                        console.log(boxen('New Update Available! → ' + lv, {
+                            padding: 1,
+                            margin: 1,
+                            align: 'center',
+                            borderColor: 'red',
+                            float: 'center',
+                            borderStyle: 'round'
+                        }));
+                        console.log('Press enter to continue.');
+                        process.stdin.once('data', function() {
+                            console.log("Starting 2b2w");
+                            require('./main.js');
 
-    feed.items.every(item => {
-        var lv = (item.title);
-        if (cv != lv) {
-            if (updatemessage == "y") {
+                        });
+                    } else {
+                        console.log("Starting 2b2w");
+                        require('./main.js');
+                    }
 
+
+
+            } else {
                 console.log("Starting 2b2w");
                 require('./main.js');
-            };
-        } else {
-
-            console.log(boxen('New Update Available! → ' + lv, {
-                padding: 1,
-                margin: 1,
-                align: 'center',
-                borderColor: 'red',
-                float: 'center',
-                borderStyle: 'round'
-            }));
-            console.log('Press enter to continue.');
-            process.stdin.once('data', function() {
-                console.log("Starting 2b2w");
-                require('./main.js');
-            });
-            
-        };
-
-
-        } else {
-            console.log("Starting 2b2w");
-            require('./main.js');
-        }
-    });
+            }
+        });
 })();
