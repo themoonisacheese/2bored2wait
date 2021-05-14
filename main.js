@@ -317,7 +317,6 @@ function join() {
 			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
 			return;
 		}
-		conn.bot.afk.stop();
 		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
@@ -325,9 +324,11 @@ function join() {
 			proxyClient = null;
 			startAntiAntiAFK();
 		})
-		conn.sendPackets(newProxyClient);
-		conn.link(newProxyClient);
-		proxyClient = newProxyClient;
+		conn.bot.afk.stop().then(()=>{
+			conn.sendPackets(newProxyClient);
+			conn.link(newProxyClient);
+			proxyClient = newProxyClient;
+		});
 	});
 }
 
