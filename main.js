@@ -24,6 +24,7 @@ try {
 }
 var mc_username;
 var mc_password;
+var updatemessage;
 var discordBotToken;
 var savelogin;
 var secrets;
@@ -51,7 +52,7 @@ const askForSecrets = async () => {
 		if(err.code != "ENOENT") throw err;
 	}
 	let canSave = false;
-	if(!(config.has("username") && config.has("mcPassword") || config.has("profilesFolder"))) {
+	if(!(config.has("username") && config.has("mcPassword") && config.has("updatemessage") || config.has("profilesFolder"))) {
 		canSave = true;
 		shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
 
@@ -60,11 +61,14 @@ const askForSecrets = async () => {
 			mc_username = await promisedQuestion("Email: ");
 			mc_password = await promisedQuestion("Password: ");
 			localConf.mcPassword = mc_password;
+			updatemessage = await promisedQuestion("Update Messages? Y or N [Y]: ");
+			localConf.updatemessage = updatemessage;
 
 		} else {
 			mc_username = await promisedQuestion("Nickname (NOT an email!): ");
 			launcherPath = (await promisedQuestion("Path to Minecraft Launcher data folder, leave blank to autodetect []: ")) || guessLauncherPath();
 			localConf.launcherPath = launcherPath;
+			
 
 		}
 		localConf.username = mc_username;
@@ -76,6 +80,7 @@ const askForSecrets = async () => {
 	}
 
 	if(canSave) {
+		     
 		savelogin = await promisedQuestion("Save login for later use? Y or N [N]: ");
 		if (savelogin.toLowerCase() === "y") {
 			fs.writeFile('config/local.json', JSON.stringify(localConf, null, 2), (err) => {
@@ -390,6 +395,11 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			startQueuing();
 			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
 			break;
+			
+		case "quit":
+			return process.exit(0);
+			break;
+			
 		case "update":
 			switch (doing) {
 				case "queue":
