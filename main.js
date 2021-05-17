@@ -53,7 +53,7 @@ const askForSecrets = async () => {
 	let canSave = false;
 	if(!(config.has("username") && config.has("mcPassword") && config.has("updatemessage") || config.has("profilesFolder"))) {
 		canSave = true;
-		shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
+		let shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
 
 		if (!shouldUseTokens) {
 			accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
@@ -278,27 +278,20 @@ function join() {
 	});
 
 	// set up actions in case we get disconnected.
-	client.on('end', () => {
+	const onDisconnect = () => {
 		if (proxyClient) {
 			proxyClient.end("Connection reset by 2b2t server.\nReconnecting...");
 			proxyClient = null
 		}
 		stop();
-		if (!stoppedByPlayer) log("Connection reset by 2b2t server. Reconnecting...");
+		if (!stoppedByPlayer) {
+			log(`Connection reset by 2b2t server. Reconnecting...`);
+			if (!config.has("MCpassword") && !config.has("password")) log("If this ^^ message shows up repeatedly, it is likely a problem with your token being invalidated. Please start minecraft manually or use credential authentication instead.");
+		}
 		if (config.reconnect.onError) setTimeout(reconnect, 30000);
-	});
-
-	client.on('error', (err) => {
-		if (proxyClient) {
-			proxyClient.end(`Connection error by 2b2t server.\n Error message: ${err}\nReconnecting...`);
-			proxyClient = null
-		}
-		stop();
-		log(`Connection error by 2b2t server. Error message: ${err} Reconnecting...`);
-		if (config.reconnect.onError) {
-			setTimeout(reconnect, 30000);
-		}
-	});
+	}
+	client.on('end', onDisconnect);
+	client.on('error', onDisconnect);
 
 	server = mc.createServer({ // create a server for us to connect to
 		'online-mode': config.get("whitelist"),
@@ -381,10 +374,10 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			startQueuing();
 			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
 			break;
-			
+		
+		case "exit":
 		case "quit":
 			return process.exit(0);
-			break;
 			
 		case "update":
 			switch (doing) {
