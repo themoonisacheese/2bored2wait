@@ -53,7 +53,7 @@ const askForSecrets = async () => {
 	let canSave = false;
 	if(!(config.has("username") && config.has("mcPassword") && config.has("updatemessage") || config.has("profilesFolder"))) {
 		canSave = true;
-		shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
+		let shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
 
 		if (!shouldUseTokens) {
 			accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
@@ -286,7 +286,7 @@ function join() {
 		stop();
 		if (!stoppedByPlayer) {
 			log(`Connection reset by 2b2t server. Reconnecting...`);
-			if (shouldUseTokens) log("If this ^^ message shows up repeatedly, it is likely a problem with your token being invalidated. Please start minecraft manually or use credential authentication instead.");
+			if (!config.has("MCpassword") && !config.has("password")) log("If this ^^ message shows up repeatedly, it is likely a problem with your token being invalidated. Please start minecraft manually or use credential authentication instead.");
 		}
 		if (config.reconnect.onError) setTimeout(reconnect, 30000);
 	}
@@ -374,10 +374,10 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			startQueuing();
 			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
 			break;
-			
+		
+		case "exit":
 		case "quit":
 			return process.exit(0);
-			break;
 			
 		case "update":
 			switch (doing) {

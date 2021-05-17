@@ -12,11 +12,8 @@ try {
         process.exit(1);
     }
 }
-if (!config.get("minecraftserver.onlinemode")) cmdInput();
-else {
-    updatemessage = config.updatemessage;
-}
-var updatemessage;
+
+var updatemessage = config.updatemessage;
 (async () => {
         let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
         feed.items.every(item => {
