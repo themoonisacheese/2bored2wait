@@ -164,5 +164,5 @@ Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 [stars-url]: https://github.com/themoonisacheese/2bored2wait/stargazers
 [issues-shield]: https://img.shields.io/github/issues/themoonisacheese/2bored2wait.svg?style=for-the-badge
 [issues-url]: https://github.com/themoonisacheese/2bored2wait/issues
-[donate-shield]: https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge&logo=appveyor
+[donate-shield]: https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge
 [donate-url]: https://paypal.me/themoonisacheese?locale.x=fr_FR
