@@ -102,57 +102,13 @@ Please optain all required items
 3. Run `npm install`
 4. Start the program and answer the questions.
 
-# Docker usage guide (self-compose)
-1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-2. Edit docker-compose.yml and start the container
-```
-docker-compose up -d
-```
-3. Open a browser and navigate to http://localhost, attach to the container, or open a chat dialog with the discord bot
-4. Press the "Start queuing" button/message the bot or cli "start"
-5. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
-6. After you log off, stop the 2bored2wait queue or your account will stay logged in on the server. You can reconnect to localhost in case you disconnected by accident.
-
-## Additional configuration
-
-If you want to change the configuration or you don't want your credentials in the bash history you will have to mount config/local.json manually.
-
-To access logs you can just do
-```
-docker logs 2bored2wait
-```
-
-You can also easily change which port to map from the docker-compose, for example, if you want your server reachable on port 25000 instead of the default 25565 and your webserver on port 8080 you can change these varibles in the docker-compose
-```
-      ports:
-         - "8080:8080"
-         - "25000:25565"
-```
-# Docker install guide (precomposed image)
+# Docker
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. `docker run 2bored2wait/2bored2wait:latest -d -p 80:8080 -p 25565:25565 -e NODE_CONFIG='{"username": "user@domain.com", "mcPassword": "myverysecretpassword", "BotToken": "mydiscordbottoken"}'`. The docker image is automatically up to date after each push to this repo. Docker images are available for `amd64` and `arm64`
 3. Open a browser and navigate to http://localhost
-4. Follow "How to use" from steps 5 onwards.
-
-If you want to change the configuration or you don't want your credentials in the bash history you will have to mount config/local.json manually.
-
-All additional configurations from the Docker usage guide apply here as well.
-
-# Docker build guide
-1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-2. Clone the repo
-3. run `scripts/gen_dockerignore.sh` to generate the .dockerignore
-4. `docker build -t 2bored2wait .` to build the image.
-5. Once the image has built, you can start it with:
-```
-docker run --name 2bored2wait -d -p 80:8080 -p 25565:25565 -e NODE_CONFIG='{"username": "user@domain.com", "mcPassword": "myverysecretpassword", "BotToken": "mydiscordbottoken"}' 2bored2wait
-```
-** Remember to change user@domain.com and myverysecretpassword with your actual Minecraft credentials, as well as mydiscordbottoken with your actual Discord Bot Token **
-
-6. Open a browser and navigate to http://localhost
-7. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-8. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
-9. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+4. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
+5. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
+6. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
 If you want to change the configuration or you don't want your credentials in the bash history you will have to mount config/local.json manually.
 
@@ -162,6 +118,25 @@ All additional configurations from the Docker usage guide apply here as well.
 # Configuration
 
 * []() You can change all credentials and whether you want update messages by simply editing the values in local.js or deleating that file.
+
+
+# How to use
+1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
+2. Run `npm start`
+3. It will now ask for your Minecraft email and password (or permission to use saved launcher data instead). If you want update messages then you need to type Y otherwise N. If you are using the discord bot you need to add your token. Then answer Y or N if you want to save your Minecraft credentials. If you answer N you will need to re-enter your Minecraft login information into the console each time you start the program.
+4. Refer to Commands on how to use 2b2w from the console. Otherwise keep on reading for the web interface.
+5. Now open a browser and navigate to http://localhost: your port here.
+6. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
+7. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
+8. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
+
+## Commands
+All commands can be used through discord or the cli.
+- `start` will start the queue. It takes between 15-30 seconds for the bot to update with the queue position.
+- `start 14:00` will start at 2pm.
+- `play 8:00` will try to calculate the right time to join so you can play at 8:00
+- `update` will send an update to the current channel with your position and ETA.
+- `stop` will stop the queue.
 
 
 <!-- ROADMAP -->
