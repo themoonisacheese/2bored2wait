@@ -278,27 +278,20 @@ function join() {
 	});
 
 	// set up actions in case we get disconnected.
-	client.on('end', () => {
+	const onDisconnect = () => {
 		if (proxyClient) {
 			proxyClient.end("Connection reset by 2b2t server.\nReconnecting...");
 			proxyClient = null
 		}
 		stop();
-		if (!stoppedByPlayer) log("Connection reset by 2b2t server. Reconnecting...");
+		if (!stoppedByPlayer) {
+			log(`Connection reset by 2b2t server. Reconnecting...`);
+			if (shouldUseTokens) log("If this ^^ message shows up repeatedly, it is likely a problem with your token being invalidated. Please start minecraft manually or use credential authentication instead.");
+		}
 		if (config.reconnect.onError) setTimeout(reconnect, 30000);
-	});
-
-	client.on('error', (err) => {
-		if (proxyClient) {
-			proxyClient.end(`Connection error by 2b2t server.\n Error message: ${err}\nReconnecting...`);
-			proxyClient = null
-		}
-		stop();
-		log(`Connection error by 2b2t server. Error message: ${err} Reconnecting...`);
-		if (config.reconnect.onError) {
-			setTimeout(reconnect, 30000);
-		}
-	});
+	}
+	client.on('end', onDisconnect);
+	client.on('error', onDisconnect);
 
 	server = mc.createServer({ // create a server for us to connect to
 		'online-mode': config.get("whitelist"),
