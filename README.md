@@ -18,11 +18,6 @@
   <p align="center">
     A proxy to wait out 2b2t.org's way too long queue. Includes a small webserver and a REST-like API for external control
     <br />
-    <a href="https://github.com/themoonisacheese/2bored2wait"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/themoonisacheese/2bored2wait">View Demo</a>
-    ·
     <a href="https://github.com/themoonisacheese/2bored2wait/issues">Report Bug</a>
     ·
     <a href="https://github.com/themoonisacheese/2bored2wait/issues">Request Feature</a>
