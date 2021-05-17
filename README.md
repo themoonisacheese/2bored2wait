@@ -1,41 +1,106 @@
-# 2bored2wait
-A proxy to wait out 2b2t.org's way too long queue.
-
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/themoonisacheese?locale.x=fr_FR)
 
-# How to install
 
-## Easy Guide
+
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/themoonisacheese/2bored2wait">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">2bored2wait</h3>
+
+  <p align="center">
+    A proxy to wait out 2b2t.org's way too long queue. Includes a small webserver and a REST-like API for external control
+    <br />
+    <a href="https://github.com/themoonisacheese/2bored2wait"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/themoonisacheese/2bored2wait">View Demo</a>
+    ·
+    <a href="https://github.com/themoonisacheese/2bored2wait/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/themoonisacheese/2bored2wait/issues">Request Feature</a>
+  </p>
+</p>
+
+
+
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#configuration">Configuration</a></li>
+    <li><a href="#roadmap-and-known-issues">Roadmap and known issues:</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#testing">Testing</a></li>
+  </ol>
+</details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+A proxy to wait out 2b2t.org's way too long queue. Please Note that because of security reasons this tool doesn't auto-update! Also 2b2w does not show ETA from 2b2t. The ETA is calculated based on position in the queue. This results in better ETA most of the time.
+
+
+### Built With
+
+* []()Node 
+* []()Npm
+* []()HTML
+
+
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+To get a local copy up and running follow these simple steps.
+
+### Prerequisites
+
+Please optain all required items
+* npm/node.js 14.x or later
+* A discord bot (optional)
+  ```sh
+  Go here for detailed instructions: https://discordpy.readthedocs.io/en/stable/discord.html
+  ```
+
+### Installation
+
+#Windows:
 1. Download the executable [here](https://github.com/themoonisacheese/2bored2wait/releases/latest)
 2. (Optional) Take a look at `config/default.json`, edit your values and place the config under `Home directory of your user/.2bored2wait/config/local.json`
 
-## Developer Guide
-1. Download and install node.js version 14 or above and git. You need git even if you download the repository as zip because it is to install the dependencies via npm, which you need to install manually on non-Windows platforms.
-2. Download this repository with the green button (top right of this page). If you downloaded it as zip, unzip it.
-3. Open a terminal and navigate to the folder you downloaded it in.
-4. Run `npm install`
-5. Copy config/default.json and name it config/local.json. Edit the values to your preference.
-6. For trust reasons, this tool does not update automatically. So look out for the update messages at the start of the program.
-
-# How to use
-1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-2. Run `npm start`
-3. It will now ask for your Minecraft email and password (or permission to use saved launcher data instead). If you are using the discord bot you need to add your token. Then answer Y or N if you want to save your Minecraft credentials. If you answer N you will need to re-enter your Minecraft login information into the console each time you start the program.
-4. Now open a browser and navigate to http://localhost: your port here.
-5. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
-6. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
-7. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
-
-# Commands
-All commands can be used through discord or the cli.
-- `start` will start the queue. It takes between 15-30 seconds for the bot to update with the queue position.
-- `start 14:00` will start at 2pm.
-- `play 8:00` will try to calculate the right time to join so you can play at 8:00
-- `update` will send an update to the current channel with your position and ETA.
-- `stop` will stop the queue.
-
-# Video guide
-Here's a video guide on how to install and use 2b2w: https://www.youtube.com/watch?v=oWeCmZNYAW4 
+#Linux and Mac:
+1. Download and install node.js version 14 or above and git. You need git even if you download the repository as zip because it is to install the dependencies via npm.
+2. Open a terminal then clone this repo then cd into folder:
+ ```sh
+  git clone https://github.com/themoonisacheese/2bored2wait
+  cd 2bored2wait
+  ```
+3. Run `npm install`
+4. Start the program and answer the questions.
 
 # Docker usage guide (self-compose)
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
@@ -93,13 +158,59 @@ If you want to change the configuration or you don't want your credentials in th
 
 All additional configurations from the Docker usage guide apply here as well.
 
-## Tests
-- Run NPM test to run test.js
 
-# ETA
+# Configuration
 
-2b2w does not show ETA from 2b2t. The ETA is calculated based on position in the queue. This results in better ETA most of the time.
+* []() You can change all credentials and whether you want update messages by simply editing the values in local.js or deleating that file.
 
-# Known issues
+
+<!-- ROADMAP -->
+# Roadmap and known issues
+
+See the [open issues](https://github.com/themoonisacheese/2bored2wait/issues) for a list of proposed features (and known issues).
+
 - Starting the queue will revoke your Minecraft token. this means that you will not be able to join normal Minecraft servers until you restart the game
 - If you connect after the queue is finished or reconnect the proxy will send cached data. Otherwise you would fly in an empty world. However not all data will be resend. You can move out of render distance (I find going through a nether portal works best) and return to fix this issue. Sometimes the client renders a cached chunk with a blank texture.
+
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+
+
+<!-- LICENSE -->
+## License
+
+Distributed under the GPL-3.0 License. See `LICENSE` for more information.
+
+
+<!-- ACKNOWLEDGEMENTS -->
+# Testing
+
+- Run NPM test to run test.js
+
+
+
+
+
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge
+[contributors-url]: https://github.com/themoonisacheese/2bored2wait/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/themoonisacheese/2bored2wait.svg?style=for-the-badge
+[forks-url]: https://github.com/themoonisacheese/2bored2wait/network/members
+[stars-shield]: https://img.shields.io/github/stars/themoonisacheese/2bored2wait.svg?style=for-the-badge
+[stars-url]: https://github.com/themoonisacheese/2bored2wait/stargazers
+[issues-shield]: https://img.shields.io/github/issues/themoonisacheese/2bored2wait.svg?style=for-the-badge
+[issues-url]: https://github.com/themoonisacheese/2bored2wait/issues
