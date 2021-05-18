@@ -25,6 +25,7 @@
     "luxon": "^1.26.0",
     "mcproxy": "git+https://github.com/rob9315/mcproxy.git",
     "minecraft-protocol": "^1.24.1",
+    "mineflayer-antiafk": "^1.1.1",
     "node-json-minify": "^1.0.0",
     "open": "^8.0.7",
     "particles.js": "^2.0.0",

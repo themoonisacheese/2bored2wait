@@ -9,6 +9,7 @@ const {DateTime} = require("luxon");
 const https = require("https");
 const everpolate = require("everpolate");
 const mcproxy = require("mcproxy");
+const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
@@ -165,9 +166,12 @@ options = {
 	port: config.get("minecraftserver.port"),
 	version: config.get("minecraftserver.version")
 }
-if (config.get("antiAntiAFK")) setInterval(function () {
-	if(proxyClient == null && webserver.isInQueue && finishedQueue) client.write("chat", { message: "!que", position: 1 })
-}, 50000)
+
+function startAntiAntiAFK(){
+	if (!config.has("antiAntiAFK.enabled") || !config.get("antiAntiAFK.enabled")) return;
+	if(proxyClient != null || !webserver.isInQueue || !finishedQueue) return;
+	conn.bot.afk.start();
+}
 
 function cmdInput() {
 	rl.question("$ ", (cmd) => {
@@ -202,6 +206,8 @@ function startQueuing() {
 	}
 	conn = new mcproxy.Conn(options);// connect to 2b2t
 	client = conn.bot._client;
+	conn.bot.loadPlugin(antiafk);
+	conn.bot.afk.setOptions(config.get("antiAntiAFK").get("config"));
 	join();
 }
 
@@ -211,6 +217,7 @@ function join() {
 	let notisend = false;
 	doing = "queue"
 	webserver.isInQueue = true;
+	startAntiAntiAFK(); //for non-2b2t servers
 	activity("Starting the queue...");
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
@@ -267,6 +274,7 @@ function join() {
 							stop();
 						} else {
 							finishedQueue = true;
+							startAntiAntiAFK();
 							webserver.queuePlace = "FINISHED";
 							webserver.ETA = "NOW";
 							logActivity("Queue is finished");
@@ -310,9 +318,15 @@ function join() {
 		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
-		conn.sendPackets(newProxyClient);
-		conn.link(newProxyClient);
-		proxyClient = newProxyClient;
+		newProxyClient.on("end", ()=>{
+			proxyClient = null;
+			startAntiAntiAFK();
+		})
+		conn.bot.afk.stop().then(()=>{
+			conn.sendPackets(newProxyClient);
+			conn.link(newProxyClient);
+			proxyClient = newProxyClient;
+		});
 	});
 }
 
