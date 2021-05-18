@@ -31,7 +31,7 @@
         "queuePlace": 20
     },
     "antiAntiAFK": { 
-        "enabled": true, // master switch for all bypass antiAFK plugins
+        "enabled": false, // master switch for all bypass antiAFK plugins
         "config":{  // mineflayer-antiafk config
         }
     },

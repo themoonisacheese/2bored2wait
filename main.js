@@ -168,7 +168,7 @@ options = {
 }
 
 function startAntiAntiAFK(){
-	if (!config.get("antiAntiAFK").get("enabled")) return;
+	if (!config.has("antiAntiAFK.enabled") || !config.get("antiAntiAFK.enabled")) return;
 	if(proxyClient != null || !webserver.isInQueue || !finishedQueue) return;
 	conn.bot.afk.start();
 }
