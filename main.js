@@ -22,6 +22,7 @@ try {
 		process.exit(1);
 	}
 }
+var Bot;
 var mc_username;
 var mc_password;
 var updatemessage;
@@ -52,7 +53,7 @@ const askForSecrets = async () => {
 		if(err.code != "ENOENT") throw err;
 	}
 	let canSave = false;
-	if(!(config.has("username") && config.has("mcPassword") && config.has("updatemessage") || config.has("profilesFolder"))) {
+	if(!(config.has("username") && config.has("mcPassword") && config.has("Bot") && config.has("updatemessage") || config.has("profilesFolder"))) {
 		canSave = true;
 		let shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
 
@@ -73,10 +74,18 @@ const askForSecrets = async () => {
 		}
 		localConf.username = mc_username;
 	}
-	if(config.get("discordBot") && !config.has("BotToken")) {
+	if(config.get("discordBot") && !(config.has("BotToken") && config.has("Bot"))) {
 		canSave = true;
-		discordBotToken = await promisedQuestion("BotToken, leave blank if not using discord []: ");
-		localConf.BotToken = discordBotToken;
+		let usebot = (await promisedQuestion("Do you want to use a discord bot? Y or N: [Y]")).toLowerCase() === 'y';
+		if (usebot) {
+			discordBotToken = await promisedQuestion("BotToken: ");
+			localConf.BotToken = discordBotToken;
+		}	else {
+			Bot = "1";
+			localConf.Bot = Bot;
+			localConf.BotToken = "0";
+		}
+		
 	}
 
 	if(canSave) {
@@ -91,9 +100,12 @@ const askForSecrets = async () => {
 	}
 
 	if (config.get("discordBot")) {
+		Bot = config.get("Bot");
 		dc = new discord.Client();
 		dc.login(discordBotToken).catch(()=>{
+			if (config.get("Bot") != "1"){
 			console.warn("There was an error when trying to log in using the provided Discord bot token."); //handle empty tokens gracefully
+			}
 		});
 		dc.on('ready', () => {
 			dc.user.setActivity("Queue is stopped.");
@@ -118,12 +130,13 @@ const askForSecrets = async () => {
 		}
 	});
 }
+	
 	cmdInput();
 	joinOnStart();
 }
-
 if(!config.get("minecraftserver.onlinemode")) cmdInput();
 else {
+	Bot = config.Bot;
 	mc_username = config.username;
 	mc_password = config.mcPassword;
 	launcherPath = config.profilesFolder;
@@ -242,7 +255,7 @@ function join() {
 						let timepassed = getWaitTime(queueStartPlace, positioninqueue);
 						let ETAmin = (totalWaitTime - timepassed) / 60;
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
-						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
+						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % mc_password60) + "m";
 						if (config.get("userStatus")) { //set the Discord Activity
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
 						} else {
@@ -575,4 +588,5 @@ module.exports = {
 	stop: function () {
 		stopQueing();
 	}
+
 };
