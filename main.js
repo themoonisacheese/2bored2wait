@@ -12,7 +12,6 @@ const mcproxy = require("mcproxy");
 const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
-const { SSL_OP_EPHEMERAL_RSA } = require("constants");
 const save = "./saveid";
 var config;
 try {
