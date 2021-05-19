@@ -58,18 +58,17 @@ To get a local copy up and running follow these simple steps.
 
 Please optain all required items
 
-- node.js 14.x or later
-- A recent version of git
 - A discord bot (optional) ([detailed instructions](https://discordpy.readthedocs.io/en/stable/discord.html))
 
 ## Installation
 
-### Windows:
+### Windows, linux and MacOS:
 
-1. Download the executable [here](https://github.com/themoonisacheese/2bored2wait/releases/latest)
-2. (Optional) Take a look at `config/default.json`, edit your values and place the config under `Home directory of your user/.2bored2wait/config/local.json`
+1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
+2.  Download the executable [here](https://github.com/themoonisacheese/2bored2wait/releases/latest)
+3. (Optional) Take a look at `config/default.json`, edit your values and place the config under `Home directory of your user/.2bored2wait/config/local.json`
 
-### Linux and Mac:
+### Other Platforms:
 
 1. Download and install node.js version 14 or above and git. You need git even if you download the repository as zip because it is to install the dependencies via npm.
 2. Open a terminal then clone this repo then cd into folder:
@@ -79,13 +78,13 @@ Please optain all required items
  cd 2bored2wait
 ```
 
-3. Run `npm install`
-4. Start the program and answer the questions.
+3. Run `npm install` to install te required libraries
+4. Start the program with `npm start`.
 
 ### Docker
 
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-2. `docker run 2bored2wait/2bored2wait:latest -d -p 80:8080 -p 25565:25565 -e NODE_CONFIG='{"username": "user@domain.com", "mcPassword": "myverysecretpassword", "BotToken": "mydiscordbottoken"}'`. The docker image is automatically up to date after each push to this repo. Docker images are available for `amd64` and `arm64`
+2. `docker run 2bored2wait/2bored2wait:latest -d -p 80:8080 -p 25565:25565 -e NODE_CONFIG='{"username": "user@domain.com", "mcPassword": "myverysecretpassword", "BotToken": "mydiscordbottoken"}'`. The docker image is automatically up to date after each push to this repo. Docker images are available for `amd64` and `arm64` among other platforms.
 3. Open a browser and navigate to http://localhost
 4. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 5. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
@@ -93,11 +92,9 @@ Please optain all required items
 
 If you want to change the configuration or you don't want your credentials in the bash history you will have to mount config/local.json manually.
 
-All additional configurations from the Docker usage guide apply here as well.
-
 # Configuration
 
-- You can change all credentials and whether you want update messages by simply editing the values in local.js or deleating that file.
+- You can change all credentials and whether you want update messages by simply editing the values in local.js or deleting that file.
 
 # How to use
 
@@ -105,14 +102,14 @@ All additional configurations from the Docker usage guide apply here as well.
 2. Run `npm start`
 3. It will now ask for your Minecraft email and password (or permission to use saved launcher data instead). If you want update messages then you need to type Y otherwise N. If you are using the discord bot you need to add your token. Then answer Y or N if you want to save your Minecraft credentials. If you answer N you will need to re-enter your Minecraft login information into the console each time you start the program.
 4. Refer to Commands on how to use 2b2w from the console. Otherwise keep on reading for the web interface.
-5. Now open a browser and navigate to http://localhost: your port here.
+5. Now open a browser and navigate to http://localhost: your web port here (default 80).
 6. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 7. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
 8. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
 
 ## Commands
 
-All commands can be used through discord or the cli.
+All commands can be used through discord or simply typed in the console window.
 
 - `start` will start the queue. It takes between 15-30 seconds for the bot to update with the queue position.
 - `start 14:00` will start at 2pm.
