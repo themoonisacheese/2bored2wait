@@ -12,6 +12,7 @@ const mcproxy = require("mcproxy");
 const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
+const { SSL_OP_EPHEMERAL_RSA } = require("constants");
 const save = "./saveid";
 var config;
 try {
@@ -80,6 +81,8 @@ const askForSecrets = async () => {
 		if (usebot) {
 			discordBotToken = await promisedQuestion("BotToken: ");
 			localConf.BotToken = discordBotToken;
+			Bot = "2";
+			localConf.Bot = Bot;
 		}	else {
 			Bot = "1";
 			localConf.Bot = Bot;
@@ -100,11 +103,10 @@ const askForSecrets = async () => {
 	}
 
 	if (config.get("discordBot")) {
-		Bot = config.get("Bot");
 		dc = new discord.Client();
 		dc.login(discordBotToken).catch(()=>{
-			if (config.get("Bot") != "1"){
-			console.warn("There was an error when trying to log in using the provided Discord bot token."); //handle empty tokens gracefully
+			if (config.Bot != "1"){
+			console.warn("There was an error when trying to log in using the provided Discord bot token. If you said no to the bot Token ignore this message."); //handle empty tokens gracefully
 			}
 		});
 		dc.on('ready', () => {
