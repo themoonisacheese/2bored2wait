@@ -28,6 +28,7 @@ var updatemessage;
 var discordBotToken;
 var savelogin;
 var secrets;
+var discordbot;
 var accountType;
 let launcherPath;
 let c = 150;
@@ -103,7 +104,7 @@ const askForSecrets = async () => {
 	if (config.get("discordbot")) {
 		dc = new discord.Client();
 		dc.login(discordBotToken).catch(()=>{
-			if (config.discordbot != "1"){
+			if (config.discordbot != "no"){
 			console.warn("There was an error when trying to log in using the provided Discord bot token. If you said no to the bot Token ignore this message."); //handle empty tokens gracefully
 			}
 		});
