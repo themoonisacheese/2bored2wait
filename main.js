@@ -22,7 +22,6 @@ try {
 		process.exit(1);
 	}
 }
-var Bot;
 var mc_username;
 var mc_password;
 var updatemessage;
@@ -53,7 +52,7 @@ const askForSecrets = async () => {
 		if(err.code != "ENOENT") throw err;
 	}
 	let canSave = false;
-	if(!(config.has("username") && config.has("mcPassword") && config.has("Bot") && config.has("updatemessage") || config.has("profilesFolder"))) {
+	if(!(config.has("username") && config.has("mcPassword") && config.has("discordbot") && config.has("updatemessage") || config.has("profilesFolder"))) {
 		canSave = true;
 		let shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
 
@@ -74,17 +73,17 @@ const askForSecrets = async () => {
 		}
 		localConf.username = mc_username;
 	}
-	if(config.get("discordBot") && !(config.has("BotToken") && config.has("Bot"))) {
+	if(config.get("discordBot") && !(config.has("BotToken") && config.has("discordbot"))) {
 		canSave = true;
 		let usebot = (await promisedQuestion("Do you want to use a discord bot? Y or N: [Y]")).toLowerCase() === 'y';
 		if (usebot) {
 			discordBotToken = await promisedQuestion("BotToken: ");
 			localConf.BotToken = discordBotToken;
-			Bot = "2";
-			localConf.Bot = Bot;
+			discordbot = "yes";
+			localConf.discordbot = Bot;
 		}	else {
-			Bot = "1";
-			localConf.Bot = Bot;
+			discordbot = "no";
+			localConf.discordbot = discordbot;
 			localConf.BotToken = "0";
 		}
 		
@@ -101,10 +100,10 @@ const askForSecrets = async () => {
 		console.clear();
 	}
 
-	if (config.get("discordBot")) {
+	if (config.get("discordbot")) {
 		dc = new discord.Client();
 		dc.login(discordBotToken).catch(()=>{
-			if (config.Bot != "1"){
+			if (config.discordbot != "1"){
 			console.warn("There was an error when trying to log in using the provided Discord bot token. If you said no to the bot Token ignore this message."); //handle empty tokens gracefully
 			}
 		});
@@ -137,7 +136,7 @@ const askForSecrets = async () => {
 }
 if(!config.get("minecraftserver.onlinemode")) cmdInput();
 else {
-	Bot = config.Bot;
+	discordbot = config.discordbot;
 	mc_username = config.username;
 	mc_password = config.mcPassword;
 	launcherPath = config.profilesFolder;
