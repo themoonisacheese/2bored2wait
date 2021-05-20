@@ -123,7 +123,7 @@ All commands can be used through discord or simply typed in the console window.
 
 # Roadmap and known issues
 
-See the [open issues](issues-url) for a list of proposed features (and known issues).
+See the [open issues]https://github.com/themoonisacheese/2bored2wait/issues) for a list of proposed features (and known issues).
 
 - Starting the queue will revoke your Minecraft token. this means that you will not be able to join normal Minecraft servers until you restart the game
 - If you connect after the queue is finished or reconnect the proxy will send cached data. Otherwise you would fly in an empty world. However not all data will be resend. You can move out of render distance (I find going through a nether portal works best) and return to fix this issue. Sometimes the client renders a cached chunk with a blank texture.
