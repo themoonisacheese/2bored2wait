@@ -18,7 +18,7 @@ var updatemessage = config.updatemessage;
         let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
         feed.items.every(item => {
                 var lv = (item.title);
-                if (cv != lv) {
+                if (!cv.includes(lv)) {
                     if (updatemessage == "y" || updatemessage != "n") {
 
                         console.log(boxen('New Update Available! → ' + lv, {
@@ -31,7 +31,6 @@ var updatemessage = config.updatemessage;
                         }));
                         console.log('Press enter to continue.');
                         process.stdin.once('data', function() {
-                            console.log("Starting 2b2w");
                             require('./main.js');
 
                         });

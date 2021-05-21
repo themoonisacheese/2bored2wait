@@ -73,12 +73,12 @@ const askForSecrets = async () => {
 		}
 		localConf.username = mc_username;
 	}
-	if(config.get("discordBot") && !config.has("BotToken")) {
+	if((!config.has("discordBot") || config.get("discordBot")) && !config.has("BotToken")) {
 		canSave = true;
 		discordBotToken = await promisedQuestion("BotToken, leave blank if not using discord []: ");
 		localConf.BotToken = discordBotToken;
 	}
-	localConf.discordBot = discordBotToken === "" ? false : config.get("discordBot");
+	localConf.discordBot = discordBotToken === "" ? false : config.has("discordBot") && config.get("discordBot");
 
 	if(canSave) {
 		
@@ -118,6 +118,7 @@ const askForSecrets = async () => {
 		}
 	});
 }
+	console.log("Starting 2b2w");
 	cmdInput();
 	joinOnStart();
 }

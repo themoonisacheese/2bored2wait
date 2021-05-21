@@ -2,17 +2,17 @@
     "accountType": "mojang", // set this to microsoft if you want to use a microsoft account
     "discordBot": true,
     "webserver": true,
-    "ports":{
-        "minecraft":25565, // port for the proxy server
-       "web":8080
+    "ports": {
+        "minecraft": 25565, // port for the proxy server
+        "web": 8080
     },
     "address":{ // address 2b2w listens on. if you leave it on 0.0.0.0 you can via all IPs
     	"minecraft": "0.0.0.0",
-	"web": "0.0.0.0"
+	    "web": "0.0.0.0"
     },
     "openBrowserOnStart": false,
-    "password":"", // password for the webinterface
-    "MCversion":"1.12.2",
+    "password": "", // password for the webinterface
+    "MCversion": "1.12.2",
     "logging": true, // log errors and queue place
     "reconnect": {
         "onError": true, // reconnect on error or if 2b2t kicks you
@@ -20,7 +20,7 @@
     },
     "minecraftserver": { // the server you want to connect. Make not much sense to change it, was just added for development purpose
         "hostname": "2b2t.org",
-	"is2b2t": true, // to allow proxies inbetween 2bored2wait and 2b2t
+	    "is2b2t": true, // to allow proxies inbetween 2bored2wait and 2b2t
         "port": 25565,
         "version": "1.12.2",
         "onlinemode": true,
@@ -32,7 +32,7 @@
     },
     "antiAntiAFK": { 
         "enabled": false, // master switch for all bypass antiAFK plugins
-        "config":{  // mineflayer-antiafk config
+        "config": {  // mineflayer-antiafk config
         }
     },
     "userStatus": true, // show username in discord bot status, in case of alts
