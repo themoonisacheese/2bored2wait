@@ -93,7 +93,7 @@ const askForSecrets = async () => {
 	if (config.get("discordBot")) {
 		dc = new discord.Client();
 		dc.login(discordBotToken).catch(()=>{
-			setTimeout(console.log("test"), 3000);
+			setTimeout(() => console.log('test'), 1000);
 			if (config.get("BotToken") != ""){
 			console.warn("There was an error when trying to log in using the provided Discord bot token."); //handle empty tokens gracefully
 				
