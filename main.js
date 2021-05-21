@@ -94,7 +94,7 @@ const askForSecrets = async () => {
 		dc = new discord.Client();
 		dc.login(discordBotToken).catch(()=>{
 			if (config.BotToken != ""){
-			console.warn("There was an error when trying to log in using the provided Discord bot token."); //handle empty tokens gracefully
+			console.warn("There was an error when trying to log in using the provided Discord bot token. If you didn't enter a token this message will go away the next time you run this program!"); //handle empty tokens gracefully
 				
 			};
 		});
