@@ -90,7 +90,7 @@ const askForSecrets = async () => {
 		console.clear();
 	}
 
-        config.discordBot = config.BotToken !== "" ? false : config.get("discordBot");
+        config.discordBot = discordBotToken !== "" ? false : config.get("discordBot");
 	if (config.get("discordBot")) {
 		dc = new discord.Client();
 		dc.login(discordBotToken).catch(()=>{
