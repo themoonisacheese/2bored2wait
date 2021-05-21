@@ -1,6 +1,6 @@
 {
   "name": "2bored2wait",
-  "version": "0.1.35",
+  "version": "0.1.36",
   "description": "A proxy to wait out 2b2t.org's way too long queue.",
   "main": "main.js",
   "scripts": {
