@@ -68,7 +68,7 @@ const askForSecrets = async () => {
 			mc_username = await promisedQuestion("Nickname (NOT an email!): ");
 			launcherPath = (await promisedQuestion("Path to Minecraft Launcher data folder, leave blank to autodetect []: ")) || guessLauncherPath();
 			localConf.launcherPath = launcherPath;
-			
+
 
 		}
 		localConf.username = mc_username;
@@ -77,11 +77,11 @@ const askForSecrets = async () => {
 		canSave = true;
 		discordBotToken = await promisedQuestion("BotToken, leave blank if not using discord []: ");
 		localConf.BotToken = discordBotToken;
-		config.discordBot = discordBotToken !== "" ? false : config.get("discordBot");
 	}
+	localConf.discordBot = discordBotToken === "" ? false : config.get("discordBot");
 
 	if(canSave) {
-		     
+		
 		savelogin = await promisedQuestion("Save login for later use? Y or N [N]: ");
 		if (savelogin.toLowerCase() === "y") {
 			fs.writeFile('config/local.json', JSON.stringify(localConf, null, 2), (err) => {
@@ -90,9 +90,9 @@ const askForSecrets = async () => {
 		};
 		console.clear();
 	}
-	if (config.get("discordBot")) {
+	if (localConf.discordBot) {
 		dc = new discord.Client();
-		dc.login(discordBotToken).catch(()=>{
+		dc.login(discordBotToken??config.get('BotToken')).catch(()=>{
 			console.warn("There was an error when trying to log in using the provided Discord bot token. If you didn't enter a token this message will go away the next time you run this program!"); //handle wrong tokens gracefully
 		});
 		dc.on('ready', () => {
