@@ -24,7 +24,7 @@
             setInterval(() => { //each second, update the info.
                 
                 const xhr = new XMLHttpRequest();
-                xhr.open("GET", "/update", true);
+                xhr.open("GET", "update", true);
                 xhr.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         if (place == 'undefined') {
@@ -57,7 +57,7 @@
 
             function start() {
                 const xhr = new XMLHttpRequest();
-                xhr.open("GET", "/start", true);
+                xhr.open("GET", "start", true);
                 xhr.setRequestHeader('XPassword', document.getElementsByClassName('password')[0].value)
                 xhr.send();
                 const queueButton = document.getElementById('queueButton');
@@ -71,7 +71,7 @@
                 if(!confirm("Are you sure you want to stop queuing?")) return;
 
                 const xhr = new XMLHttpRequest();
-                xhr.open("GET", "/stop", true);
+                xhr.open("GET", "stop", true);
                 xhr.setRequestHeader('XPassword', document.getElementsByClassName('password')[0].value)
                 xhr.send();
                 const queueButton = document.getElementById('queueButton');
