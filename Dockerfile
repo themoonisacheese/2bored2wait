@@ -1,6 +1,6 @@
 FROM node:alpine
 
-LABEL mantainer="mrgeorgen"
+LABEL maintainer="mrgeorgen"
 LABEL name="2bored2wait"
 
 # copy application
@@ -10,10 +10,7 @@ WORKDIR "/srv/app"
 COPY . "/srv/app"
 
 # install requirements
-RUN apk add --no-cache git;\
-npm install;\
-apk del --no-cache git || true
-
+RUN npm install
 
 # exposing 8080 (webui), 25566 (mc proxy)
 EXPOSE 8080/tcp
