@@ -1,6 +1,6 @@
 {
   "name": "2bored2wait",
-  "version": "0.1.37",
+  "version": "0.1.38",
   "description": "A proxy to wait out 2b2t.org's way too long queue.",
   "main": "main.js",
   "scripts": {
@@ -18,12 +18,12 @@
   },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
+    "@rob9315/mcproxy": "^0.0.4",
     "boxen": "^5.0.1",
     "config": "^3.3.6",
     "discord.js": "^12.5.1",
     "everpolate": "0.0.3",
     "luxon": "^1.26.0",
-    "@rob9315/mcproxy": "^0.0.4",
     "minecraft-protocol": "^1.24.1",
     "mineflayer-antiafk": "^1.1.1",
     "node-json-minify": "^1.0.0",
