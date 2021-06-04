@@ -1,5 +1,4 @@
-let Parser = require('rss-parser');
-let parser = new Parser();
+let parser = new (require('rss-parser'))();
 const boxen = require('boxen');
 var pjson = require('./package.json');
 var cv1 = pjson.version;
@@ -15,33 +14,20 @@ try {
 
 var updatemessage = config.updatemessage;
 (async () => {
-        let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
-        feed.items.every(item => {
-                var lv = (item.title);
-                if (!cv.includes(lv)) {
-                    if (updatemessage == "y" || updatemessage != "n") {
-
-                        console.log(boxen('New Update Available! → ' + lv, {
-                            padding: 1,
-                            margin: 1,
-                            align: 'center',
-                            borderColor: 'red',
-                            float: 'center',
-                            borderStyle: 'round'
-                        }));
-                        console.log('Press enter to continue.');
-                        process.stdin.once('data', function() {
-                            require('./main.js');
-
-                        });
-                    } else {
-                        console.log("Starting 2b2w");
-                        require('./main.js');
-                    }
-
-            } else {
-                console.log("Starting 2b2w");
-                require('./main.js');
-            }
-        });
+    let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
+    feed.items.every(item => {
+        var lv = (item.title);
+        if (!cv.includes(lv) && updatemessage != "n") {
+            console.log(boxen('New Update Available! → ' + lv, {
+                padding: 1,
+                margin: 1,
+                align: 'center',
+                borderColor: 'red',
+                float: 'center',
+                borderStyle: 'round'
+            }));
+            console.log('Press enter to continue.');
+            process.stdin.once('data', () => require('./main.js'));
+        } else require('./main.js');
+    });
 })();
