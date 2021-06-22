@@ -81,7 +81,7 @@ const askForSecrets = async () => {
 	localConf.discordBot = discordBotToken === "" ? false : config.has("discordBot") && config.get("discordBot");
 
 	if(canSave) {
-		
+
 		savelogin = await promisedQuestion("Save login for later use? Y or N [N]: ");
 		if (savelogin.toLowerCase() === "y") {
 			fs.writeFile('config/local.json', JSON.stringify(localConf, null, 2), (err) => {
@@ -187,15 +187,20 @@ function stop() {
 	finishedQueue = !config.minecraftserver.is2b2t;
 	webserver.queuePlace = "None";
 	webserver.ETA = "None";
-	client.end(); // disconnect
+	if(client){
+		client.end(); // disconnect
+	}
 	if (proxyClient) {
 		proxyClient.end("Stopped the proxy."); // boot the player from the server
 	}
-	server.close(); // close the server
+	if(server){
+		server.close(); // close the server
+	}
 }
 
 // function to start the whole thing
 function startQueuing() {
+	stopQueing();
 	doing = "auth";
 	if (config.get("minecraftserver.onlinemode")) {
 		options.username = mc_username;
@@ -226,7 +231,7 @@ function join() {
 				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
 					let headermessage = JSON.parse(data.header);
                                         let positioninqueue = "None";
-                                        try{	
+                                        try{
                                             positioninqueue = headermessage.text.split("\n")[5].substring(25);
 				        }catch(e){
                                             if (e instanceof TypeError)
@@ -383,17 +388,17 @@ function activity(string) {
 
 function userInput(cmd, DiscordOrigin, discordMsg) {
 	 cmd = cmd.toLowerCase();
-	
+
 	switch (cmd) {
 		case "start":
 			startQueuing();
 			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
 			break;
-		
+
 		case "exit":
 		case "quit":
 			return process.exit(0);
-			
+
 		case "update":
 			switch (doing) {
 				case "queue":
@@ -435,7 +440,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 					msg(DiscordOrigin, discordMsg, authMsg, authMsg);
 					break;
 				case "calcTime":
-					let calcMsg = 
+					let calcMsg =
 						msg(DiscordOrigin, discordMsg, "Calculating time", "Calculating the time, so you can play at " + starttimestring);
 					break;
 			}
