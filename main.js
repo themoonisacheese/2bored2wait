@@ -60,6 +60,7 @@ const askForSecrets = async () => {
 			accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
 			mc_username = await promisedQuestion("Email: ");
 			mc_password = await promisedQuestion("Password: ");
+			localConf.accountType = accountType;
 			localConf.mcPassword = mc_password;
 			updatemessage = await promisedQuestion("Update Messages? Y or N [Y]: ");
 			localConf.updatemessage = updatemessage;
