@@ -72,7 +72,7 @@ Please optain all required items
 
 ### Other Platforms (including ARM / Raspberry Pi):
 
-1. Download and install node.js version 14 or above and git. You need git even if you download the repository as zip because it is to install the dependencies via npm.
+1. Download and install [node.js](https://nodejs.org/) version 14 or above and git. You need git even if you download the repository as zip because it is to install the dependencies via npm.
 2. Open a terminal then clone this repo then cd into folder:
 
 ```sh
@@ -123,7 +123,7 @@ All commands can be used through discord or simply typed in the console window.
 
 # Roadmap and known issues
 
-See the [open issues]https://github.com/themoonisacheese/2bored2wait/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/themoonisacheese/2bored2wait/issues) for a list of proposed features (and known issues).
 
 - Starting the queue will revoke your Minecraft token. this means that you will not be able to join normal Minecraft servers until you restart the game
 - If you connect after the queue is finished or reconnect the proxy will send cached data. Otherwise you would fly in an empty world. However not all data will be resend. You can move out of render distance (I find going through a nether portal works best) and return to fix this issue. Sometimes the client renders a cached chunk with a blank texture.
@@ -144,13 +144,13 @@ Contributions are what make the open source community such an amazing place to b
 
 ## License
 
-Distributed under the GPL-3.0 License. See `LICENSE` for more information.
+Distributed under the GPL-3.0 License. See [this](LICENSE) for more information.
 
 <!-- ACKNOWLEDGEMENTS -->
 
 # Testing
 
-- Run NPM test to run test.js
+- Run `npm test` to run test.js
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -164,4 +164,4 @@ Distributed under the GPL-3.0 License. See `LICENSE` for more information.
 [issues-shield]: https://img.shields.io/github/issues/themoonisacheese/2bored2wait.svg?style=for-the-badge
 [issues-url]: https://github.com/themoonisacheese/2bored2wait/issues
 [donate-shield]: https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge
-[donate-url]: https://paypal.me/themoonisacheese?locale.x=fr_FR
+[donate-url]: https://paypal.me/themoonisacheese
