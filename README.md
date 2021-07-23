@@ -46,8 +46,8 @@ The ETA is calculated based on position in the queue. This results in better ETA
 
 ### Built With
 
-- Node
-- Npm
+- node.js
+- npm
 - HTML
 
 <!-- GETTING STARTED -->
