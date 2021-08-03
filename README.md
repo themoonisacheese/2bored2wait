@@ -68,7 +68,7 @@ Please optain all required items
 
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. Download the executable [here](https://github.com/themoonisacheese/2bored2wait/releases/latest)
-3. (Optional) Take a look at `config/default.json`, edit your values and place the config under `Home directory of your user/.2bored2wait/config/local.json`
+3. (Optional) Take a look at `config/default.json`, edit your values and place the config under `${USER}/.2bored2wait/config/local.json`
 
 ### Other Platforms (including ARM / Raspberry Pi):
 
