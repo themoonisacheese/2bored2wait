@@ -72,7 +72,7 @@ Please optain all required items
 
 ### Other Platforms (including ARM / Raspberry Pi):
 
-1. Download and install [node.js](https://nodejs.org/) version 14 or above and git. You need git even if you download the repository as zip because it is to install the dependencies via npm.
+1. Download and install [node.js](https://nodejs.org/) version 14 or above and [git](https://git-scm.com). You need git even if you download the repository as zip because it is to install the dependencies via npm.
 2. Open a terminal then clone this repo then cd into folder:
 
 ```sh
