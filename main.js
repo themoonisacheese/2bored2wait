@@ -119,7 +119,7 @@ const askForSecrets = async () => {
 		}
 	});
 }
-	console.log("Starting 2b2w");
+	console.log("Finished setting up 2b2w. Type 'Start' to start the queue.");
 	cmdInput();
 	joinOnStart();
 }
