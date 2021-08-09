@@ -8,7 +8,7 @@
 </br>
 <div align="center">
 
-<a href="#readme.md"><img align="center" src="images/logo.png" alt="Logo" width="80" height="80"><a>
+<a href="#readme.md"><img align="center" src="logo.png" alt="Logo" width="80" height="80"><a>
 
 ### 2bored2wait
 
