@@ -1,4 +1,4 @@
-let parser = new (require('rss-parser'))();
+let parser = new(require('rss-parser'))();
 const boxen = require('boxen');
 var pjson = require('./package.json');
 var cv1 = pjson.version;
@@ -28,6 +28,9 @@ var updatemessage = config.updatemessage;
             }));
             console.log('Press enter to continue.');
             process.stdin.once('data', () => require('./main.js'));
-        } else require('./main.js');
+        } else {
+            console.log("Please wait...")
+            require('./main.js');
+        };
     });
 })();
