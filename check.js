@@ -1,8 +1,14 @@
 let parser = new(require('rss-parser'))();
 const boxen = require('boxen');
+const readline = require("readline");
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 var pjson = require('./package.json');
 var cv1 = pjson.version;
 var cv = 'v' + cv1;
+
 try {
     config = require("config");
 } catch (err) {
@@ -27,10 +33,20 @@ var updatemessage = config.updatemessage;
                 borderStyle: 'round'
             }));
             console.log('Press enter to continue.');
-            process.stdin.once('data', () => require('./main.js'));
+            //process.stdin.once('data', () => require('./main.js'));
+            rl.question("To continue type one. Two edit settings type 2", function(choice) {
+                if (choice == 1) {
+                    start();
+                };
+            });
         } else {
             console.log("Please wait...")
             require('./main.js');
         };
     });
 })();
+
+function start() {
+    console.log("Please wait...");
+    require('./main.js');
+}
