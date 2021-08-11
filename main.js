@@ -2,7 +2,7 @@
 const jsonminify = require("node-json-minify"); // to remove comments from the config.json, because normally comments in json are not allowed
 const fs = require('fs');
 const mc = require('minecraft-protocol'); // to handle minecraft login session
-const webserver = require('./webserver/webserver.js'); // to serve the webserver
+const webserver = require('./webserver.js'); // to serve the webserver
 const opn = require('open'); //to open a browser window
 const discord = require('discord.js');
 const {DateTime} = require("luxon");

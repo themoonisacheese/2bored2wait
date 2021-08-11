@@ -1,10 +1,11 @@
 {
   "name": "2bored2wait",
-  "version": "1.1.1",
+  "version": "1.2",
   "description": "A proxy to wait out 2b2t.org's way too long queue.",
   "main": "main.js",
   "scripts": {
     "test": "node test.js",
+    "build": "webpack",
     "start": "node check.js"
   },
   "repository": {
@@ -18,20 +19,39 @@
   },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
     "@rob9315/mcproxy": "^0.2.2",
+    "babel-loader": "^8.2.2",
+    "babel-preset-react": "^6.24.1",
+    "bootstrap": "^5.1.0",
     "boxen": "^5.0.1",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
     "config": "^3.3.6",
+    "css-loader": "^6.2.0",
     "discord.js": "^12.5.1",
     "everpolate": "0.0.3",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.3.2",
     "luxon": "^2.0.1",
     "minecraft-protocol": "^1.24.1",
     "mineflayer-antiafk": "^1.1.1",
+    "mini-css-extract-plugin": "^2.2.0",
+    "nexe": "^4.0.0-beta.18",
     "node-json-minify": "^1.0.0",
     "open": "^8.0.7",
-    "particles.js": "^2.0.0",
-    "rss-parser": "^3.12.0"
+    "react": "^17.0.2",
+    "react-bootstrap": "^1.6.1",
+    "react-dom": "^17.0.2",
+    "rss-parser": "^3.12.0",
+    "sass": "^1.37.5",
+    "sass-loader": "^12.1.0",
+    "webpack": "^5.50.0"
   },
   "devDependencies": {
-    "nexe": "^4.0.0-beta.18"
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
   }
 }
