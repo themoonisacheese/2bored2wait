@@ -1,4 +1,5 @@
 let parser = new(require('rss-parser'))();
+const fs = require('fs');
 const boxen = require('boxen');
 const readline = require("readline");
 const rl = readline.createInterface({
@@ -34,14 +35,19 @@ var updatemessage = config.updatemessage;
             }));
             console.log('Press enter to continue.');
             //process.stdin.once('data', () => require('./main.js'));
-            rl.question("To continue type one. Two edit settings type 2", function(choice) {
+            rl.question("To continue type one. Two edit settings type 2. ", function(choice) {
                 if (choice == 1) {
+                    console.log("Chose 1");
                     start();
+                } else if (choice == 2) {
+                    console.log("Chose 2");
+                    settings();
+                } else {
+                    console.log("Chose Nothing");
                 };
             });
         } else {
-            console.log("Please wait...")
-            require('./main.js');
+            start();
         };
     });
 })();
@@ -49,4 +55,16 @@ var updatemessage = config.updatemessage;
 function start() {
     console.log("Please wait...");
     require('./main.js');
+}
+
+function settings() {
+    console.log("Clearing Settings");
+    fs.unlink('config/local.json', (err) => {
+        if (err) {
+            throw err;
+        }
+
+        console.log("Done.");
+
+    });
 }
