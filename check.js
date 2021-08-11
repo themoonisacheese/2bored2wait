@@ -37,10 +37,8 @@ var updatemessage = config.updatemessage;
             //process.stdin.once('data', () => require('./main.js'));
             rl.question("To continue type one. Two edit settings type 2. ", function(choice) {
                 if (choice == 1) {
-                    console.log("Chose 1");
                     start();
                 } else if (choice == 2) {
-                    console.log("Chose 2");
                     settings();
                 } else {
                     console.log("Chose Nothing");
@@ -61,10 +59,11 @@ function settings() {
     console.log("Clearing Settings");
     fs.unlink('config/local.json', (err) => {
         if (err) {
-            throw err;
+            console.log("No settings file.");
         }
 
         console.log("Done.");
 
     });
+    start();
 }
