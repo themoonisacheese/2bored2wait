@@ -33,15 +33,14 @@ var updatemessage = config.updatemessage;
                 float: 'center',
                 borderStyle: 'round'
             }));
-            console.log('Press enter to continue.');
-            //process.stdin.once('data', () => require('./main.js'));
             rl.question("To continue type one. Two edit settings type 2. ", function(choice) {
                 if (choice == 1) {
                     start();
                 } else if (choice == 2) {
                     settings();
                 } else {
-                    console.log("Chose Nothing");
+                    console.log("Invalid Responce.");
+                    require('./check.js');
                 };
             });
         } else {
@@ -52,6 +51,7 @@ var updatemessage = config.updatemessage;
 
 function start() {
     console.log("Please wait...");
+    rl.close();
     require('./main.js');
 }
 
