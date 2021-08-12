@@ -33,13 +33,13 @@ var updatemessage = config.updatemessage;
                 float: 'center',
                 borderStyle: 'round'
             }));
-            rl.question("To continue type one. Two edit settings type 2. ", function(choice) {
+            rl.question("To continue type 1. To edit settings type 2. ", function(choice) {
                 if (choice == 1) {
                     start();
                 } else if (choice == 2) {
                     settings();
                 } else {
-                    console.log("Invalid Responce.");
+                    console.log("Invalid response.");
                     require('./check.js');
                 };
             });
