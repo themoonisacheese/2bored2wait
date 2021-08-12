@@ -1,6 +1,6 @@
 {
   "name": "2bored2wait",
-  "version": "1.2",
+  "version": "1.1.1",
   "description": "A proxy to wait out 2b2t.org's way too long queue.",
   "main": "main.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "@rob9315/mcproxy": "^0.2.2",
     "babel-loader": "^8.2.2",
     "babel-preset-react": "^6.24.1",
-    "bootstrap": "^5.1.0",
+    "bootstrap": "^5.0.2",
     "boxen": "^5.0.1",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "config": "^3.3.6",
@@ -43,7 +43,7 @@
     "node-json-minify": "^1.0.0",
     "open": "^8.0.7",
     "react": "^17.0.2",
-    "react-bootstrap": "^1.6.1",
+    "react-bootstrap": "^2.0.0-beta.4",
     "react-dom": "^17.0.2",
     "rss-parser": "^3.12.0",
     "sass": "^1.37.5",

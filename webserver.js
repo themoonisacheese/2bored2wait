@@ -47,6 +47,8 @@ module.exports = {
 						module.exports.onstopcallback();
 					} else if(req.url === "/togglerestart"){
 						module.exports.restartQueue = !module.exports.restartQueue
+						res.writeHead(200);
+						res.end();
 					} else {
 						res.writeHead(404);
 						res.end();
