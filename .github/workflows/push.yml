@@ -26,7 +26,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: echo "TAG=$(git describe --tags)" >> $GITHUB_ENV
-      - name: "Build"
+      - name: Build web app
+        run: npm run build
+      - name: "Build release"
         run: node build.js
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:

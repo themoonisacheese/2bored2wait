@@ -7,7 +7,8 @@ const dist = "dist/" // webpack compiled packages
 const contentTypes = {
 	".html": "text/html",
 	".js": "text/javascript",
-	".css" : "text/css"
+	".css": "text/css",
+	".png": "image/png"
 }
 
 module.exports = {
@@ -20,44 +21,45 @@ module.exports = {
 			if (req.url == "/") {
 				resource = path.join(dist, "index.html");
 			}
-			try {
-				fs.accessSync(resource, fs.constants.R_OK);
-				let contentType = contentTypes[path.extname(resource)];
-				if (contentType == undefined) {
-					contentType = "text/html";
-				}
-				res.writeHead(200, {"Content-Type" : contentType});
-				res.write(fs.readFileSync(resource));
-				res.end();
-			} catch (err) {
-				if (module.exports.password == "" || req.headers.xpassword == module.exports.password) { //before doing any action, test if the provided password is correct.
-					if(req.url === "/update") { //API endpoint to get position, ETA, and status in JSON format
-						res.writeHead(200, {'Content-type': 'text/json'});
-						let json = module.exports;
-						json.place = json.queuePlace;
-						res.write(JSON.stringify(json));
-						res.end();
-					} else if(req.url === "/start") { //API endpoint to start queuing
-						res.writeHead(200);
-						res.end();
-						module.exports.onstartcallback();
-					} else if(req.url === "/stop") { //API endpoint to stop queuing
-						res.writeHead(200);
-						res.end();
-						module.exports.onstopcallback();
-					} else if(req.url === "/togglerestart"){
-						module.exports.restartQueue = !module.exports.restartQueue
-						res.writeHead(200);
-						res.end();
-					} else {
-						res.writeHead(404);
-						res.end();
+			fs.readFile(resource, null, (err, data) => {
+				if (!err) {
+					let contentType = contentTypes[path.extname(resource)];
+					if (contentType == undefined) {
+						contentType = "text/html";
 					}
-				}else{
-					res.writeHead(403);
-					res.end()
+					res.writeHead(200, {"Content-Type": contentType});
+					res.write(data);
+					res.end();
+				} else {
+					if (module.exports.password == "" || req.headers.xpassword == module.exports.password) { //before doing any action, test if the provided password is correct.
+						if(req.url === "/update") { //API endpoint to get position, ETA, and status in JSON format
+							res.writeHead(200, {'Content-type': 'text/json'});
+							let json = module.exports;
+							json.place = json.queuePlace;
+							res.write(JSON.stringify(json));
+							res.end();
+						} else if(req.url === "/start") { //API endpoint to start queuing
+							res.writeHead(200);
+							res.end();
+							module.exports.onstartcallback();
+						} else if(req.url === "/stop") { //API endpoint to stop queuing
+							res.writeHead(200);
+							res.end();
+							module.exports.onstopcallback();
+						} else if(req.url === "/togglerestart"){
+							module.exports.restartQueue = !module.exports.restartQueue
+							res.writeHead(200);
+							res.end();
+						} else {
+							res.writeHead(404);
+							res.end();
+						}
+					}else{
+						res.writeHead(403);
+						res.end()
+					}
 				}
-			}
+			});
 		}).listen(port, address);
 	},
 	onstart: (callback) => { //function to set the action to do when starting
