@@ -18,52 +18,56 @@ try {
         process.exit(1);
     }
 }
+check();
 
-var updatemessage = config.updatemessage;
-(async () => {
-    let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
-    feed.items.every(item => {
-        var lv = (item.title);
-        if (!cv.includes(lv) && updatemessage != "n") {
-            console.log(boxen('New Update Available! → ' + lv, {
-                padding: 1,
-                margin: 1,
-                align: 'center',
-                borderColor: 'red',
-                float: 'center',
-                borderStyle: 'round'
-            }));
-            rl.question("To continue type 1. To edit settings type 2. ", function(choice) {
-                if (choice == 1) {
-                    start();
-                } else if (choice == 2) {
-                    settings();
-                } else {
-                    console.log("Invalid response.");
-                    require('./check.js');
-                };
-            });
-        } else {
-            start();
-        };
-    });
-})();
+function check() {
 
-function start() {
-    console.log("Please wait...");
-    rl.close();
-    require('./main.js');
-}
+    var updatemessage = config.updatemessage;
+    (async () => {
+        let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
+        feed.items.every(item => {
+            var lv = (item.title);
+            if (!cv.includes(lv) && updatemessage != "n") {
+                console.log(boxen('New Update Available! → ' + lv, {
+                    padding: 1,
+                    margin: 1,
+                    align: 'center',
+                    borderColor: 'red',
+                    float: 'center',
+                    borderStyle: 'round'
+                }));
+                rl.question("To continue type 1. To edit settings type 2. ", function(choice) {
+                    if (choice == 1) {
+                        start();
+                    } else if (choice == 2) {
+                        settings();
+                    } else {
+                        console.log("Invalid response.");
+                        check();
+                    };
+                });
+            } else {
+                start();
+            };
+        });
+    })();
 
-function settings() {
-    console.log("Clearing Settings");
-    fs.unlink('config/local.json', (err) => {
-        if (err) {
-            console.log("No settings file.");
-        }
+    function start() {
+        console.log("Please wait...");
+        rl.close();
+        require('./main.js');
+    }
 
-        console.log("Done.");
+    function settings() {
+        console.log("Clearing Settings");
+        fs.unlink('config/local.json', (err) => {
+            if (err) {
+                console.log("No settings file.");
+            }
 
-    });
-    start();
+            console.log("Done.");
+
+        });
+        start();
+    }
 }
