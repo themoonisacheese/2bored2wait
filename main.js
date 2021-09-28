@@ -250,6 +250,7 @@ function join() {
 						let ETAmin = (totalWaitTime - timepassed) / 60;
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
+						webserver.finTime = new Date((new Date()).getTime() + ETAmin*60000);
 						if (config.get("userStatus")) { //set the Discord Activity
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
 						} else {

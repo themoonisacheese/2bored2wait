@@ -60,6 +60,7 @@ module.exports = {
 	},
 	ETA: "None", //ETA
 	queuePlace : "None", //our place in queue
+	finTime: "Never", //time queueing will finish
 	isInQueue: false, //are we in queue?
 	onstartcallback: null, //a save of the action to start
 	onstopcallback: null, //same but to stop
