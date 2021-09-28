@@ -35,8 +35,15 @@
                         document.getElementsByClassName("place")[0].innerHTML = response.place;
                         document.title = "2Bored2Wait - " + response.place;
                         document.getElementsByClassName("ETA")[0].innerHTML = response.ETA;
-                        const finishedDate = new Date(response.finTime);
-                        document.getElementsByClassName("finishedTime")[0].innerHTML = response.finTime != "Never" ? `${finishedDate.getHours()}:${finishedDate.getMinutes()}` : "Never";
+                        if (response.finTime != "Never") {
+                            const finishedDate = new Date(response.finTime);
+                            let hours = finishedDate.getHours();
+                            let minutes = finishedDate.getMinutes();
+                            if (hours < 10) hours = `0${hours}`;
+                            if (minutes < 10) minutes = `0${minutes}`;
+                            document.getElementsByClassName("finishedTime")[0].innerHTML = `${hours}:${minutes}`;
+                        } else document.getElementsByClassName("finishedTime")[0].innerHTML = response.finTime;
+
                         document.getElementsByClassName("restartQueue")[0].checked = response.restartQueue
                         const queueButton = document.getElementById('queueButton');
                         if(response.isInQueue){
