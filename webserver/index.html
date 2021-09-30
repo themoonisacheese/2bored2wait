@@ -36,12 +36,8 @@
                         document.title = "2Bored2Wait - " + response.place;
                         document.getElementsByClassName("ETA")[0].innerHTML = response.ETA;
                         if (response.finTime != "Never") {
-                            const finishedDate = new Date(response.finTime);
-                            let hours = finishedDate.getHours();
-                            let minutes = finishedDate.getMinutes();
-                            if (hours < 10) hours = `0${hours}`;
-                            if (minutes < 10) minutes = `0${minutes}`;
-                            document.getElementsByClassName("finishedTime")[0].innerHTML = `${hours}:${minutes}`;
+                            const date = (new Date(response.finTime)).toLocaleTimeString();
+                            document.getElementsByClassName("finishedTime")[0].innerHTML = date;
                         } else document.getElementsByClassName("finishedTime")[0].innerHTML = response.finTime;
 
                         document.getElementsByClassName("restartQueue")[0].checked = response.restartQueue
