@@ -19,7 +19,7 @@
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
     "@rob9315/mcproxy": "^0.2.2",
-    "boxen": "^5.0.1",
+    "boxen": "^6.0.0",
     "config": "^3.3.6",
     "discord.js": "^12.5.1",
     "everpolate": "0.0.3",
