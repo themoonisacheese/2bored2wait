@@ -3,6 +3,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![Donate][donate-shield]][donate-url]
+[![NextGEN-Discord-Server][discord-shield]][discord-url]
 
 <!-- PROJECT LOGO -->
 </br>
@@ -165,3 +166,5 @@ Distributed under the GPL-3.0 License. See [this](LICENSE) for more information.
 [issues-url]: https://github.com/themoonisacheese/2bored2wait/issues
 [donate-shield]: https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge
 [donate-url]: https://paypal.me/themoonisacheese
+[discord-shield]: https://img.shields.io/discord/879482948099919903.svg?label=Discord&color=7289da&style=for-the-badge
+[discord-url]: https://discord.gg/9ZrXZp7nVj
