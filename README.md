@@ -1,9 +1,4 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![Donate][donate-shield]][donate-url]
-[![NextGEN-Discord-Server][discord-shield]][discord-url]
+[![Contributors][contributors-shield]][contributors-url] [![Forks][forks-shield]][forks-url] [![Stargazers][stars-shield]][stars-url] [![Issues][issues-shield]][issues-url] [![Donate][donate-shield]][donate-url] [![NextGEN-Discord-Server][discord-shield]][discord-url]
 
 <!-- PROJECT LOGO -->
 </br>
