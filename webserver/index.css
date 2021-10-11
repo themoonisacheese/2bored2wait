@@ -42,6 +42,6 @@ button.stop {
     border: 2px solid #f32727;
 }
 
-.place, .ETA{
+.place, .ETA, .finishedTime {
     display: inline-block;
 }
