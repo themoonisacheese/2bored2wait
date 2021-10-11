@@ -150,7 +150,7 @@ Distributed under the GPL-3.0 License. See [this](LICENSE) for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
+   <p align="center">
 [contributors-shield]: https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge
 [contributors-url]: https://github.com/themoonisacheese/2bored2wait/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/themoonisacheese/2bored2wait.svg?style=for-the-badge
@@ -163,3 +163,4 @@ Distributed under the GPL-3.0 License. See [this](LICENSE) for more information.
 [donate-url]: https://paypal.me/themoonisacheese
 [discord-shield]: https://img.shields.io/discord/879482948099919903.svg?label=Discord&color=7289da&style=for-the-badge
 [discord-url]: https://discord.gg/9ZrXZp7nVj
+   </p>
