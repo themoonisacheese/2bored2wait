@@ -1,25 +1,10 @@
 <!-- Badges -->
-<p align="center">
-    <a href="https://github.com/themoonisacheese/2bored2wait/graphs/contributors">
-      <img alt="Contributers" src="https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=3e961e" />
-</a>
-    <a href="https://github.com/themoonisacheese/2bored2wait/stargazers">
-      <img alt="Stars" src="https://img.shields.io/github/stars/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=yellow" />
-</a>
-    <a href="https://github.com/themoonisacheese/2bored2wait/issues">
-      <img alt="Issues" src="https://img.shields.io/github/issues-raw/themoonisacheese/2bored2wait.svg?label=issues&style=for-the-badge&color=orange" />
-</a>
-    </a>
-        <a href="https://github.com/themoonisacheese/2bored2wait/network/members">
-      <img alt="Forks" src="https://img.shields.io/github/forks/themoonisacheese/2bored2wait.svg?style=for-the-badge" />
-</a>
-    <a href="https://paypal.me/themoonisacheese">
-      <img alt="Donate!" src="https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge" />
-</a>       
-    <a href="https://discord.gg/cT3upwNxz6">
-      <img alt="Join Our Server!" src="https://img.shields.io/badge/dynamic/json?label=Discord&color=7289da&query=%24.presence_count&url=https%3A%2F%2Fdiscordapp.com%2Fapi%2Fguilds%2F879482948099919903%2Fwidget.json&style=for-the-badge" />
-</a>
-</p>
+[![contributors]][contributors-url]
+[![stars]][stars-url]
+[![issues]][issues-url]
+[![forks]][forks-url]
+[![donate]][donate-url]
+[![discord]][discord-url]
 
 <!-- PROJECT LOGO -->
 </br>
@@ -168,3 +153,19 @@ Distributed under the GPL-3.0 License. See [this](LICENSE) for more information.
 # Testing
 
 - Run `npm test` to run test.js
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[contributors]: https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=3e961e
+[contributors-url]: https://github.com/themoonisacheese/2bored2wait/graphs/contributors
+[stars]: https://img.shields.io/github/stars/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=yellow
+[stars-url]: https://github.com/themoonisacheese/2bored2wait/stargazers
+[issues]: https://img.shields.io/github/issues-raw/themoonisacheese/2bored2wait.svg?label=issues&style=for-the-badge&color=orange
+[issues-url]: https://github.com/themoonisacheese/2bored2wait/issues
+[forks]: https://img.shields.io/github/forks/themoonisacheese/2bored2wait.svg?style=for-the-badge
+[forks-url]: https://github.com/themoonisacheese/2bored2wait/network/members
+[donate]: https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge
+[donate-url]: https://paypal.me/themoonisacheese
+[discord]: https://img.shields.io/badge/dynamic/json?label=Discord&color=7289da&query=%24.presence_count&url=https%3A%2F%2Fdiscordapp.com%2Fapi%2Fguilds%2F879482948099919903%2Fwidget.json&style=for-the-badge
+[discord-url]: https://discord.gg/9ZrXZp7nVj
