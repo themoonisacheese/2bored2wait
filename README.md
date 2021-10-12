@@ -1,16 +1,17 @@
 <!-- Badges -->
 <p align="center">
     <a href="https://github.com/themoonisacheese/2bored2wait/graphs/contributors">
-      <img alt="Contributers" src="https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=pink" />
-</a>
-    <a href="https://github.com/themoonisacheese/2bored2wait/network/members">
-      <img alt="Forks" src="https://img.shields.io/github/forks/themoonisacheese/2bored2wait.svg?style=for-the-badge" />
+      <img alt="Contributers" src="https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=3e961e" />
 </a>
     <a href="https://github.com/themoonisacheese/2bored2wait/stargazers">
       <img alt="Stars" src="https://img.shields.io/github/stars/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=yellow" />
 </a>
     <a href="https://github.com/themoonisacheese/2bored2wait/issues">
-      <img alt="Issues" src="https://img.shields.io/github/issues-raw/themoonisacheese/2bored2wait.svg?label=issues&style=for-the-badge&color=red" />
+      <img alt="Issues" src="https://img.shields.io/github/issues-raw/themoonisacheese/2bored2wait.svg?label=issues&style=for-the-badge&color=orange" />
+</a>
+    </a>
+        <a href="https://github.com/themoonisacheese/2bored2wait/network/members">
+      <img alt="Forks" src="https://img.shields.io/github/forks/themoonisacheese/2bored2wait.svg?style=for-the-badge" />
 </a>
     <a href="https://paypal.me/themoonisacheese">
       <img alt="Donate!" src="https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge" />
