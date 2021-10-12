@@ -15,7 +15,7 @@
       <img alt="Donate!" src="https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge" />
 </a>       
     <a href="https://discord.gg/cT3upwNxz6">
-      <img alt="Join Our Server!" src="https://img.shields.io/static/v1?&label=&color=grey&message=Discord&logo=Discord&style=for-the-badge" />
+      <img alt="Join Our Server!" src="https://img.shields.io/badge/Discord-grey?style=for-the-badge&logo=discord&logoColor=white" />
 </a>
 
 <!-- PROJECT LOGO -->
