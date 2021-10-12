@@ -1,6 +1,7 @@
+<!-- Badges -->
 <p align="center">
     <a href="https://github.com/themoonisacheese/2bored2wait/graphs/contributors">
-      <img alt="Contributers" src="https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=teal" />
+      <img alt="Contributers" src="https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=pink" />
 </a>
     <a href="https://github.com/themoonisacheese/2bored2wait/network/members">
       <img alt="Forks" src="https://img.shields.io/github/forks/themoonisacheese/2bored2wait.svg?style=for-the-badge" />
