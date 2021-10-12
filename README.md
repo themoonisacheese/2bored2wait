@@ -19,6 +19,7 @@
     <a href="https://discord.gg/cT3upwNxz6">
       <img alt="Join Our Server!" src="https://img.shields.io/badge/dynamic/json?label=Discord&color=7289da&query=%24.presence_count&url=https%3A%2F%2Fdiscordapp.com%2Fapi%2Fguilds%2F879482948099919903%2Fwidget.json&style=for-the-badge" />
 </a>
+</p>
 
 <!-- PROJECT LOGO -->
 </br>
