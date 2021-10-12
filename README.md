@@ -1,21 +1,21 @@
 <p align="center">
     <a href="https://github.com/themoonisacheese/2bored2wait/graphs/contributors">
-      <img alt="Contributers" src="https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge" />
+      <img alt="Contributers" src="https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=teal" />
 </a>
     <a href="https://github.com/themoonisacheese/2bored2wait/network/members">
       <img alt="Forks" src="https://img.shields.io/github/forks/themoonisacheese/2bored2wait.svg?style=for-the-badge" />
 </a>
     <a href="https://github.com/themoonisacheese/2bored2wait/stargazers">
-      <img alt="Stars" src="https://img.shields.io/github/stars/themoonisacheese/2bored2wait.svg?style=for-the-badge" />
+      <img alt="Stars" src="https://img.shields.io/github/stars/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=yellow" />
 </a>
     <a href="https://github.com/themoonisacheese/2bored2wait/issues">
-      <img alt="Issues" src="https://img.shields.io/github/issues-raw/themoonisacheese/2bored2wait.svg?label=issues&style=for-the-badge" />
+      <img alt="Issues" src="https://img.shields.io/github/issues-raw/themoonisacheese/2bored2wait.svg?label=issues&style=for-the-badge&color=red" />
 </a>
     <a href="https://paypal.me/themoonisacheese">
       <img alt="Donate!" src="https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge" />
 </a>       
     <a href="https://discord.gg/cT3upwNxz6">
-      <img alt="Join Our Server!" src="https://img.shields.io/badge/Discord-grey?style=for-the-badge&logo=discord&logoColor=white" />
+      <img alt="Join Our Server!" src="https://img.shields.io/badge/dynamic/json?label=Discord&color=7289da&query=%24.presence_count&url=https%3A%2F%2Fdiscordapp.com%2Fapi%2Fguilds%2F879482948099919903%2Fwidget.json&style=for-the-badge" />
 </a>
 
 <!-- PROJECT LOGO -->
