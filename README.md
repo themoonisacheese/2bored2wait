@@ -82,7 +82,7 @@ Please optain all required items
  cd 2bored2wait
 ```
 
-3. Run `npm install` to install te required libraries
+3. Run `npm install` to install the required libraries
 4. Start the program with `npm start`.
 
 ### Docker
