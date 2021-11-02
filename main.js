@@ -52,28 +52,17 @@ const askForSecrets = async () => {
 		if(err.code != "ENOENT") throw err;
 	}
 	let canSave = false;
-	if(!(config.has("username") && config.has("mcPassword") && config.has("updatemessage") || config.has("profilesFolder"))) {
+	if(!(config.has("username") && config.has("mcPassword") && config.has("updatemessage"))) {
 		canSave = true;
-		let shouldUseTokens = (await promisedQuestion("Do you want to use launcher account data? Y or N [N]: ")).toLowerCase() === 'y';
-
-		if (!shouldUseTokens) {
 			accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
 			mc_username = await promisedQuestion("Email: ");
 			mc_password = await promisedQuestion("Password: ");
 			localConf.accountType = accountType;
 			localConf.mcPassword = mc_password;
+			localConf.username = mc_username;
 			updatemessage = await promisedQuestion("Update Messages? Y or N [Y]: ");
 			localConf.updatemessage = updatemessage;
-
-		} else {
-			mc_username = await promisedQuestion("Nickname (NOT an email!): ");
-			launcherPath = (await promisedQuestion("Path to Minecraft Launcher data folder, leave blank to autodetect []: ")) || guessLauncherPath();
-			localConf.launcherPath = launcherPath;
-
-
-		}
-		localConf.username = mc_username;
-	}
+			}
 	if((!config.has("discordBot") || config.get("discordBot")) && !config.has("BotToken")) {
 		canSave = true;
 		discordBotToken = await promisedQuestion("BotToken, leave blank if not using discord []: ");
