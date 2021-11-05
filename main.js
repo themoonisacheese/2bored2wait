@@ -197,7 +197,7 @@ function startQueuing() {
 		options.password = mc_password;
 		options.profilesFolder = launcherPath;
 		options.auth = accountType;
-		options.authTitle = "2bored2wait";
+		options.authTitle = "Titles.MinecraftJava";
 	} else {
 		options.username = config.get("minecraftserver.username");
 	}
