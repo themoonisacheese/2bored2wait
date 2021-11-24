@@ -13,7 +13,6 @@ const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
-const { Titles } = require('prismarine-auth');
 var config;
 try {
 	config = require("config");
@@ -198,7 +197,6 @@ function startQueuing() {
 		options.password = mc_password;
 		options.profilesFolder = launcherPath;
 		options.auth = accountType;
-		options.authTitle = Titles.MinecraftJava;
 	} else {
 		options.username = config.get("minecraftserver.username");
 	}
