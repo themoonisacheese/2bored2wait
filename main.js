@@ -54,7 +54,7 @@ const askForSecrets = async () => {
 	let canSave = false;
 	if(!(config.has("username") && config.has("mcPassword") && config.has("updatemessage"))) {
 		canSave = true;
-			accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [2]: ")) === "2" ? "microsoft" : "mojang");
+			accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
 			mc_username = await promisedQuestion("Email: ");
 			mc_password = await promisedQuestion("Password: ");
 			localConf.accountType = accountType;
