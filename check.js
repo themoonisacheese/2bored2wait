@@ -1,8 +1,15 @@
-let parser = new (require('rss-parser'))();
+let parser = new(require('rss-parser'))();
+const fs = require('fs');
 const boxen = require('boxen');
+const readline = require("readline");
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 var pjson = require('./package.json');
 var cv1 = pjson.version;
 var cv = 'v' + cv1;
+
 try {
     config = require("config");
 } catch (err) {
@@ -11,23 +18,56 @@ try {
         process.exit(1);
     }
 }
+check();
 
-var updatemessage = config.updatemessage;
-(async () => {
-    let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
-    feed.items.every(item => {
-        var lv = (item.title);
-        if (!cv.includes(lv) && updatemessage != "n") {
-            console.log(boxen('New Update Available! → ' + lv, {
-                padding: 1,
-                margin: 1,
-                align: 'center',
-                borderColor: 'red',
-                float: 'center',
-                borderStyle: 'round'
-            }));
-            console.log('Press enter to continue.');
-            process.stdin.once('data', () => require('./main.js'));
-        } else require('./main.js');
-    });
-})();
+function check() {
+
+    var updatemessage = config.updatemessage;
+    (async () => {
+        let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
+        feed.items.every(item => {
+            var lv = (item.title);
+            if (!cv.includes(lv) && updatemessage != "n") {
+                console.log(boxen('New Update Available! → ' + lv, {
+                    padding: 1,
+                    margin: 1,
+                    align: 'center',
+                    borderColor: 'red',
+                    float: 'center',
+                    borderStyle: 'round'
+                }));
+                rl.question("To continue type 1. To edit settings type 2. ", function(choice) {
+                    if (choice == 1) {
+                        start();
+                    } else if (choice == 2) {
+                        settings();
+                    } else {
+                        console.log("Invalid response.");
+                        check();
+                    };
+                });
+            } else {
+                start();
+            };
+        });
+    })();
+
+    function start() {
+        console.log("Please wait...");
+        rl.close();
+        require('./main.js');
+    }
+
+    function settings() {
+        console.log("Clearing Settings");
+        fs.unlink('config/local.json', (err) => {
+            if (err) {
+                console.log("No settings file.");
+            }
+
+            console.log("Done.");
+
+        });
+        start();
+    }
+}

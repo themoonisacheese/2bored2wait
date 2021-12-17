@@ -1,8 +1,10 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![Donate][donate-shield]][donate-url]
+<!-- Badges -->
+[![contributors]][contributors-url]
+[![stars]][stars-url]
+[![issues]][issues-url]
+[![forks]][forks-url]
+[![donate]][donate-url]
+[![discord]][discord-url]
 
 <!-- PROJECT LOGO -->
 </br>
@@ -80,7 +82,7 @@ Please optain all required items
  cd 2bored2wait
 ```
 
-3. Run `npm install` to install te required libraries
+3. Run `npm install` to install the required libraries
 4. Start the program with `npm start`.
 
 ### Docker
@@ -133,13 +135,14 @@ See the [open issues](https://github.com/themoonisacheese/2bored2wait/issues) fo
 <!-- CONTRIBUTING -->
 
 ## Contributing
+   
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+2. Create your Feature Branch (`git checkout -b themoonisacheese/2bored2wait`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+4. Push to the Branch (`git push origin themoonisacheese/2bored2wait`)
 5. Open a Pull Request
 
 <!-- LICENSE -->
@@ -157,13 +160,15 @@ Distributed under the GPL-3.0 License. See [this](LICENSE) for more information.
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[contributors-shield]: https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge
+[contributors]: https://img.shields.io/github/contributors/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=3e961e
 [contributors-url]: https://github.com/themoonisacheese/2bored2wait/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/themoonisacheese/2bored2wait.svg?style=for-the-badge
-[forks-url]: https://github.com/themoonisacheese/2bored2wait/network/members
-[stars-shield]: https://img.shields.io/github/stars/themoonisacheese/2bored2wait.svg?style=for-the-badge
+[stars]: https://img.shields.io/github/stars/themoonisacheese/2bored2wait.svg?style=for-the-badge&color=yellow
 [stars-url]: https://github.com/themoonisacheese/2bored2wait/stargazers
-[issues-shield]: https://img.shields.io/github/issues/themoonisacheese/2bored2wait.svg?style=for-the-badge
+[issues]: https://img.shields.io/github/issues-raw/themoonisacheese/2bored2wait.svg?label=issues&style=for-the-badge&color=orange
 [issues-url]: https://github.com/themoonisacheese/2bored2wait/issues
-[donate-shield]: https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge
+[forks]: https://img.shields.io/github/forks/themoonisacheese/2bored2wait.svg?style=for-the-badge
+[forks-url]: https://github.com/themoonisacheese/2bored2wait/network/members
+[donate]: https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge
 [donate-url]: https://paypal.me/themoonisacheese
+[discord]: https://img.shields.io/badge/dynamic/json?label=Discord&color=7289da&query=%24.presence_count&url=https%3A%2F%2Fdiscordapp.com%2Fapi%2Fguilds%2F879482948099919903%2Fwidget.json&style=for-the-badge
+[discord-url]: https://discord.gg/9ZrXZp7nVj
