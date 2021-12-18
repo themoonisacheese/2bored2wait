@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node test.js",
     "build": "webpack",
+    "prepublish": "webpack",
     "start": "node check.js"
   },
   "repository": {
@@ -39,7 +40,7 @@
     "minecraft-protocol": "^1.28.0",
     "mineflayer-antiafk": "^1.1.1",
     "mini-css-extract-plugin": "^2.2.0",
-    "nexe": "^4.0.0-beta.18",
+    "nexe": "^1.1.6",
     "node-json-minify": "^2.0.0",
     "open": "^8.0.7",
     "react": "^17.0.2",
@@ -52,6 +53,6 @@
   },
   "devDependencies": {
     "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^4.6.0"
   }
 }
