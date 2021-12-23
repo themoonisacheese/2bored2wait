@@ -26,7 +26,7 @@
     "luxon": "^2.0.1",
     "minecraft-protocol": "^1.28.0",
     "mineflayer-antiafk": "^1.1.1",
-    "node-json-minify": "^2.0.0",
+    "node-json-minify": "^3.0.0",
     "open": "^8.0.7",
     "particles.js": "^2.0.0",
     "rss-parser": "^3.12.0"
