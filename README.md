@@ -65,6 +65,14 @@ Please optain all required items
 - A discord bot (optional) ([detailed instructions](https://discordpy.readthedocs.io/en/stable/discord.html))
 
 ## Installation
+   
+### Video Instilation 
+
+Click the picture or link bellow to watch!   
+[![Click Me To Watch!](https://img.youtube.com/vi/3kCKnwuiHak/0.jpg)](https://youtu.be/3kCKnwuiHak)
+  
+   
+https://youtu.be/3kCKnwuiHak
 
 ### x86 and x64 (most home computers):
 
