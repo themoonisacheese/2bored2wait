@@ -32,6 +32,7 @@ A proxy to wait out 2b2t.org's way too long queue. Includes a small webserver a 
 3. [How to use](#how-to-use)
 4. [Configuration](#configuration)
 5. [Roadmap and known issues](#roadmap-and-known-issues)
+6. [Addons](#addons)
 6. [Contributing](#contributing)
 7. [License](#license)
 8. [Testing](#testing)
@@ -43,7 +44,7 @@ A proxy to wait out 2b2t.org's way too long queue. Includes a small webserver a 
 ## About The Project
 
 A proxy to wait out 2b2t.org's way too long queue.  
-Please Note that because of security reasons this tool doesn't auto-update! Also 2b2w does not show ETA from 2b2t.  
+Please Note that because of security reasons this tool doesn't auto-update offically (check out the addons section)! Also 2b2w does not show ETA from 2b2t.  
 The ETA is calculated based on position in the queue. This results in better ETA most of the time.
 
 ### Built With
@@ -96,8 +97,8 @@ https://youtu.be/3kCKnwuiHak
 ### Docker
 
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-2. `docker run -d -p 80:8080 -p 25565:25565 -e NODE_CONFIG='{"username":"user@domain.com","mcPassword":"password","updatemessage":"n","BotToken":""}' 2bored2wait/2bored2wait:latest`. The docker image is automatically up to date after each push to this repo. Docker images are available for `amd64` and `arm64` among other platforms.
-3. Open a browser and navigate to http://localhost
+2. `docker run -d -p 8080:8080 -p 25565:25565 -e NODE_CONFIG='{"username":"user@domain.com","mcPassword":"password","updatemessage":"n","BotToken":""}' 2bored2wait/2bored2wait:latest`. The docker image is automatically up to date after each push to this repo. Docker images are available for `amd64` and `arm64` among other platforms.
+3. Open a browser and navigate to http://localhost:8080
 4. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 5. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
 6. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
@@ -138,6 +139,10 @@ See the [open issues](https://github.com/themoonisacheese/2bored2wait/issues) fo
 - Starting the queue will revoke your Minecraft token. this means that you will not be able to join normal Minecraft servers until you restart the game
 - If you connect after the queue is finished or reconnect the proxy will send cached data. Otherwise you would fly in an empty world. However not all data will be resend. You can move out of render distance (I find going through a nether portal works best) and return to fix this issue. Sometimes the client renders a cached chunk with a blank texture.
 
+   
+## Addons
+- [Auto-Update](https://github.com/KozmikCode/2b2t-auto-update) Allows you to have auto updates!
+   
 <!-- CONTRIBUTING -->
 
 ## Contributing
