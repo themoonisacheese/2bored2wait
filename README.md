@@ -114,7 +114,7 @@ If you want to change the configuration or you don't want your credentials in th
 2. Run `npm start`
 3. It will now ask for your Minecraft email and password (or permission to use saved launcher data instead). If you want update messages then you need to type Y otherwise N. If you are using the discord bot you need to add your token. Then answer Y or N if you want to save your Minecraft credentials. If you answer N you will need to re-enter your Minecraft login information into the console each time you start the program.
 4. Refer to Commands on how to use 2b2w from the console. Otherwise keep on reading for the web interface.
-5. Now open a browser and navigate to http://localhost: your web port here (default 80).
+5. Now open a browser and navigate to http://localhost: your web port here (default 8080).
 6. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 7. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
 8. After you log off, click the "stop queuing" button. This is really important, as you will not actually disconnect from 2b2t until you do that.
