@@ -124,6 +124,9 @@ If you want to change the configuration or you don't want your credentials in th
 
 All commands can be used through discord or simply typed in the console window.
 
+• Please note that the time zone for the calculations is based off your computer's time!
+
+
 - `start` will start the queue. It takes between 15-30 seconds for the bot to update with the queue position.
 - `start 14:00` will start at 2pm.
 - `play 8:00` will try to calculate the right time to join so you can play at 8:00
