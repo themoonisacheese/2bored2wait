@@ -44,7 +44,7 @@ A proxy to wait out 2b2t.org's way too long queue. Includes a small webserver a 
 ## About The Project
 
 A proxy to wait out 2b2t.org's way too long queue.  
-Please Note that because of security reasons this tool doesn't auto-update offically (check out the addons section)! Also 2b2w does not show ETA from 2b2t.  
+Please Note that because of security reasons this tool doesn't auto-update without a plug-in (check out the addons section)! Also 2b2w does not show ETA from 2b2t.  
 The ETA is calculated based on position in the queue. This results in better ETA most of the time.
 
 ### Built With
