@@ -211,6 +211,7 @@ function join() {
 	let positioninqueue = "None";
 	let lastQueuePlace = "None";
 	let notisend = false;
+	var PositionError = false;
 	doing = "queue"
 	webserver.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers
@@ -224,8 +225,9 @@ function join() {
                                         try{
                                             positioninqueue = headermessage.text.split("\n")[5].substring(25);
 				        }catch(e){
-                                            if (e instanceof TypeError)
+                                            if (e instanceof TypeError && (PositionError !== true)) {
                                                 console.log("Reading position in queue from tab failed! Is the queue empty, or the server isn't 2b2t?");
+						    PositionError = true;}
                                         }
 					if(positioninqueue !== "None") positioninqueue = Number(positioninqueue);
 					webserver.queuePlace = positioninqueue; // update info on the web page
