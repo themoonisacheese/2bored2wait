@@ -220,10 +220,10 @@ function join() {
 		switch (meta.name) {
 			case "playerlist_header":
 				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
-					let headermessage = JSON.parse(data.header);
+					let messageheader = data.header;
                                         let positioninqueue = "None";
                                         try{
-                                            positioninqueue = headermessage.text.split("\n")[5].substring(25);
+                                            positioninqueue = messageheader.split('text')[5].replace(/\D/g,'');
 				        }catch(e){
                                             if (e instanceof TypeError && (PositionError !== true)) {
                                                 console.log("Reading position in queue from tab failed! Is the queue empty, or the server isn't 2b2t?");
