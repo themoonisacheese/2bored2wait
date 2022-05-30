@@ -102,8 +102,11 @@ jobs:
 
   build-docker:
     runs-on: ubuntu-22.04
+    needs: bump-commit
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.bump-commit.outputs.commit-id }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
