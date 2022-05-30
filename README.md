@@ -32,10 +32,11 @@ A proxy to wait out 2b2t.org's way too long queue. Includes a small webserver a 
 3. [How to use](#how-to-use)
 4. [Configuration](#configuration)
 5. [Roadmap and known issues](#roadmap-and-known-issues)
+   - [How to make a bug report](#how-to-make-a-bug-report)
 6. [Addons](#addons)
-6. [Contributing](#contributing)
-7. [License](#license)
-8. [Testing](#testing)
+7. [Contributing](#contributing)
+8. [License](#license)
+9. [Testing](#testing)
 
 </p></details>
 
@@ -135,14 +136,25 @@ All commands can be used through discord or simply typed in the console window.
 
 <!-- ROADMAP -->
 
-# Roadmap and known issues
+## Roadmap and known issues
 
 See the [open issues](https://github.com/themoonisacheese/2bored2wait/issues) for a list of proposed features (and known issues).
 
 - Starting the queue will revoke your Minecraft token. this means that you will not be able to join normal Minecraft servers until you restart the game
 - If you connect after the queue is finished or reconnect the proxy will send cached data. Otherwise you would fly in an empty world. However not all data will be resend. You can move out of render distance (I find going through a nether portal works best) and return to fix this issue. Sometimes the client renders a cached chunk with a blank texture.
 
-   
+### How to make a bug report
+
+Try updating 2bored2wait, run `npm update` (if you are using the source code), and update your system.
+
+• Give info in bug reports such as....
+
+- Output of `npm list` (if you are using the source code).
+- Version of program.
+- Other error messages. 
+
+Make a bug report [here](https://github.com/themoonisacheese/2bored2wait/issues). Feel free to ask questions or add feature requests as well.
+
 ## Addons
 - [Auto-Update](https://github.com/KozmikCode/2b2t-auto-update) Allows you to have auto updates!
    
