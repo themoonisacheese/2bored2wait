@@ -76,10 +76,12 @@ jobs:
         with:
           registry-url: https://registry.npmjs.org/
           cache: yarn
-      - run: |
+      - name: Build ${{ matrix.os }} ${{ matrix.arch }} binary
+        run: |
           npx -y pkg \
             -t node${{ matrix.node-version }}-${{ matrix.os }}-${{ matrix.arch }} \
             -o 2bored2wait-${{ matrix.os }}-${{ matrix.arch }} \
+            --compress gzip \
             ./check.js
       - id: find-file-name
         run: |
