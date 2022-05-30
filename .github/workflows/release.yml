@@ -89,7 +89,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          target_commitish: ${{ needs.bump-commit.outputs.commit-id }}
           upload_url: ${{ needs.create-gh-release.outputs.upload_url }}
           asset_path: ./${{ steps.find-file-name.file-name }}
           asset_name: ${{ steps.find-file-name.file-name }}
