@@ -7,7 +7,8 @@ const opn = require('open'); //to open a browser window
 const {
 	Client,
 	discord,
-	Intents
+	Intents,
+	MessageEmbed
 } = require('discord.js');
 const {
 	DateTime
@@ -19,9 +20,6 @@ const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
-const {
-	MessageEmbed
-} = require('discord.js');
 var config;
 try {
 	config = require("config");
@@ -136,7 +134,7 @@ else {
 
 var stoppedByPlayer = false;
 var timedStart;
-let dcUser; // discord user that controlls the bot
+let dcUser; // discord user that controls the bot
 var totalWaitTime;
 var starttimestring;
 var options;
