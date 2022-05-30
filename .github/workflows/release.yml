@@ -21,6 +21,12 @@ jobs:
         with:
           registry-url: https://registry.npmjs.org/
           cache: yarn
+      - name: Configure git credentials
+        uses: OleksiyRudenko/gha-git-credentials@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ github.actor }}
+          email: ${{ github.actor }}@users.noreply.github.com
       - run: yarn version --${{ github.event.inputs.version-type }} --preid beta
       - id: new-commit
         run: |
