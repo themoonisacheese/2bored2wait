@@ -76,6 +76,7 @@ jobs:
         with:
           registry-url: https://registry.npmjs.org/
           cache: yarn
+      - run: yarn
       - name: Build ${{ matrix.os }} ${{ matrix.arch }} binary
         run: |
           npx -y pkg \
