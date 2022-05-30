@@ -32,7 +32,7 @@ jobs:
         run: |
           export VERSION="v$(node -pe "require('./package.json').version")"
           echo "::set-output name=version::${VERSION}"
-          git add .
+          git add *
           git commit -m "Release ${VERSION}"
           git tag -m "" "${VERSION}"
           export COMMIT_ID=`git log -1 --pretty=format:%H`
