@@ -92,8 +92,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ needs.create-gh-release.outputs.upload_url }}
-          asset_path: ./${{ steps.find-file-name.file-name }}
           asset_name: ${{ steps.find-file-name.file-name }}
+          asset_path: ./${{ steps.find-file-name.file-name }}
 
   publish-release:
     runs-on: ubuntu-22.04
