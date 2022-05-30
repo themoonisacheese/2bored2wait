@@ -90,6 +90,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_ASSET_NAME: ${{ steps.find-file-name.file-name }}
         with:
           upload_url: ${{ needs.create-gh-release.outputs.upload_url }}
           asset_name: ${{ steps.find-file-name.file-name }}
