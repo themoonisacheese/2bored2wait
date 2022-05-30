@@ -27,17 +27,14 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ github.actor }}
           email: ${{ github.actor }}@users.noreply.github.com
+      - run: yarn config set version-git-message "Release v%s"
       - run: yarn version --${{ github.event.inputs.version-type }} --preid beta
       - id: new-commit
         run: |
-          export VERSION="v$(node -pe "require('./package.json').version")"
-          echo "::set-output name=version::${VERSION}"
-          git add *
-          git commit -m "Release ${VERSION}"
-          git tag -m "" "${VERSION}"
-          export COMMIT_ID=`git log -1 --pretty=format:%H`
-          echo "::set-output name=commit-id::${COMMIT_ID}"
-          git push --follow-tags
+          echo "::set-output name=version::v$(node -pe "require('./package.json').version")"
+          echo "::set-output name=commit-id::$(git log -1 --pretty=format:%H)"
+      - name: push commit
+        run: git push --follow-tags
 
   create-gh-release:
     runs-on: ubuntu-22.04
