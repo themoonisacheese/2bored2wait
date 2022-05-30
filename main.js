@@ -105,7 +105,7 @@ const askForSecrets = async () => {
 			});
 		});
 
-		dc.on('message', function (message) {
+		dc.on('messageCreate', function (message) {
 			if (message.author.username !== dc.user.username) {
 				userInput(message.content, true, message);
 				if (dcUser == null || message.author.id !== dcUser.id) {
