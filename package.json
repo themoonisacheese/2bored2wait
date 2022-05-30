@@ -21,7 +21,7 @@
     "@rob9315/mcproxy": "^0.3",
     "boxen": "^5.0.1",
     "config": "^3.3.6",
-    "discord.js": "^12.5.1",
+    "discord.js": "^13.7.0",
     "everpolate": "0.0.3",
     "luxon": "^2.0.1",
     "minecraft-protocol": "^1.28.0",
