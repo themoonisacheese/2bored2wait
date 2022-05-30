@@ -94,6 +94,7 @@ jobs:
           upload_url: ${{ needs.create-gh-release.outputs.upload_url }}
           asset_name: ${{ steps.find-file-name.outputs.file-name }}
           asset_path: ./${{ steps.find-file-name.outputs.file-name }}
+          asset_content_type: application/octet-stream
 
   publish-release:
     runs-on: ubuntu-22.04
