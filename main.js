@@ -410,33 +410,8 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 		case "update":
 			switch (doing) {
 				case "queue":
-					if (DiscordOrigin) {
-						const MessageUpdateEmbed = {
-							color: 3447003,
-							author: {
-								name: dc.user.username,
-								icon_url: dc.user.avatarURL
-							},
-							title: "2bored2wait discord bridge",
-							description: "Start and stop the queue from discord!",
-							fields: [{
-									name: "Position",
-									value: `You are in position **${webserver.queuePlace}**.`
-								},
-								{
-									name: "ETA",
-									value: `Estimated time until login: **${webserver.ETA}**`
-								}
-							],
-							timestamp: new Date(),
-							footer: {
-								icon_url: dc.user.avatarURL,
-								text: "Author: Surprisejedi"
-							}
-						};
-						channel.send({ embeds: [MessageUpdateEmbed]});
-				}
-					else console.log("Position: " + webserver.queuePlace + "  Estimated time until login: " + webserver.ETA);
+					msg(DiscordOrigin, discordMsg, "Reconnecting", `Position: ${webserver.queuePlace} \n Estimated time until login: ${webserver.ETA}`);
+					console.log("Position: " + webserver.queuePlace + "  Estimated time until login: " + webserver.ETA);
 					break;
 				case "timedStart":
 					msg(DiscordOrigin, discordMsg, "Timer", "Timer is set to " + starttimestring);
