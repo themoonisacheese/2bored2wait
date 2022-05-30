@@ -56,7 +56,7 @@ jobs:
           target_commitish: ${{ needs.bump-commit.outputs.commit-id }}
           tag_name: ${{ needs.bump-commit.outputs.version }}
           release_name: Release ${{ needs.bump-commit.outputs.version }}
-          draft: false
+          draft: true
           prerelease: ${{ contains(github.event.inputs.version-type, 'pre') }}
 
   release-binaries:
