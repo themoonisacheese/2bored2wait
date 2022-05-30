@@ -68,7 +68,7 @@ Please optain all required items
 
 ## Installation
    
-### Video Instilation 
+### Video installation
 
 Click the picture or link bellow to watch!   
 [![Click Me To Watch!](https://img.youtube.com/vi/3kCKnwuiHak/0.jpg)](https://youtu.be/3kCKnwuiHak)
