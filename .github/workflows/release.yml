@@ -80,7 +80,7 @@ jobs:
       - name: Build ${{ matrix.os }} ${{ matrix.arch }} binary
         run: |
           npx -y pkg \
-            -a "webserver/index*","nexe-conf","node_modules/discord.js/src","node_modules/particles.js/particles.js","node_modules/particles.js/demo/js/app.js"
+            -a "webserver/index*","nexe-conf","node_modules/discord.js/src","node_modules/particles.js/particles.js","node_modules/particles.js/demo/js/app.js" \
             -t node${{ matrix.node-version }}-${{ matrix.os }}-${{ matrix.arch }} \
             -o 2bored2wait-${{ matrix.os }}-${{ matrix.arch }} \
             --compress gzip \
