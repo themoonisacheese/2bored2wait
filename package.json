@@ -1,6 +1,6 @@
 {
   "name": "2bored2wait",
-  "version": "3.0.26",
+  "version": "3.0.27",
   "description": "A proxy to wait out 2b2t.org's way too long queue.",
   "main": "main.js",
   "scripts": {
@@ -17,7 +17,9 @@
     "url": "https://github.com/themoonisacheese/2bored2wait/issues"
   },
   "pkg": {
-    "assets": [ "config/default.json" ]
+    "assets": [
+      "config/default.json"
+    ]
   },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
