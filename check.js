@@ -1,4 +1,5 @@
 let parser = new(require('rss-parser'))();
+const https = require('https'); // or 'https' for https:// URLs
 const fs = require('fs');
 const boxen = require('boxen');
 const readline = require("readline");
@@ -14,14 +15,43 @@ try {
     config = require("config");
 } catch (err) {
     if (String(err).includes("SyntaxError: ")) {
-        console.error("The syntax in your config file is not correct. Make sure you replaced all values as the README says under 'How to Install' step 5. If it still does not work, check that all quotes are closed. You can look up the json syntax online. Please note that the comments are no problem although comments are normally not allowed in json. " + err)
         process.exit(1);
     }
 }
-check();
+
+// start the checks
+getconf();
+
+function getconf() {
+    const conf = "./config/default.json";
+    if (fs.existsSync(conf)) {
+        check();
+    } else {
+        console.log("Default conf doesn't exist, downloading...");
+        const url = 'https://raw.githubusercontent.com/themoonisacheese/2bored2wait/master/config/default.json';
+
+        https.get(url, (res) => {
+            // Image will be stored at this path
+            fs.mkdirSync("config");
+            const path = `${__dirname}/config/default.json`;
+            const filePath = fs.createWriteStream(path);
+            res.pipe(filePath);
+            filePath.on('finish', () => {
+                filePath.close();
+                console.log('Default Config Downloaded! Please rerun 2bored2wait.');
+                console.log('Press any key to exit');
+
+                process.stdin.setRawMode(true);
+                process.stdin.resume();
+                process.stdin.on('data', process.exit.bind(process, 0));
+
+            })
+        })
+    }
+}
+
 
 function check() {
-
     var updatemessage = config.updatemessage;
     (async () => {
         let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
@@ -36,7 +66,7 @@ function check() {
                     float: 'center',
                     borderStyle: 'round'
                 }));
-                rl.question("To continue type 1. To edit settings type 2. ", function(choice) {
+                rl.question("To continue type 1. To edit settings type 2. ", function (choice) {
                     if (choice == 1) {
                         start();
                     } else if (choice == 2) {
