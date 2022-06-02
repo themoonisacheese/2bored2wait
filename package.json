@@ -17,9 +17,7 @@
     "url": "https://github.com/themoonisacheese/2bored2wait/issues"
   },
   "pkg": {
-    "assets": [
-      "config/default.json"
-    ]
+    "assets": "config/default.json"
   },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
