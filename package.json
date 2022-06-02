@@ -1,6 +1,6 @@
 {
   "name": "2bored2wait",
-  "version": "3.0.21",
+  "version": "3.0.22",
   "description": "A proxy to wait out 2b2t.org's way too long queue.",
   "main": "main.js",
   "scripts": {
@@ -17,7 +17,14 @@
     "url": "https://github.com/themoonisacheese/2bored2wait/issues"
   },
   "pkg": {
-    "assets": [ "webserver/index*", "nexe-conf", "node_modules/discord.js/src", "node_modules/particles.js/particles.js", "config/default.json", "node_modules/particles.js/demo/js/app.js" ]
+    "assets": [
+      "webserver/index*",
+      "nexe-conf",
+      "node_modules/discord.js/src",
+      "node_modules/particles.js/particles.js",
+      "config/default.json",
+      "node_modules/particles.js/demo/js/app.js"
+    ]
   },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
