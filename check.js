@@ -10,6 +10,7 @@ const rl = readline.createInterface({
 var pjson = require('./package.json');
 var cv1 = pjson.version;
 var cv = 'v' + cv1;
+path.join(__dirname, '../config/default.json')
 
 try {
     config = require("config");
