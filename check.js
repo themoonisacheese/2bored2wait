@@ -3,6 +3,7 @@ const https = require('https'); // or 'https' for https:// URLs
 const fs = require('fs');
 const boxen = require('boxen');
 const readline = require("readline");
+const path = require('path');
 // This dummy var is a workaround to allow binaries
 const dummy = path.join(__dirname, '../config/default.json')
 const rl = readline.createInterface({
