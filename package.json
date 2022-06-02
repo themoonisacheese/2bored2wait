@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/themoonisacheese/2bored2wait/issues"
   },
-  "pkg:" {
+  "pkg": {
     "assets": [ "webserver/index*", "nexe-conf", "node_modules/discord.js/src", "node_modules/particles.js/particles.js", "config/default.json", "node_modules/particles.js/demo/js/app.js" ]
   },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
