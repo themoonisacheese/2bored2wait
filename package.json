@@ -16,6 +16,8 @@
   "bugs": {
     "url": "https://github.com/themoonisacheese/2bored2wait/issues"
   },
+    "assets": "webserver/index*","nexe-conf","node_modules/discord.js/src","node_modules/particles.js/particles.js","node_modules/particles.js/demo/js/app.js"
+  },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
     "@rob9315/mcproxy": "^0.3",
