@@ -7,6 +7,9 @@
     "test": "node test.js",
     "start": "node check.js"
   },
+  "pkg": {
+    "assets": "../config/default.json"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/themoonisacheese/2bored2wait.git"
