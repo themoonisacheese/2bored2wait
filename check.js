@@ -32,7 +32,7 @@ function getconf() {
 
     // if (fs.existsSync(configPath)) {
         // check();
-        console.log(Test Test)
+        console.log("Test Test")
     // } else {
         try {
             console.log("Default conf doesn't exist, downloading...");
@@ -85,6 +85,7 @@ function getconf() {
                 // In case of a error throw err.
                 if (err) throw err;
             })
+            console.log("Test Download")
 
             // check();
         } catch (err) {
