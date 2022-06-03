@@ -21,6 +21,9 @@ const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
 var config;
+// This dummy var is a workaround to allow binaries
+const path = require('path');
+const dummy = path.join(__dirname, '../config/default.json')
 try {
 	config = require("config");
 } catch (err) {

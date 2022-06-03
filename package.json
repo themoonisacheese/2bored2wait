@@ -8,7 +8,7 @@
     "start": "node check.js"
   },
   "pkg": {
-    "assets": "../config/default.json"
+    "assets": [ "config/defaults.json" ]
   },
   "repository": {
     "type": "git",

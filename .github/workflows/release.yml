@@ -80,11 +80,10 @@ jobs:
       - name: Build ${{ matrix.os }} ${{ matrix.arch }} binary
         run: |
           npx -y pkg \
-            -a "config/default.json" \
             -t node${{ matrix.node-version }}-${{ matrix.os }}-${{ matrix.arch }} \
             -o 2bored2wait-${{ matrix.os }}-${{ matrix.arch }} \
             --compress gzip \
-            check.js
+            ./check.js
       - id: find-file-name
         run: |
           echo "::set-output name=file-name::$(ls 2bored2wait-${{ matrix.os }}-${{ matrix.arch }}*)"

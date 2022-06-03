@@ -5,7 +5,7 @@ const boxen = require('boxen');
 const readline = require("readline");
 const path = require('path');
 // This dummy var is a workaround to allow binaries
-const dummy = path.join(__filename, '../config/default.json')
+const dummy = path.join(__dirname, '../config/default.json')
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
