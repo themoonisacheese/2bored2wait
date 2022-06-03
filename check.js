@@ -80,7 +80,7 @@ function getconf() {
 
 
 
-        fs.open(configPath,'r',function(err, fd){
+        fs.open(configPath, 'r', function (err, fd) {
             if (err) {
                 fs.writeFile(`${configPath}`, data, (err) => {
 
@@ -88,15 +88,17 @@ function getconf() {
                     if (err) throw err;
                 })
                 console.log("Config made, please rerun 2bored2wait!")
+                console.log('Press any key to exit');
+
+                process.stdin.setRawMode(true);
+                process.stdin.resume();
+                process.stdin.on('data', process.exit.bind(process, 0));
             } else {
-              console.log("Config Already Made, proceeding...");
-              console.log("Done")
+                console.log("Config Already Made, proceeding...");
+                console.log("Done")
+                check();
             }
-          });
-
-
-
-        check();
+        });   
     } catch (err) {
         if (String(err).includes("SyntaxError: ")) {
             process.exit(1);
