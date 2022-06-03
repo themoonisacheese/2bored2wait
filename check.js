@@ -32,10 +32,10 @@ function getconf() {
     // if (fs.existsSync(configPath)) {
     //     check();
     // } else {
-        try {
-            console.log("Default conf doesn't exist, downloading...");
+    try {
+        console.log("Default conf doesn't exist, downloading...");
 
-            let data = `{
+        let data = `{
             "accountType": "mojang", // set this to microsoft if you want to use a microsoft account
             "discordBot": true,
             "webserver": true,
@@ -78,18 +78,30 @@ function getconf() {
             "expandQueueData": false // enlarge the dataset in queue.json for better ETA calculation
         }`
 
-            fs.writeFile(`${configPath}`, data, (err) => {
 
-                // In case of a error throw err.
-                if (err) throw err;
-            })
 
-            check();
-        } catch (err) {
-            if (String(err).includes("SyntaxError: ")) {
-                process.exit(1);
+        fs.open(configPath,'r',function(err, fd){
+            if (err) {
+                fs.writeFile(`${configPath}`, data, (err) => {
+
+                    // In case of a error throw err.
+                    if (err) throw err;
+                })
+                console.log("Config made, please rerun 2bored2wait!")
+            } else {
+              console.log("Config Already Made, proceeding...");
+              console.log("Done")
             }
+          });
+
+
+
+        check();
+    } catch (err) {
+        if (String(err).includes("SyntaxError: ")) {
+            process.exit(1);
         }
+    }
     // }
 }
 
