@@ -22,8 +22,11 @@ try {
     }
 }
 
+const configPath = path.join(process.cwd(), './config/default.json');
+lset data = fs.readFileSync(configPath);
+
 // start the checks
-getconf();
+check();
 
 function getconf() {
     const conf = "./config/default.json";
