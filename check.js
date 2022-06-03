@@ -14,13 +14,13 @@ var pjson = require('./package.json');
 var cv1 = pjson.version;
 var cv = 'v' + cv1;
 
-// try {
-//     config = require("config");
-// } catch (err) {
-//     if (String(err).includes("SyntaxError: ")) {
-//         process.exit(1);
-//     }
-// }
+try {
+    config = require("config");
+} catch (err) {
+    if (String(err).includes("SyntaxError: ")) {
+        process.exit(1);
+    }
+}
 
 const configPath = path.join(process.cwd(), './config/default.json');
 const data = fs.readFileSync(configPath);
@@ -30,10 +30,9 @@ getconf();
 
 function getconf() {
 
-    // if (fs.existsSync(configPath)) {
-        // check();
-        console.log("Test Test")
-    // } else {
+    if (fs.existsSync(configPath)) {
+        check();
+    } else {
         try {
             console.log("Default conf doesn't exist, downloading...");
 
@@ -85,65 +84,64 @@ function getconf() {
                 // In case of a error throw err.
                 if (err) throw err;
             })
-            console.log("Test Download")
 
-            // check();
+            check();
         } catch (err) {
             if (String(err).includes("SyntaxError: ")) {
                 process.exit(1);
             }
         }
-    // }
+    }
 }
 
 
-// function check() {
-//     var updatemessage = config.updatemessage;
-//     (async () => {
-//         let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
-//         feed.items.every(item => {
-//             var lv = (item.title);
-//             if (!cv.includes(lv) && updatemessage != "n") {
-//                 console.log(boxen('New Update Available! → ' + lv, {
-//                     padding: 1,
-//                     margin: 1,
-//                     align: 'center',
-//                     borderColor: 'red',
-//                     float: 'center',
-//                     borderStyle: 'round'
-//                 }));
-//                 rl.question("To continue type 1. To edit settings type 2. ", function (choice) {
-//                     if (choice == 1) {
-//                         start();
-//                     } else if (choice == 2) {
-//                         settings();
-//                     } else {
-//                         console.log("Invalid response.");
-//                         check();
-//                     };
-//                 });
-//             } else {
-//                 start();
-//             };
-//         });
-//     })();
+function check() {
+    var updatemessage = config.updatemessage;
+    (async () => {
+        let feed = await parser.parseURL('https://github.com/themoonisacheese/2bored2wait/releases.atom');
+        feed.items.every(item => {
+            var lv = (item.title);
+            if (!cv.includes(lv) && updatemessage != "n") {
+                console.log(boxen('New Update Available! → ' + lv, {
+                    padding: 1,
+                    margin: 1,
+                    align: 'center',
+                    borderColor: 'red',
+                    float: 'center',
+                    borderStyle: 'round'
+                }));
+                rl.question("To continue type 1. To edit settings type 2. ", function (choice) {
+                    if (choice == 1) {
+                        start();
+                    } else if (choice == 2) {
+                        settings();
+                    } else {
+                        console.log("Invalid response.");
+                        check();
+                    };
+                });
+            } else {
+                start();
+            };
+        });
+    })();
 
-//     function start() {
-//         console.log("Please wait...");
-//         rl.close();
-//         require('./main.js');
-//     }
+    function start() {
+        console.log("Please wait...");
+        rl.close();
+        require('./main.js');
+    }
 
-//     function settings() {
-//         console.log("Clearing Settings");
-//         fs.unlink('config/local.json', (err) => {
-//             if (err) {
-//                 console.log("No settings file.");
-//             }
+    function settings() {
+        console.log("Clearing Settings");
+        fs.unlink('config/local.json', (err) => {
+            if (err) {
+                console.log("No settings file.");
+            }
 
-//             console.log("Done.");
+            console.log("Done.");
 
-//         });
-//         start();
-//     }
-// }
+        });
+        start();
+    }
+}
