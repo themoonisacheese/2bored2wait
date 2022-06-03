@@ -7,9 +7,10 @@
     "test": "node test.js",
     "start": "node check.js"
   },
+  "bin": "main.js",
   "pkg": {
     "assets": [
-      "config/defaults.json"
+      "config/default.json"
     ]
   },
   "repository": {
