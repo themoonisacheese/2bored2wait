@@ -35,19 +35,18 @@ function getconf() {
 
         https.get(url, (res) => {
             // Image will be stored at this path
-            fs.mkdirSync("config");
             const path = `${__dirname}/config/default.json`;
             const filePath = fs.createWriteStream(path);
             res.pipe(filePath);
             filePath.on('finish', () => {
                 filePath.close();
                 console.log('Default Config Downloaded! Please rerun 2bored2wait.');
-                console.log('Press any key to exit');
+                // console.log('Press any key to exit');
 
-                process.stdin.setRawMode(true);
-                process.stdin.resume();
-                process.stdin.on('data', process.exit.bind(process, 0));
-
+                // process.stdin.setRawMode(true);
+                // process.stdin.resume();
+                // process.stdin.on('data', process.exit.bind(process, 0));
+                check();
             })
         })
     }
