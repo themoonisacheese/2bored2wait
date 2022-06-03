@@ -35,7 +35,7 @@ function getconf() {
 
             https.get(url, (res) => {
                 // Image will be stored at this path
-                const path = path.join(process.cwd(), './config/default.json');
+                const path = `${process.cwd()}/config/default.json`;
                 const filePath = fs.createWriteStream(path);
                 res.pipe(filePath);
                 filePath.on('finish', () => {
