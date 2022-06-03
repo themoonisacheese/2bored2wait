@@ -23,16 +23,15 @@ try {
 }
 
 const configPath = path.join(process.cwd(), './config/default.json');
-const data = fs.readFileSync(configPath);
 
 // start the checks
 getconf();
 
 function getconf() {
 
-    if (fs.existsSync(configPath)) {
-        check();
-    } else {
+    // if (fs.existsSync(configPath)) {
+    //     check();
+    // } else {
         try {
             console.log("Default conf doesn't exist, downloading...");
 
@@ -91,7 +90,7 @@ function getconf() {
                 process.exit(1);
             }
         }
-    }
+    // }
 }
 
 
