@@ -23,7 +23,7 @@ try {
 }
 
 const configPath = path.join(process.cwd(), './config/default.json');
-lset data = fs.readFileSync(configPath);
+const data = fs.readFileSync(configPath);
 
 // start the checks
 check();
