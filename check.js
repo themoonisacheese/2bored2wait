@@ -23,7 +23,7 @@ try {
 }
 
 // start the checks
-check();
+getconf();
 
 function getconf() {
     const conf = "./config/default.json";
