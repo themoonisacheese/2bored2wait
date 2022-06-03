@@ -1,6 +1,6 @@
 {
   "name": "2bored2wait",
-  "version": "3.0.39",
+  "version": "3.0.40",
   "description": "A proxy to wait out 2b2t.org's way too long queue.",
   "main": "main.js",
   "scripts": {
@@ -8,7 +8,9 @@
     "start": "node check.js"
   },
   "pkg": {
-    "assets": [ "config/defaults.json" ]
+    "assets": [
+      "config/defaults.json"
+    ]
   },
   "repository": {
     "type": "git",
