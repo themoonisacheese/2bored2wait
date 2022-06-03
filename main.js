@@ -24,7 +24,7 @@ var config;
 // This dummy var is a workaround to allow binaries
 const path = require('path');
 const configPath = path.join(process.cwd(), './config/default.json');
-lset data = fs.readFileSync(configPath);try {
+const data = fs.readFileSync(configPath);try {
 	config = require("config");
 } catch (err) {
 	if (String(err).includes("SyntaxError: ")) {
