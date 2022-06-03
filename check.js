@@ -26,7 +26,7 @@ const configPath = path.join(process.cwd(), './config/default.json');
 const data = fs.readFileSync(configPath);
 
 // start the checks
-check();
+getconf();
 
 function getconf() {
     const conf = "./config/default.json";
