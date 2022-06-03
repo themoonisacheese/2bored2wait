@@ -29,14 +29,13 @@ const data = fs.readFileSync(configPath);
 getconf();
 
 function getconf() {
-    const conf = "./config/default.json";
         try {
             console.log("Default conf doesn't exist, downloading...");
             const url = 'https://raw.githubusercontent.com/themoonisacheese/2bored2wait/master/config/default.json';
 
             https.get(url, (res) => {
                 // Image will be stored at this path
-                const path = `${__dirname}/config/default.json`;
+                const path = path.join(process.cwd(), './config/default.json');
                 const filePath = fs.createWriteStream(path);
                 res.pipe(filePath);
                 filePath.on('finish', () => {
