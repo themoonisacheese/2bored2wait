@@ -30,30 +30,32 @@ getconf();
 
 function getconf() {
     const conf = "./config/default.json";
-    if (fs.existsSync(conf)) {
-        check();
-    } else {
-        console.log("Default conf doesn't exist, downloading...");
-        const url = 'https://raw.githubusercontent.com/themoonisacheese/2bored2wait/master/config/default.json';
+        try {
+            console.log("Default conf doesn't exist, downloading...");
+            const url = 'https://raw.githubusercontent.com/themoonisacheese/2bored2wait/master/config/default.json';
 
-        https.get(url, (res) => {
-            // Image will be stored at this path
-            const path = `${__dirname}/config/default.json`;
-            const filePath = fs.createWriteStream(path);
-            res.pipe(filePath);
-            filePath.on('finish', () => {
-                filePath.close();
-                console.log('Default Config Downloaded! Please rerun 2bored2wait.');
-                // console.log('Press any key to exit');
+            https.get(url, (res) => {
+                // Image will be stored at this path
+                const path = `${__dirname}/config/default.json`;
+                const filePath = fs.createWriteStream(path);
+                res.pipe(filePath);
+                filePath.on('finish', () => {
+                    filePath.close();
+                    console.log('Default Config Downloaded! Please rerun 2bored2wait.');
+                    // console.log('Press any key to exit');
 
-                // process.stdin.setRawMode(true);
-                // process.stdin.resume();
-                // process.stdin.on('data', process.exit.bind(process, 0));
-                check();
+                    // process.stdin.setRawMode(true);
+                    // process.stdin.resume();
+                    // process.stdin.on('data', process.exit.bind(process, 0));
+                    check();
+                })
             })
-        })
+        } catch (err) {
+            if (String(err).includes("SyntaxError: ")) {
+                process.exit(1);
+            }
+        }
     }
-}
 
 
 function check() {
