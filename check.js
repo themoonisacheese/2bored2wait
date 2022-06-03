@@ -29,32 +29,71 @@ const data = fs.readFileSync(configPath);
 getconf();
 
 function getconf() {
+
+    const conf = "./config/default.json";
+    if (fs.existsSync(configPath)) {
+        check();
+    } else {
         try {
             console.log("Default conf doesn't exist, downloading...");
-            const url = 'https://raw.githubusercontent.com/themoonisacheese/2bored2wait/master/config/default.json';
 
-            https.get(url, (res) => {
-                // Image will be stored at this path
-                const path = (configPath);
-                const filePath = fs.createWriteStream(path);
-                res.pipe(filePath);
-                filePath.on('finish', () => {
-                    filePath.close();
-                    console.log('Default Config Downloaded! Please rerun 2bored2wait.');
-                    // console.log('Press any key to exit');
+            let data = `{
+            "accountType": "mojang", // set this to microsoft if you want to use a microsoft account
+            "discordBot": true,
+            "webserver": true,
+            "ports": {
+                "minecraft": 25565, // port for the proxy server
+                "web": 8080
+            },
+            "address":{ // address 2b2w listens on. if you leave it on 0.0.0.0 you can via all IPs
+                "minecraft": "0.0.0.0",
+                "web": "0.0.0.0"
+            },
+            "openBrowserOnStart": false,
+            "password": "", // password for the webinterface
+            "MCversion": "1.12.2",
+            "logging": true, // log errors and queue place
+            "reconnect": {
+                "onError": true, // reconnect on error or if 2b2t kicks you
+                "notConnectedQueueEnd": false // restart the queue if you are not connect at the end of it
+            },
+            "minecraftserver": { // the server you want to connect. Make not much sense to change it, was just added for development purpose
+                "hostname": "2b2t.org",
+                "is2b2t": true, // to allow proxies inbetween 2bored2wait and 2b2t
+                "port": 25565,
+                "version": "1.12.2",
+                "onlinemode": true,
+                "username": "lol" // the username to use if onlinemode is false
+            },
+            "notification": { // sends a message via discord if the place in the queue reaches the specified number
+                "enabled": true, // you must send the bot a message once.
+                "queuePlace": 20
+            },
+            "antiAntiAFK": { 
+                "enabled": false, // master switch for all bypass antiAFK plugins
+                "config": {  // mineflayer-antiafk config
+                }
+            },
+            "userStatus": true, // show username in discord bot status, in case of alts
+            "joinOnStart": false, // join the server when 2b2w is started
+            "whitelist": false, // only let the same minecraft account join 2b2w as the one connected to 2b2t
+            "expandQueueData": false // enlarge the dataset in queue.json for better ETA calculation
+        }`
 
-                    // process.stdin.setRawMode(true);
-                    // process.stdin.resume();
-                    // process.stdin.on('data', process.exit.bind(process, 0));
-                    check();
-                })
+            fs.writeFile(`${configPath}`, data, (err) => {
+
+                // In case of a error throw err.
+                if (err) throw err;
             })
+
+            check();
         } catch (err) {
             if (String(err).includes("SyntaxError: ")) {
                 process.exit(1);
             }
         }
     }
+}
 
 
 function check() {
