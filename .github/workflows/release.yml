@@ -68,7 +68,10 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
-      - run: git checkout ${{ needs.bump-commit.outputs.commit-id }}
+      - run: |
+          git pull --no-commit
+          git reset --hard origin/main
+          git checkout ${{ needs.bump-commit.outputs.commit-id }}
       - uses: actions/setup-node@v3
         with:
           registry-url: https://registry.npmjs.org/
@@ -109,7 +112,10 @@ jobs:
     needs: bump-commit
     steps:
       - uses: actions/checkout@v3
-      - run: git checkout ${{ needs.bump-commit.outputs.commit-id }}
+      - run: |
+          git pull --no-commit
+          git reset --hard origin/main
+          git checkout ${{ needs.bump-commit.outputs.commit-id }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
