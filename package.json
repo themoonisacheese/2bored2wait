@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
+    "@folder/xdg": "^3.1.2",
     "@rob9315/mcproxy": "^0.3",
     "boxen": "^5.0.1",
     "config": "^3.3.6",
