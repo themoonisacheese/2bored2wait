@@ -31,7 +31,7 @@ jobs:
       - run: yarn version --${{ github.event.inputs.version-type }} --preid beta
       - id: new-commit
         run: |
-          echo "::set-output name=version::v$(node -pe "require('./package.json').version")"
+          echo "::set-output name=version::$(node -pe "require('./package.json').version")"
           echo "::set-output name=commit-id::$(git log -1 --pretty=format:%H)"
       - name: push commit
         run: git push --follow-tags

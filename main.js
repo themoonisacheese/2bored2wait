@@ -21,6 +21,10 @@ const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
 var config;
+// This dummy var is a workaround to allow binaries
+const path = require('path');
+// const configPath = path.join(process.cwd(), './config/default.json');
+// const data = fs.readFileSync(configPath);
 try {
 	config = require("config");
 } catch (err) {
@@ -53,8 +57,9 @@ const guessLauncherPath = () => {
 }
 const askForSecrets = async () => {
 	let localConf = {};
+	const config_dir = process.env["NODE_CONFIG_DIR"] ?? 'config';
 	try {
-		localConf = util.readJSON("config/local.json");
+		localConf = util.readJSON(config_dir + '/local.json');
 	} catch (err) {
 		if (err.code != "ENOENT") throw err;
 	}
@@ -81,7 +86,7 @@ const askForSecrets = async () => {
 
 		savelogin = await promisedQuestion("Save login for later use? Y or N [N]: ");
 		if (savelogin.toLowerCase() === "y") {
-			fs.writeFile('config/local.json', JSON.stringify(localConf, null, 2), (err) => {
+			fs.writeFile(config_dir + '/local.json', JSON.stringify(localConf, null, 2), (err) => {
 				if (err) console.log(err);
 			});
 		};
@@ -117,7 +122,7 @@ const askForSecrets = async () => {
 			}
 		});
 	}
-	console.log("Finished setting up 2b2w. Type 'Start' to start the queue.");
+	console.log("Finished setting up 2b2w. Type 'start' to start the queue.");
 	cmdInput();
 	joinOnStart();
 }
