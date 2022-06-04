@@ -93,9 +93,7 @@ if (config.updatemessage === false || config.updatemessage == "n") {
 
     let { tag_name, url } = JSON.parse(await latest.text());
 
-    let isLatest = require("./package.json").version.includes(tag_name);
-
-    if (isLatest) {
+    if (`v${require("./package.json").version}` == tag_name) {
         start();
         return;
     }
