@@ -43,10 +43,6 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       release_id: ${{ steps.create_release.outputs.id }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ needs.bump-commit.outputs.commit-id }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -71,7 +67,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.bump-commit.outputs.commit-id }}
       - uses: actions/setup-node@v3
         with:
           registry-url: https://registry.npmjs.org/
