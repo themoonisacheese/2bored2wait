@@ -4,8 +4,10 @@ const fs = require('fs');
 const boxen = require('boxen');
 const readline = require("readline");
 const path = require('path');
+const os = require("os");
+process.env.NODE_CONFIG_DIR = `${os.homedir()}/.config/2bored2wait`;
 // This dummy var is a workaround to allow binaries
-const dummy = path.join(__dirname, '../config/default.json')
+const dummy = path.join(__dirname, './default.json')
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -25,7 +27,7 @@ try {
     }
 }
 
-const configPath = path.join(process.cwd(), './config/default.json');
+const configPath = path.join(process.cwd(), './default.json');
 
 // start the checks
 getconf();

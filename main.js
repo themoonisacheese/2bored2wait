@@ -21,9 +21,11 @@ const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
 var config;
+const os = require("os");
+process.env.NODE_CONFIG_DIR = `${os.homedir()}/.config/2bored2wait`;
 // This dummy var is a workaround to allow binaries
 const path = require('path');
-const configPath = path.join(process.cwd(), './config/default.json');
+const configPath = path.join(process.cwd(), './default.json');
 const data = fs.readFileSync(configPath);try {
 	config = require("config");
 } catch (err) {
