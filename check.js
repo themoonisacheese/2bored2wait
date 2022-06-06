@@ -54,7 +54,7 @@ const DEFAULT_CONFIG = `{
     "joinOnStart": false, // join the server when 2b2w is started
     "whitelist": false, // only let the same minecraft account join 2b2w as the one connected to 2b2t
     "expandQueueData": false, // enlarge the dataset in queue.json for better ETA calculation
-    "Disply_Email": false // If set to true, the cli and discord will disply your email instead of your username
+    "Display_Email": false // If set to true, the cli and discord will disply your email instead of your username
 }`;
 
 if (process.env["NODE_CONFIG_DIR"] ?? "" == "") {
