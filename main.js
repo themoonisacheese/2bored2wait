@@ -443,7 +443,7 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 			console.log("Loop is already disabled!");
 			else {
 			webserver.restartQueue = false
-			console.log("disabled Loop");}
+			console.log("Disabled Loop");}
 			break;
 
 		case "start":
