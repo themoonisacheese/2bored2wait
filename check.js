@@ -92,13 +92,13 @@ if (config.updatemessage === false || config.updatemessage == "n") {
     const fetch = require('node-fetch');
     let latest = await fetch('https://api.github.com/repos/themoonisacheese/2bored2wait/releases/latest');
 
-    let { tag_name, url } = JSON.parse(await latest.text());
+    let { tag_name, html_url, body } = JSON.parse(await latest.text());
 
     if (`v${require("./package.json").version}` == tag_name) {
         start();
         return;
     }
-    let update_message = newUpdateMessage(tag_name);
+    let update_message = newUpdateMessage(tag_name, body);
 
     question();
 
@@ -126,7 +126,8 @@ if (config.updatemessage === false || config.updatemessage == "n") {
             case 'dl':
             case 'download':
             case 'show':
-                require('open')(url);
+                require('open')(html_url);
+                console.log(html_url)
                 process.exit(0);
                 break;
             default:
@@ -145,10 +146,15 @@ function start() {
     require('./main.js');
 }
 
-function newUpdateMessage(tag) {
-    return require('boxen')('New Update Available! → ' + tag, {
+function newUpdateMessage(tag, body) {
+    return require('boxen')(`New Update Available! → ${tag}
+ 
+Changes:
+${body}
+
+Change Log: https://github.com/themoonisacheese/2bored2wait/compare/v${require("./package.json").version}...${tag}`, {
         padding: 1,
-        margin: 1,
+        margin: 2,
         align: 'center',
         borderColor: 'red',
         float: 'center',
