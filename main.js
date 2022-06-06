@@ -451,7 +451,7 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 			startQueuing();
 			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
 			break;
-			
+
 		case "exit":
 		case "quit":
 			return process.exit(0);
@@ -513,7 +513,7 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 				calcTime(cmd);
 				msg(DiscordOrigin, discordMsg, "Time calculator", "The perfect time to start the queue will be calculated, so you can play at " + starttimestring);
 				activity("You can play at " + starttimestring);
-			} else msg(DiscordOrigin, discordMsg, "Error", "Unknown command. Type help for help.");
+			} else msg(DiscordOrigin, discordMsg, "Error", `Unknown command. Type "Help" for the list of commands.`);
 	}
 }
 
