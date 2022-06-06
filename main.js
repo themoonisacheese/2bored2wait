@@ -122,7 +122,7 @@ const askForSecrets = async () => {
 			}
 		});
 	}
-	console.log("Finished setting up 2b2w. Type 'Start' to start the queue. Type 'Help' for help.");
+	console.log(`Finished setting up 2b2w. Type "Start" to start the queue. Type "Help" for the list of commands.`);
 	cmdInput();
 	joinOnStart();
 }
@@ -407,15 +407,16 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 	switch (cmd) {
 		case "help":
 		case "commands":
-			console.log(" help: Lists avaible commands.");
-			console.log(" start 14:00: Start at 2pm.");
-			console.log(" play 8:00: Trys to calculate the right time to join so you can play at 8:00am.");
+			console.log(" help: Lists available commands.");
+			console.log(" start 14:00: Start queue at 2pm.");
+			console.log(" play 8:00: Tries to calculate the right time to join so you can play at 8:00am.");
 			console.log(" start: Starts the queue.");
 			console.log(" loop: Restarts the queue if you are not connect at the end of it");
+			console.log(" loop status: Lets you know if you have reconnect on or off.")
 			console.log(" update: Sends an update to the current channel with your position and ETA.");
 			console.log(" url: displays the github url");
 			console.log(" stop: Stops the queue.");
-			console.log(" exit: Exits the application.");
+			console.log(" exit or quit: Exits the application.");
 			break;
 
 		case "url":
@@ -450,12 +451,7 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 			startQueuing();
 			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
 			break;
-
-		case "start":
-			startQueuing();
-			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
-			break;
-
+			
 		case "exit":
 		case "quit":
 			return process.exit(0);
