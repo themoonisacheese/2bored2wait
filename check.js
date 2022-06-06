@@ -74,7 +74,7 @@ if (process.env["NODE_CONFIG_DIR"] ?? "" == "") {
                 break outer;
             }
         }
-        fs.mkdirSync(proper_dir);
+        fs.mkdirSync(proper_dir, { recursive: true });
         process.env["NODE_CONFIG_DIR"] = proper_dir;
         fs.writeFileSync(require('path').join(proper_dir, "default.json"), DEFAULT_CONFIG);
         break outer;
