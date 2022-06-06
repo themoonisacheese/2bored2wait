@@ -259,10 +259,10 @@ function join() {
 						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
 						webserver.finTime = new Date((new Date()).getTime() + ETAmin * 60000);
 						if (config.get("userStatus")) {{ //set the Discord Activity
-							if (displayEmail == true){
-							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
+							if (displayEmail){
+								logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
 							} else {
-							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + client.username);}
+								logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + client.username);}
 						}} else {
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
 						}
