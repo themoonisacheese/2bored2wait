@@ -553,7 +553,7 @@ function sendDiscordMsg(channel, title, content) {
 		embeds: [MessageEmbed]
 	}).catch(() => {
 		console.warn(`There was a permission error! Please make sure your bot has perms to talk.`); //handle wrong tokens gracefully
-	});;
+	});
 }
 
 function timeStringtoDateTime(time) {
