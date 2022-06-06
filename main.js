@@ -122,7 +122,7 @@ const askForSecrets = async () => {
 			}
 		});
 	}
-	console.log("Finished setting up 2b2w. Type 'start' to start the queue.");
+	console.log(`Finished setting up 2b2w. Type "Start" to start the queue. Type "Help" for the list of commands.`);
 	cmdInput();
 	joinOnStart();
 }
@@ -226,6 +226,7 @@ function join() {
 	let lastQueuePlace = "None";
 	let notisend = false;
 	var PositionError = false;
+	let Disply_Email = config.get("Disply_Email");
 	doing = "queue"
 	webserver.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers
@@ -257,9 +258,12 @@ function join() {
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
 						webserver.finTime = new Date((new Date()).getTime() + ETAmin * 60000);
-						if (config.get("userStatus")) { //set the Discord Activity
+						if (config.get("userStatus")) {{ //set the Discord Activity
+							if (Disply_Email == true){
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
-						} else {
+							} else {
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + client.username);}
+						}} else {
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
 						}
 						if (config.get("notification.enabled") && positioninqueue <= config.get("notification.queuePlace") && !notisend && config.discordBot && dcUser != null) {
@@ -401,6 +405,48 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 	cmd = cmd.toLowerCase();
 
 	switch (cmd) {
+		case "help":
+		case "commands":
+			console.log(" help: Lists available commands.");
+			console.log(" start 14:00: Start queue at 2pm.");
+			console.log(" play 8:00: Tries to calculate the right time to join so you can play at 8:00am.");
+			console.log(" start: Starts the queue.");
+			console.log(" loop: Restarts the queue if you are not connect at the end of it");
+			console.log(" loop status: Lets you know if you have reconnect on or off.")
+			console.log(" update: Sends an update to the current channel with your position and ETA.");
+			console.log(" url: displays the github url");
+			console.log(" stop: Stops the queue.");
+			console.log(" exit or quit: Exits the application.");
+			break;
+
+		case "url":
+			console.log("https://github.com/themoonisacheese/2bored2wait");
+			break;
+
+		case "loop":
+			console.log("Syntax: status, enable, disable");
+			break;
+		case "loop status":
+			if (JSON.stringify(webserver.restartQueue) == "true")
+			console.log("Loop is enabled");
+			else
+			console.log("Loop is disabled");
+			break;
+		case "loop enable":
+			if (JSON.stringify(webserver.restartQueue) == "true")
+			console.log("Loop is already enabled!");
+			else {
+			webserver.restartQueue = true
+			console.log("Enabled Loop");}
+			break;
+		case "loop disable":
+			if (JSON.stringify(webserver.restartQueue) == "false")
+			console.log("Loop is already disabled!");
+			else {
+			webserver.restartQueue = false
+			console.log("Disabled Loop");}
+			break;
+
 		case "start":
 			startQueuing();
 			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
@@ -467,7 +513,7 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 				calcTime(cmd);
 				msg(DiscordOrigin, discordMsg, "Time calculator", "The perfect time to start the queue will be calculated, so you can play at " + starttimestring);
 				activity("You can play at " + starttimestring);
-			} else msg(DiscordOrigin, discordMsg, "Error", "Unknown command");
+			} else msg(DiscordOrigin, discordMsg, "Error", `Unknown command. Type "Help" for the list of commands.`);
 	}
 }
 
