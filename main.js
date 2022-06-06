@@ -122,7 +122,7 @@ const askForSecrets = async () => {
 			}
 		});
 	}
-	console.log("Finished setting up 2b2w. Type 'start' to start the queue.");
+	console.log("Finished setting up 2b2w. Type 'Start' to start the queue. Type 'Help' for help.");
 	cmdInput();
 	joinOnStart();
 }
@@ -405,6 +405,52 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 	cmd = cmd.toLowerCase();
 
 	switch (cmd) {
+		case "help":
+		case "commands":
+			console.log(" help: Lists avaible commands.");
+			console.log(" start 14:00: Start at 2pm.");
+			console.log(" play 8:00: Trys to calculate the right time to join so you can play at 8:00am.");
+			console.log(" start: Starts the queue.");
+			console.log(" loop: Restarts the queue if you are not connect at the end of it");
+			console.log(" update: Sends an update to the current channel with your position and ETA.");
+			console.log(" url: displays the github url");
+			console.log(" stop: Stops the queue.");
+			console.log(" exit: Exits the application.");
+			break;
+
+		case "url":
+			console.log("https://github.com/themoonisacheese/2bored2wait");
+			break;
+
+		case "loop":
+			console.log("Syntax: status, enable, disable");
+			break;
+		case "loop status":
+			if (JSON.stringify(webserver.restartQueue) == "true")
+			console.log("Loop is enabled");
+			else
+			console.log("Loop is disabled");
+			break;
+		case "loop enable":
+			if (JSON.stringify(webserver.restartQueue) == "true")
+			console.log("Loop is already enabled!");
+			else {
+			webserver.restartQueue = true
+			console.log("Enabled Loop");}
+			break;
+		case "loop disable":
+			if (JSON.stringify(webserver.restartQueue) == "false")
+			console.log("Loop is already disabled!");
+			else {
+			webserver.restartQueue = false
+			console.log("disabled Loop");}
+			break;
+
+		case "start":
+			startQueuing();
+			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
+			break;
+
 		case "start":
 			startQueuing();
 			msg(DiscordOrigin, discordMsg, "Queue", "Queue is starting up");
@@ -471,7 +517,7 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 				calcTime(cmd);
 				msg(DiscordOrigin, discordMsg, "Time calculator", "The perfect time to start the queue will be calculated, so you can play at " + starttimestring);
 				activity("You can play at " + starttimestring);
-			} else msg(DiscordOrigin, discordMsg, "Error", "Unknown command");
+			} else msg(DiscordOrigin, discordMsg, "Error", "Unknown command. Type help for help.");
 	}
 }
 
