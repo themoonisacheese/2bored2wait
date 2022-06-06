@@ -1,11 +1,17 @@
 {
   "name": "2bored2wait",
-  "version": "3.0.19",
+  "version": "3.0.25",
   "description": "A proxy to wait out 2b2t.org's way too long queue.",
   "main": "main.js",
   "scripts": {
     "test": "node test.js",
     "start": "node check.js"
+  },
+  "bin": "main.js",
+  "pkg": {
+    "assets": [
+      "config/default.json"
+    ]
   },
   "repository": {
     "type": "git",
@@ -18,6 +24,7 @@
   },
   "homepage": "https://github.com/themoonisacheese/2bored2wait#readme",
   "dependencies": {
+    "@folder/xdg": "^3.1.2",
     "@rob9315/mcproxy": "^0.3",
     "boxen": "^5.0.1",
     "config": "^3.3.6",
