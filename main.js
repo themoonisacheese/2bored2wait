@@ -20,7 +20,6 @@ const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
-const http = require("http")
 var config;
 // This dummy var is a workaround to allow binaries
 const path = require('path');
@@ -574,7 +573,7 @@ function timeStringtoDateTime(time) {
 }
 
 function calcTime(msg) {
-	http.get('http://2b2t.io/api/queue', function (res) {
+	https.get('https://2b2t.io/api/queue', function (res) {
 		doing = "calcTime"
 		interval.calc = setInterval(function () {
 			https.get("https://2b2t.io/api/queue", (resp) => {
