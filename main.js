@@ -20,6 +20,7 @@ const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
+const http = require("http")
 var config;
 // This dummy var is a workaround to allow binaries
 const path = require('path');
@@ -573,29 +574,32 @@ function timeStringtoDateTime(time) {
 }
 
 function calcTime(msg) {
-	doing = "calcTime"
-	interval.calc = setInterval(function () {
-		https.get("https://2b2t.io/api/queue", (resp) => {
-			let data = '';
-			resp.on('data', (chunk) => {
-				data += chunk;
+	http.get('http://2b2t.io/api/queue', function (res) {
+		doing = "calcTime"
+		interval.calc = setInterval(function () {
+			https.get("https://2b2t.io/api/queue", (resp) => {
+				let data = '';
+				resp.on('data', (chunk) => {
+					data += chunk;
+				});
+				resp.on("end", () => {
+					data = JSON.parse(data);
+					let queueLength = data[0][1];
+					let playTime = timeStringtoDateTime(msg);
+					let waitTime = getWaitTime(queueLength, 0);
+					if (playTime.toSeconds() - DateTime.local().toSeconds() < waitTime) {
+						startQueuing();
+						clearInterval(interval.calc);
+						console.log(waitTime);
+					}
+				});
+			}).on("error", (err) => {
+				log(err)
 			});
-			resp.on("end", () => {
-				data = JSON.parse(data);
-				let queueLength = data[0][1];
-				let playTime = timeStringtoDateTime(msg);
-				let waitTime = getWaitTime(queueLength, 0);
-				if (playTime.toSeconds() - DateTime.local().toSeconds() < waitTime) {
-					startQueuing();
-					clearInterval(interval.calc);
-					console.log(waitTime);
-				}
-			});
-		}).on("error", (err) => {
-			log(err)
-		});
-	}, 60000);
-
+		}, 60000);
+	}).on('error', function (e) {
+		console.log(`2b2t.io is currently offline. Please try again later to use the "play" command.`)
+	});
 }
 
 
