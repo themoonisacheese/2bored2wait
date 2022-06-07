@@ -258,12 +258,14 @@ function join() {
 						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
 						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
 						webserver.finTime = new Date((new Date()).getTime() + ETAmin * 60000);
-						if (config.get("userStatus")) {{ //set the Discord Activity
-							if (displayEmail){
+						if (config.get("userStatus")) {
+							//set the Discord Activity
+							if (displayEmail) {
 								logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + options.username);
 							} else {
-								logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + client.username);}
-						}} else {
+								logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + client.username);
+							}
+						} else {
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
 						}
 						if (config.get("notification.enabled") && positioninqueue <= config.get("notification.queuePlace") && !notisend && config.discordBot && dcUser != null) {
@@ -428,23 +430,25 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 			break;
 		case "loop status":
 			if (JSON.stringify(webserver.restartQueue) == "true")
-			console.log("Loop is enabled");
+				console.log("Loop is enabled");
 			else
-			console.log("Loop is disabled");
+				console.log("Loop is disabled");
 			break;
 		case "loop enable":
 			if (JSON.stringify(webserver.restartQueue) == "true")
-			console.log("Loop is already enabled!");
+				console.log("Loop is already enabled!");
 			else {
-			webserver.restartQueue = true
-			console.log("Enabled Loop");}
+				webserver.restartQueue = true
+				console.log("Enabled Loop");
+			}
 			break;
 		case "loop disable":
 			if (JSON.stringify(webserver.restartQueue) == "false")
-			console.log("Loop is already disabled!");
+				console.log("Loop is already disabled!");
 			else {
-			webserver.restartQueue = false
-			console.log("Disabled Loop");}
+				webserver.restartQueue = false
+				console.log("Disabled Loop");
+			}
 			break;
 
 		case "start":
@@ -546,6 +550,8 @@ function sendDiscordMsg(channel, title, content) {
 	}
 	channel.send({
 		embeds: [MessageEmbed]
+	}).catch(() => {
+		console.warn(`There was a permission error! Please make sure your bot has perms to talk.`); //handle wrong tokens gracefully
 	});
 }
 
@@ -566,29 +572,32 @@ function timeStringtoDateTime(time) {
 }
 
 function calcTime(msg) {
-	doing = "calcTime"
-	interval.calc = setInterval(function () {
-		https.get("https://2b2t.io/api/queue", (resp) => {
-			let data = '';
-			resp.on('data', (chunk) => {
-				data += chunk;
+	https.get('https://2b2t.io/api/queue', function (res) {
+		doing = "calcTime"
+		interval.calc = setInterval(function () {
+			https.get("https://2b2t.io/api/queue", (resp) => {
+				let data = '';
+				resp.on('data', (chunk) => {
+					data += chunk;
+				});
+				resp.on("end", () => {
+					data = JSON.parse(data);
+					let queueLength = data[0][1];
+					let playTime = timeStringtoDateTime(msg);
+					let waitTime = getWaitTime(queueLength, 0);
+					if (playTime.toSeconds() - DateTime.local().toSeconds() < waitTime) {
+						startQueuing();
+						clearInterval(interval.calc);
+						console.log(waitTime);
+					}
+				});
+			}).on("error", (err) => {
+				log(err)
 			});
-			resp.on("end", () => {
-				data = JSON.parse(data);
-				let queueLength = data[0][1];
-				let playTime = timeStringtoDateTime(msg);
-				let waitTime = getWaitTime(queueLength, 0);
-				if (playTime.toSeconds() - DateTime.local().toSeconds() < waitTime) {
-					startQueuing();
-					clearInterval(interval.calc);
-					console.log(waitTime);
-				}
-			});
-		}).on("error", (err) => {
-			log(err)
-		});
-	}, 60000);
-
+		}, 60000);
+	}).on('error', function (e) {
+		console.log(`2b2t.io is currently offline. Please try again later to use the "play" command.`)
+	});
 }
 
 
