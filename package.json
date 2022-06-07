@@ -31,7 +31,7 @@
     "discord.js": "^13.7.0",
     "everpolate": "0.0.3",
     "luxon": "^2.0.1",
-    "minecraft-protocol": "^1.28.0",
+    "minecraft-protocol": "^1.35.0",
     "mineflayer-antiafk": "^1.1.1",
     "node-json-minify": "^3.0.0",
     "open": "^8.0.7",
