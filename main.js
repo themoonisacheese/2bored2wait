@@ -222,10 +222,9 @@ function startQueuing() {
 }
 
 function join() {
-	let positioninqueue = "None";
 	let lastQueuePlace = "None";
 	let notisend = false;
-	var PositionError = false;
+	let PositionError = false;
 	let displayEmail = (config.has("displayEmail") ? config.get("displayEmail") : false);
 	doing = "queue"
 	webserver.isInQueue = true;
