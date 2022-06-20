@@ -1,4 +1,5 @@
 {
+    "version": "1.0.0",
     "accountType": "mojang", // set this to microsoft if you want to use a microsoft account
     "discordBot": true,
     "webserver": true,
@@ -7,8 +8,8 @@
         "web": 8080
     },
     "address":{ // address 2b2w listens on. if you leave it on 0.0.0.0 you can via all IPs
-    	"minecraft": "0.0.0.0",
-	    "web": "0.0.0.0"
+        "minecraft": "0.0.0.0",
+        "web": "0.0.0.0"
     },
     "openBrowserOnStart": false,
     "password": "", // password for the webinterface

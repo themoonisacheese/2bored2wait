@@ -231,7 +231,7 @@ function join() {
 	let lastQueuePlace = "None";
 	let notisend = false;
 	var PositionError = false;
-	let displayEmail = (config.has("displayEmail") ? config.get("displayEmail") : false);
+	let displayEmail = config.get("displayEmail")
 	doing = "queue"
 	webserver.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers

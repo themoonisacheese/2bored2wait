@@ -8,12 +8,14 @@ const rl = readline.createInterface({
 
 
 // constants
+const conVer = "1.0.0"
 
 const UPDATE_PROMPT = `To ignore press enter.
 To clear your settings type 'settings'.
 To open the release in browser, type 'show'.
 > `;
 const DEFAULT_CONFIG = `{
+    "version": "${conVer}",
     "accountType": "mojang", // set this to microsoft if you want to use a microsoft account
     "discordBot": true,
     "webserver": true,
@@ -60,9 +62,9 @@ if (process.env["NODE_CONFIG_DIR"] ?? "" == "") {
     let proper_dir = require('@folder/xdg')({ "subdir": "2bored2wait" }).config;
     const fs = require('fs');
     let dirs = [
-        "config", 
-        `${os.homedir()}/.2bored2wait/config`, 
-        `${os.homedir()}/.2bored2wait`, 
+        "config",
+        `${os.homedir()}/.2bored2wait/config`,
+        `${os.homedir()}/.2bored2wait`,
         proper_dir
     ];
 
@@ -119,7 +121,7 @@ if (config.updatemessage === false || config.updatemessage == "n") {
                     const full_path = path.join(config_dir, file);
                     fs.renameSync(full_path, `${full_path}.bak`);
                 }
-                fs.writeFileSync(path.join(config_dir, "default.json"), DEFAULT_CONFIG);
+                fs.writeFileSync(path.join(config_dir, "local.json"), DEFAULT_CONFIG);
                 process.exit(0);
                 break;
             case 'dl':
@@ -140,10 +142,35 @@ if (config.updatemessage === false || config.updatemessage == "n") {
 // functions
 
 function start() {
-    console.log("Please wait...");
-    rl.close();
-    require('./main.js');
+    if (config.version === conVer) {
+        console.log("Please wait...");
+        rl.close();
+        require('./main.js');
+    } else {
+        console.log("It appears your default.json is outdated! Should I update it? (This wil cause anything you have changed in default.json to disappear! Instead make changes to local.json if you want to keep them!)")
+
+        rl.question("Overwrite? [yes]/no: ", function (answer) {
+            if (answer === 'yes') {
+                console.log("Updating the configs")
+                const config_dir = process.env["NODE_CONFIG_DIR"];
+                const path = require('path');
+                const defaultOld = path.join(config_dir, 'default.json');
+                fs.renameSync(defaultOld, `${defaultOld}.bak`);
+                fs.writeFileSync(path.join(config_dir, "default.json"), DEFAULT_CONFIG);
+                console.log('Done Updating the config! Please Run 2bored2wait (Press any key to exit!)');
+                process.stdin.setRawMode(true);
+                process.stdin.resume();
+                process.stdin.on('data', process.exit.bind(process, 0));	
+            } else if (answer === 'no') {
+                console.log("Alright! You may have problems if it isn't updated!")
+                console.log("Please wait...");
+                rl.close();
+                require('./main.js');
+            }
+        })
+    }
 }
+
 
 function newUpdateMessage(tag, body) {
     return require('boxen')(`New Update Available! → ${tag}
