@@ -42,7 +42,7 @@ var secrets;
 var accountType;
 let launcherPath;
 let c = 150;
-let finishedQueue = !config.get("minecraftserver.is2b2t");
+let finishedQueue = false
 let dc;
 const rl = require("readline").createInterface({
 	input: process.stdin,
@@ -188,7 +188,7 @@ function cmdInput() {
 // function to disconnect from the server
 function stop() {
 	webserver.isInQueue = false;
-	finishedQueue = !config.minecraftserver.is2b2t;
+	finishedQueue = false
 	webserver.queuePlace = "None";
 	webserver.ETA = "None";
 	if (client) {
@@ -234,7 +234,7 @@ function join() {
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "playerlist_header":
-				if (!finishedQueue && config.minecraftserver.is2b2t) { // if the packet contains the player list, we can use it to see our place in the queue
+				if (!finishedQueue && true) { // if the packet contains the player list, we can use it to see our place in the queue
 					let messageheader = data.header;
 					let positioninqueue = "None";
 					try {
