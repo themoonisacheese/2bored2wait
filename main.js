@@ -407,9 +407,7 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 
 	switch (cmd) {
 		case "help":
-		case "help 1":
 		case "commands":
-			console.log(" Help 1 of 2.\n");
 			console.log(" help: Lists available commands.");
 			console.log(" start 14:00: Start queue at 2pm.");
 			console.log(" play 8:00: Tries to calculate the right time to join so you can play at 8:00am.");
@@ -420,13 +418,8 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 			console.log(" url: displays the github url");
 			console.log(" stop: Stops the queue.");
 			console.log(" exit or quit: Exits the application.");
-			break;
-		case "help 2":
-		case "commands 2":
-			console.log(" Help 2 of 2.\n");
 			console.log(" stats: Displays your health and hunger.");
 			break;
-
 		case "stats":
 			try {
 			if (conn.bot.health == undefined && conn.bot.food == undefined){
