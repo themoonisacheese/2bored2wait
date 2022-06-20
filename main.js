@@ -278,8 +278,9 @@ function join() {
 			case "chat":
 				if (finishedQueue === false) { // we can know if we're about to finish the queue by reading the chat message
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
-					let chatMessage = JSON.parse(data.message);
-					if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
+					//let chatMessage = JSON.parse(data.message);
+					//if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
+					if (PositionError == true) {
 						if (config.get("expandQueueData")) {
 							queueData.place.push(queueStartPlace);
 							let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSeconds();
