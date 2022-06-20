@@ -624,6 +624,16 @@ function getWaitTime(queueLength, queuePos) {
 	let b = everpolate.linear(queueLength, queueData.place, queueData.factor)[0];
 	return Math.log((queuePos + c) / (queueLength + c)) / Math.log(b); // see issue 141
 }
+process.on('uncaughtException', err => {
+	const boxen = require("boxen")
+	console.error(err);
+	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, {title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center'}));	
+	console.log('Press any key to exit');
+	process.stdin.setRawMode(true);
+	process.stdin.resume();
+	process.stdin.on('data', process.exit.bind(process, 0));		
+});
+  
 module.exports = {
 	startQueue: function () {
 		startQueuing();
