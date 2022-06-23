@@ -227,11 +227,11 @@ function startQueuing() {
 }
 
 function join() {
-	let positioninqueue = "None";
 	let lastQueuePlace = "None";
 	let notisend = false;
 	var PositionError = false;
 	let displayEmail = config.get("displayEmail")
+
 	doing = "queue"
 	webserver.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers
@@ -285,8 +285,8 @@ function join() {
 			case "chat":
 				if (finishedQueue === false) { // we can know if we're about to finish the queue by reading the chat message
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
-					let chatMessage = JSON.parse(data.message);
-					if (chatMessage.text && chatMessage.text === "Connecting to the server...") {
+					let chatMessage = JSON.parse(data.message).text;
+					if (chatMessage == "Connected to the server.") {
 						if (config.get("expandQueueData")) {
 							queueData.place.push(queueStartPlace);
 							let timeQueueTook = DateTime.local().toSeconds() - queueStartTime.toSeconds();
@@ -425,6 +425,24 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 			console.log(" url: displays the github url");
 			console.log(" stop: Stops the queue.");
 			console.log(" exit or quit: Exits the application.");
+			console.log(" stats: Displays your health and hunger.");
+			break;
+		case "stats":
+			try {
+			if (conn.bot.health == undefined && conn.bot.food == undefined){
+			console.log("Unknown.")
+			break;}
+			else
+			{if (conn.bot.health == 0)
+			console.log("Health: DEAD");
+			else
+			console.log("Health: " + Math.ceil(conn.bot.health)/2 + "/10");
+			if (conn.bot.food == 0)
+			console.log("Hunger: STARVING");
+			else
+			console.log("Hunger: " + conn.bot.food/2 + "/10");}
+			} catch (err)
+			{console.log(`Start 2B2W first with "Start".`)}
 			break;
 
 		case "url":
