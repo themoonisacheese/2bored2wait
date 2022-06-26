@@ -76,15 +76,15 @@ Click the picture or link bellow to watch!
    
 https://youtu.be/3kCKnwuiHak
 
-### x86 and x64 (most home computers):
+### Quick Install (64-bit Systems)
 
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
 2. Download the executable [here](https://github.com/themoonisacheese/2bored2wait/releases/latest)
-3. (Optional) Take a look at `config/default.json`, edit your values and place the config under `${USER}/.2bored2wait/config/local.json`
+3. (Optional) Take a look at the [Configs](#configuration)! 
 
-### Other Platforms (including ARM / Raspberry Pi):
+### Manual Install (32-bit systems, and fallback for quick install):
 
-1. Download and install [node.js](https://nodejs.org/) version 14 or above and [git](https://git-scm.com). You need git even if you download the repository as zip because it is to install the dependencies via npm.
+1. Download and install [node.js](https://nodejs.org/) version 16 or above and [git](https://git-scm.com). You need git even if you download the repository as zip because it is to install the dependencies via npm.
 2. Open a terminal then clone this repo then cd into folder:
 
 ```sh
@@ -92,13 +92,13 @@ https://youtu.be/3kCKnwuiHak
  cd 2bored2wait
 ```
 
-3. Run `npm install` to install the required libraries
-4. Start the program with `npm start`.
+3. Run ```yarn``` to install the required libraries
+4. Start the program with ````yarn start````.
 
 ### Docker
 
 1. Read the code to ensure I'm not stealing your credentials. I'm not, but you shouldn't take my word for it. If you don't know how to read it, downloading stuff off the internet and giving it your password is probably a bad idea anyway.
-2. `docker run -d -p 8080:8080 -p 25565:25565 -e NODE_CONFIG='{"username":"user@domain.com","mcPassword":"password","updatemessage":"n","BotToken":""}' 2bored2wait/2bored2wait:latest`. The docker image is automatically up to date after each push to this repo. Docker images are available for `amd64` and `arm64` among other platforms.
+2. `docker run -d -p 8080:8080 -p 25565:25565 -e NODE_CONFIG='{"username": "account email", "accountType": "mojang or microsoft", "mcPassword": "your password", "BotToken": "your discord bot token"}' 2bored2wait/2bored2wait:latest`. The docker image is automatically up to date after each push to this repo. Docker images are available for `amd64` and `arm64` among other platforms.
 3. Open a browser and navigate to http://localhost:8080
 4. Press the "Start queuing" button. The queue position indicator auto-updates, but sometimes it takes a while to start counting (like 1 min).
 5. Once the queue reaches a low number, connect to the Minecraft server at address `localhost`.
@@ -108,7 +108,11 @@ If you want to change the configuration or you don't want your credentials in th
 
 # Configuration
 
-- You can change all credentials and whether you want update messages by simply editing the values in local.js or deleting that file.
+- You can change all credentials and whether you want update messages by simply editing the values in local.json or deleting that file.
+- For the quick install, configs are located: 
+   - gnu+linux/macos: $HOME/.config/2bored2wait/
+   - windows: C:\Users\USERNAME\AppData\Roaming\2bored2wait\Config\ 
+
 
 # How to use
 
@@ -125,14 +129,15 @@ If you want to change the configuration or you don't want your credentials in th
 
 All commands can be used through discord or simply typed in the console window.
 
-• Please note that the time zone for the calculations is based off your computer's time!
+- Please note that the time zone for the calculations is based off your computer's time!
 
-
-- `start` will start the queue. It takes between 15-30 seconds for the bot to update with the queue position.
-- `start 14:00` will start at 2pm.
-- `play 8:00` will try to calculate the right time to join so you can play at 8:00
-- `update` will send an update to the current channel with your position and ETA.
-- `stop` will stop the queue.
+- Here are some basic commands:
+   - `start` will start the queue. It takes between 15-30 seconds for the bot to update with the queue position.
+      - `start 14:00` will start at 2pm.
+   - `play 8:00` will try to calculate the right time to join so you can play at 8:00
+   - `update` will send an update to the current channel with your position and ETA.
+   - `stop` will stop the queue.
+- Type `help` for a full ist of commands
 
 <!-- ROADMAP -->
 
