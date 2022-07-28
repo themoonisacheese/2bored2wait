@@ -10,9 +10,7 @@
   "bin": "main.js",
   "pkg": {
     "assets": [
-      "config/default.json",
-      "webserver/index.html",
-      "webserver/index.css"
+      "config/default.json"
     ]
   },
   "repository": {
