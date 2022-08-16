@@ -1169,17 +1169,17 @@ minecraft-data@^2.119.1, minecraft-data@^2.93.0:
   version "2.221.0"
   resolved "https://registry.npmjs.org/minecraft-data/-/minecraft-data-2.221.0.tgz"
 
-minecraft-data@^3.0.0:
-  version "3.2.0"
-  resolved "https://registry.npmjs.org/minecraft-data/-/minecraft-data-3.2.0.tgz"
+minecraft-data@^3.0.0, minecraft-data@^3.8.0:
+  version "3.10.1"
+  resolved "https://registry.yarnpkg.com/minecraft-data/-/minecraft-data-3.10.1.tgz#62b5c251e63fe089d5f531f458d7b6abc7ea885f"
 
 minecraft-folder-path@^1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/minecraft-folder-path/-/minecraft-folder-path-1.2.0.tgz"
 
-minecraft-protocol@^1.31.0, minecraft-protocol@^1.32.0, minecraft-protocol@^1.35.1:
-  version "1.35.1"
-  resolved "https://registry.yarnpkg.com/minecraft-protocol/-/minecraft-protocol-1.35.1.tgz#5783bd2156f14128d1ed8d0c756b3306622e1575"
+minecraft-protocol@^1.31.0, minecraft-protocol@^1.32.0, minecraft-protocol@^1.36.0:
+  version "1.36.0"
+  resolved "https://registry.yarnpkg.com/minecraft-protocol/-/minecraft-protocol-1.36.0.tgz#89a3600d4c0491ebe884588fab139f00eaf990c4"
   dependencies:
     "@types/readable-stream" "^2.3.13"
     aes-js "^3.1.2"
@@ -1188,11 +1188,11 @@ minecraft-protocol@^1.31.0, minecraft-protocol@^1.32.0, minecraft-protocol@^1.35
     endian-toggle "^0.0.0"
     lodash.get "^4.1.2"
     lodash.merge "^4.3.0"
-    minecraft-data "^3.0.0"
+    minecraft-data "^3.8.0"
     minecraft-folder-path "^1.2.0"
     node-fetch "^2.6.1"
     node-rsa "^0.4.2"
-    prismarine-auth "^1.1.0"
+    prismarine-auth "^1.7.0"
     prismarine-nbt "^2.0.0"
     protodef "^1.8.0"
     readable-stream "^4.1.0"
@@ -1445,9 +1445,9 @@ prepend-http@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/prepend-http/-/prepend-http-2.0.0.tgz"
 
-prismarine-auth@^1.1.0:
-  version "1.5.3"
-  resolved "https://registry.npmjs.org/prismarine-auth/-/prismarine-auth-1.5.3.tgz"
+prismarine-auth@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/prismarine-auth/-/prismarine-auth-1.7.0.tgz#7eaa474ad10b94c9787836a5e0f2cf2d90024294"
   dependencies:
     "@azure/msal-node" "^1.1.0"
     "@xboxreplay/xboxlive-auth" "^3.3.3"
