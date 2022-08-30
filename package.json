@@ -33,6 +33,7 @@
     "luxon": "^2.0.1",
     "minecraft-protocol": "^1.35.1",
     "mineflayer-antiafk": "^1.1.1",
+    "minecraft-data": "^3",
     "node-json-minify": "^3.0.0",
     "open": "^8.0.7",
     "particles.js": "^2.0.0",
