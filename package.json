@@ -27,7 +27,7 @@
     "@folder/xdg": "^3.1.2",
     "@rob9315/mcproxy": "^0.3",
     "boxen": "^5.0.1",
-    "config": "^3.3.6",
+    "config": "^3.3.8",
     "discord.js": "^13.7.0",
     "everpolate": "0.0.3",
     "luxon": "^2.0.1",
