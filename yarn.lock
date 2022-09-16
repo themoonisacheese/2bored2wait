@@ -987,8 +987,8 @@ isurl@^1.0.0-alpha5:
     is-object "^1.0.1"
 
 jose@^4.1.4:
-  version "4.8.1"
-  resolved "https://registry.npmjs.org/jose/-/jose-4.8.1.tgz"
+  version "4.9.3"
+  resolved "https://registry.yarnpkg.com/jose/-/jose-4.9.3.tgz#890abd3f26725fe0f2aa720bc2f7835702b624db"
 
 json-buffer@3.0.0:
   version "3.0.0"
