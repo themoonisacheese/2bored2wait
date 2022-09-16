@@ -298,6 +298,7 @@ function join() {
 						}
 						if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
 							stop();
+							reconnect();
 						} else {
 							finishedQueue = true;
 							startAntiAntiAFK();
