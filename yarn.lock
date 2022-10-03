@@ -1169,13 +1169,9 @@ minecraft-data@^2.119.1, minecraft-data@^2.93.0:
   version "2.221.0"
   resolved "https://registry.npmjs.org/minecraft-data/-/minecraft-data-2.221.0.tgz"
 
-minecraft-data@^3:
-  version "3.12.0"
-  resolved "https://registry.yarnpkg.com/minecraft-data/-/minecraft-data-3.12.0.tgz#69899568a3cd2837c7f320f27c9bb4906e24fddc"
-
-minecraft-data@^3.0.0:
-  version "3.2.0"
-  resolved "https://registry.npmjs.org/minecraft-data/-/minecraft-data-3.2.0.tgz"
+minecraft-data@^3, minecraft-data@^3.0.0:
+  version "3.15.0"
+  resolved "https://registry.yarnpkg.com/minecraft-data/-/minecraft-data-3.15.0.tgz#6c4a0fe06a50c35b772ca7e7b4de62937877d93c"
 
 minecraft-folder-path@^1.2.0:
   version "1.2.0"
