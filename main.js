@@ -39,6 +39,8 @@ var updatemessage;
 var discordBotToken;
 var savelogin;
 var secrets;
+var whitelistUUIDs = [];
+var whitelistNames = Array.from(config.whitelist.users);
 var accountType;
 let launcherPath;
 let c = 150;
@@ -101,7 +103,7 @@ const askForSecrets = async () => {
 		dc = new Client({
 			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
 		});
-		dc.login(discordBotToken??config.get('BotToken')).catch(() => {
+		dc.login(discordBotToken ?? config.get('BotToken')).catch(() => {
 			console.warn("There was an error when trying to log in using the provided Discord bot token. If you didn't enter a token this message will go away the next time you run this program!"); //handle wrong tokens gracefully
 		});
 		dc.on('ready', () => {
@@ -139,7 +141,14 @@ else {
 	launcherPath = config.profilesFolder;
 	accountType = config.get("accountType");
 	discordBotToken = config.BotToken
-	askForSecrets();
+	if (config.whitelist.enabled) {
+		util.getUUIDForWhitelist(whitelistNames).then(res => {
+			whitelistUUIDs = res
+			askForSecrets();
+		})
+	} else {
+		askForSecrets();
+	}
 }
 
 var stoppedByPlayer = false;
@@ -338,8 +347,14 @@ function join() {
 	});
 
 	server.on('login', (newProxyClient) => { // handle login
-		if (config.whitelist && client.uuid !== newProxyClient.uuid) {
-			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
+		if (config.whitelist.enabled) {
+			if (!whitelistUUIDs.map(user => user.id == newProxyClient.uuid.replaceAll('-', '')).includes(true)) {
+				newProxyClient.end("Not whitelisted!");
+				return;
+			}
+		}
+		else if (client.uuid !== newProxyClient.uuid) {
+			newProxyClient.end("Not whitelisted!");
 			return;
 		}
 		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
@@ -405,7 +420,7 @@ function round(number) {
 }
 
 function activity(string) {
-	dc?.user ?.setActivity(string);
+	dc?.user?.setActivity(string);
 }
 
 //the discordBot part starts here.
@@ -427,23 +442,27 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 			console.log(" stop: Stops the queue.");
 			console.log(" exit or quit: Exits the application.");
 			console.log(" stats: Displays your health and hunger.");
+			console.log(" whitelist add [username]: Adds user to whitelist for this session.");
+			console.log(" whitelist remove [username]: Removes user from whitelist for this session.");
+			console.log(" whitelist list: Lists all whitelisted users.");
 			break;
 		case "stats":
 			try {
-			if (conn.bot.health == undefined && conn.bot.food == undefined){
-			console.log("Unknown.")
-			break;}
-			else
-			{if (conn.bot.health == 0)
-			console.log("Health: DEAD");
-			else
-			console.log("Health: " + Math.ceil(conn.bot.health)/2 + "/10");
-			if (conn.bot.food == 0)
-			console.log("Hunger: STARVING");
-			else
-			console.log("Hunger: " + conn.bot.food/2 + "/10");}
-			} catch (err)
-			{console.log(`Start 2B2W first with "Start".`)}
+				if (conn.bot.health == undefined && conn.bot.food == undefined) {
+					console.log("Unknown.")
+					break;
+				}
+				else {
+					if (conn.bot.health == 0)
+						console.log("Health: DEAD");
+					else
+						console.log("Health: " + Math.ceil(conn.bot.health) / 2 + "/10");
+					if (conn.bot.food == 0)
+						console.log("Hunger: STARVING");
+					else
+						console.log("Hunger: " + conn.bot.food / 2 + "/10");
+				}
+			} catch (err) { console.log(`Start 2B2W first with "Start".`) }
 			break;
 
 		case "url":
@@ -484,6 +503,34 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 		case "exit":
 		case "quit":
 			return process.exit(0);
+
+		case "whitelist":
+			if (splitCmd[1] == "add") {
+				check = util.getUUIDForWhitelist(splitCmd[2])
+				check.then(promise => {
+					if (promise[0] != undefined) {
+						whitelistUUIDs.push(promise[0])
+						logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", `Added ${splitCmd[2]} to Whitelist!`)
+					} else {
+						logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", "Username wrong?");
+					}
+				})
+			} else if (splitCmd[1] == "delete" || splitCmd[1] == "remove") {
+				check = util.getUUIDForWhitelist(splitCmd[2])
+				check.then(usrObj => {
+					if (usrObj[0] != undefined) {
+						whitelistUUIDs = whitelistUUIDs.filter(({ id }) => id !== usrObj[0].id)
+						logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", `Removed ${splitCmd[2]} from Whitelist!`)
+					} else {
+						logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", "Username wrong?");
+					}
+				})
+			} else if (splitCmd[1] == "list") {
+				logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", "Listing all whitelisted Users" + whitelistUUIDs.map(accounts => "\n" + accounts.name + ""));
+			} else {
+				logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", "Wrong Syntax for Whitelist command!")
+			}
+			break;
 
 		case "update":
 			switch (doing) {
@@ -647,13 +694,13 @@ function getWaitTime(queueLength, queuePos) {
 process.on('uncaughtException', err => {
 	const boxen = require("boxen")
 	console.error(err);
-	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, {title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center'}));	
+	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, { title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center' }));
 	console.log('Press any key to exit');
 	process.stdin.setRawMode(true);
 	process.stdin.resume();
-	process.stdin.on('data', process.exit.bind(process, 0));		
+	process.stdin.on('data', process.exit.bind(process, 0));
 });
-  
+
 module.exports = {
 	startQueue: function () {
 		startQueuing();

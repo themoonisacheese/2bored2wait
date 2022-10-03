@@ -46,14 +46,18 @@ const DEFAULT_CONFIG = `{
         "enabled": true, // you must send the bot a message once.
         "queuePlace": 20
     },
-    "antiAntiAFK": { 
+    "antiAntiAFK": {
         "enabled": false, // master switch for all bypass antiAFK plugins
         "config": {  // mineflayer-antiafk config
         }
     },
     "userStatus": true, // show username in discord bot status, in case of alts
     "joinOnStart": false, // join the server when 2b2w is started
-    "whitelist": false, // only let the same minecraft account join 2b2w as the one connected to 2b2t
+    , // join the server when 2b2w is started
+    "whitelist": { // If the whitelist is turned off only the same account can join, if it is turned on all the accounts in the users list can join
+        "enabled": true,
+        "users": []
+    },
     "expandQueueData": false, // enlarge the dataset in queue.json for better ETA calculation
     "displayEmail": false, // If set to true, the cli and discord will disply your email instead of your username
     "favicon": "" //convert a png icon to base64 for your server icon!
@@ -161,7 +165,7 @@ function start() {
                 console.log('Done Updating the config! Please Run 2bored2wait (Press any key to exit!)');
                 process.stdin.setRawMode(true);
                 process.stdin.resume();
-                process.stdin.on('data', process.exit.bind(process, 0));	
+                process.stdin.on('data', process.exit.bind(process, 0));
             } else if (answer === 'no') {
                 console.log("Alright! You may have problems if it isn't updated!")
                 console.log("Please wait...");
@@ -175,7 +179,7 @@ function start() {
 
 function newUpdateMessage(tag, body) {
     return require('boxen')(`New Update Available! → ${tag}
- 
+
 Changes:
 ${body}
 
