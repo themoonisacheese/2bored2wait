@@ -426,7 +426,11 @@ function activity(string) {
 //the discordBot part starts here.
 
 function userInput(cmd, DiscordOrigin, discordMsg, channel) {
+	let splitCmd = cmd.split(" ")
 	cmd = cmd.toLowerCase();
+	if (cmd.includes(" ")) {
+		cmd = cmd.split(" ")[0]
+	}
 
 	switch (cmd) {
 		case "help":
@@ -510,7 +514,7 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 				check.then(promise => {
 					if (promise[0] != undefined) {
 						whitelistUUIDs.push(promise[0])
-						logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", `Added ${splitCmd[2]} to Whitelist!`)
+						msg(DiscordOrigin, discordMsg, "Whitelist", `Added ${splitCmd[2]} to Whitelist!`)
 					} else {
 						logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", "Username wrong?");
 					}
@@ -520,15 +524,15 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 				check.then(usrObj => {
 					if (usrObj[0] != undefined) {
 						whitelistUUIDs = whitelistUUIDs.filter(({ id }) => id !== usrObj[0].id)
-						logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", `Removed ${splitCmd[2]} from Whitelist!`)
+						msg(DiscordOrigin, discordMsg, "Whitelist", `Removed ${splitCmd[2]} from Whitelist!`)
 					} else {
-						logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", "Username wrong?");
+						msg(DiscordOrigin, discordMsg, "Whitelist", "Username wrong?");
 					}
 				})
 			} else if (splitCmd[1] == "list") {
-				logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", "Listing all whitelisted Users" + whitelistUUIDs.map(accounts => "\n" + accounts.name + ""));
+				msg(DiscordOrigin, discordMsg, "Whitelist", "Listing all whitelisted Users" + whitelistUUIDs.map(accounts => "\n" + accounts.name + ""));
 			} else {
-				logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", "Wrong Syntax for Whitelist command!")
+				msg(DiscordOrigin, discordMsg, "Whitelist", "Wrong Syntax for Whitelist command!")
 			}
 			break;
 
