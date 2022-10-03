@@ -516,7 +516,7 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 						whitelistUUIDs.push(promise[0])
 						msg(DiscordOrigin, discordMsg, "Whitelist", `Added ${splitCmd[2]} to Whitelist!`)
 					} else {
-						logConsoleDiscord(DiscordOrigin, discordMsg, "Whitelist", "Username wrong?");
+						msg(DiscordOrigin, discordMsg, "Whitelist", "Username wrong?");
 					}
 				})
 			} else if (splitCmd[1] == "delete" || splitCmd[1] == "remove") {
