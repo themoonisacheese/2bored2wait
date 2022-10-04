@@ -101,7 +101,7 @@ const askForSecrets = async () => {
 		dc = new Client({
 			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
 		});
-		dc.login(discordBotToken??config.get('BotToken')).catch(() => {
+		dc.login(discordBotToken ?? config.get('BotToken')).catch(() => {
 			console.warn("There was an error when trying to log in using the provided Discord bot token. If you didn't enter a token this message will go away the next time you run this program!"); //handle wrong tokens gracefully
 		});
 		dc.on('ready', () => {
@@ -405,75 +405,74 @@ function round(number) {
 }
 
 function activity(string) {
-	dc?.user ?.setActivity(string);
+	dc?.user?.setActivity(string);
 }
 
 //the discordBot part starts here.
 
 function userInput(cmd, DiscordOrigin, discordMsg, channel) {
+	let splitCmd = cmd.split(" ")
 	cmd = cmd.toLowerCase();
+	if (cmd.includes(" ")) {
+		cmd = cmd.split(" ")[0]
+	}
 
 	switch (cmd) {
 		case "help":
 		case "commands":
-			console.log(" help: Lists available commands.");
-			console.log(" start 14:00: Start queue at 2pm.");
-			console.log(" play 8:00: Tries to calculate the right time to join so you can play at 8:00am.");
-			console.log(" start: Starts the queue.");
-			console.log(" loop: Restarts the queue if you are not connect at the end of it");
-			console.log(" loop status: Lets you know if you have reconnect on or off.")
-			console.log(" update: Sends an update to the current channel with your position and ETA.");
-			console.log(" url: displays the github url");
-			console.log(" stop: Stops the queue.");
-			console.log(" exit or quit: Exits the application.");
-			console.log(" stats: Displays your health and hunger.");
+			msg(DiscordOrigin, discordMsg, "Help", " help: Lists available commands.\n start 14:00: Start queue at 2pm.\n play 8:00: Tries to calculate the right time to join so you can play at 8:00am.\n start: Starts the queue.\n loop: Restarts the queue if you are not connect at the end of it,\n loop status: Lets you know if you have reconnect on or off.\n update: Sends an update to the current channel with your position and ETA.\n url: displays the github url.\n stop: Stops the queue.\n exit or quit: Exits the application.\n stats: Displays your health and hunger.");
 			break;
+		case "status":
 		case "stats":
 			try {
-			if (conn.bot.health == undefined && conn.bot.food == undefined){
-			console.log("Unknown.")
-			break;}
-			else
-			{if (conn.bot.health == 0)
-			console.log("Health: DEAD");
-			else
-			console.log("Health: " + Math.ceil(conn.bot.health)/2 + "/10");
-			if (conn.bot.food == 0)
-			console.log("Hunger: STARVING");
-			else
-			console.log("Hunger: " + conn.bot.food/2 + "/10");}
-			} catch (err)
-			{console.log(`Start 2B2W first with "Start".`)}
+				if (conn.bot.health == undefined && conn.bot.food == undefined) {
+					msg(DiscordOrigin, discordMsg, "Status", "Unknown.")
+					break;
+				}
+				else {
+					if (conn.bot.health == 0)
+						msg(DiscordOrigin, discordMsg, "Status", "Health: DEAD");
+					else
+						msg(DiscordOrigin, discordMsg, "Status", "Health: " + Math.ceil(conn.bot.health) / 2 + "/10");
+					if (conn.bot.food == 0)
+						msg(DiscordOrigin, discordMsg, "Status", "Hunger: STARVING");
+					else
+						msg(DiscordOrigin, discordMsg, "Status", "Hunger: " + conn.bot.food / 2 + "/10");
+				}
+			} catch (err) { msg(DiscordOrigin, discordMsg, "Error", `Start 2B2W first with "Start".`) }
 			break;
 
 		case "url":
-			console.log("https://github.com/themoonisacheese/2bored2wait");
+			msg(DiscordOrigin, discordMsg, "URL", "https://github.com/themoonisacheese/2bored2wait");
 			break;
 
 		case "loop":
-			console.log("Syntax: status, enable, disable");
-			break;
-		case "loop status":
-			if (JSON.stringify(webserver.restartQueue) == "true")
-				console.log("Loop is enabled");
-			else
-				console.log("Loop is disabled");
-			break;
-		case "loop enable":
-			if (JSON.stringify(webserver.restartQueue) == "true")
-				console.log("Loop is already enabled!");
-			else {
-				webserver.restartQueue = true
-				console.log("Enabled Loop");
+			if (splitCmd[1] = "status") {
+				if (JSON.stringify(webserver.restartQueue) == "true")
+					msg(DiscordOrigin, discordMsg, "Loop", "Loop is enabled");
+				else
+					msg(DiscordOrigin, discordMsg, "Loop", "Loop is disabled");
+				break;
 			}
-			break;
-		case "loop disable":
-			if (JSON.stringify(webserver.restartQueue) == "false")
-				console.log("Loop is already disabled!");
-			else {
-				webserver.restartQueue = false
-				console.log("Disabled Loop");
+			else if (splitCmd[1] = "enable") {
+				if (JSON.stringify(webserver.restartQueue) == "true")
+					msg(DiscordOrigin, discordMsg, "Loop", "Loop is already enabled!");
+				else {
+					webserver.restartQueue = true
+					msg(DiscordOrigin, discordMsg, "Loop", "Enabled Loop");
+				}
+				break;
 			}
+			if (splitCmd[1] = "disable") {
+				if (JSON.stringify(webserver.restartQueue) == "false")
+					msg(DiscordOrigin, discordMsg, "Loop", "Loop is already disabled!");
+				else {
+					webserver.restartQueue = false
+					msg(DiscordOrigin, discordMsg, "Loop", "Disabled Loop");
+				}
+				break;
+			}
+			msg(DiscordOrigin, discordMsg, "Syntax", "Syntax: status, enable, disable");
 			break;
 
 		case "start":
@@ -552,8 +551,16 @@ function stopMsg(discordOrigin, discordMsg, stoppedThing) {
 }
 
 function msg(discordOrigin, msg, title, content) {
-	if (discordOrigin) sendDiscordMsg(msg.channel, title, content);
-	else console.log(content);
+	if (discordOrigin) {
+		sendDiscordMsg(msg.channel, title, content);
+	} else {
+		var eachLine = content.split('\n');
+		for (var i = 0, l = eachLine.length; i < l; i++) {
+			if (eachLine[i].length != 0) {
+				console.log(`${eachLine[i]}`);
+			}
+		}
+	}
 }
 
 function sendDiscordMsg(channel, title, content) {
@@ -647,13 +654,13 @@ function getWaitTime(queueLength, queuePos) {
 process.on('uncaughtException', err => {
 	const boxen = require("boxen")
 	console.error(err);
-	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, {title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center'}));	
+	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, { title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center' }));
 	console.log('Press any key to exit');
 	process.stdin.setRawMode(true);
 	process.stdin.resume();
-	process.stdin.on('data', process.exit.bind(process, 0));		
+	process.stdin.on('data', process.exit.bind(process, 0));
 });
-  
+
 module.exports = {
 	startQueue: function () {
 		startQueuing();
