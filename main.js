@@ -474,29 +474,32 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 			break;
 
 		case "loop":
-			console.log("Syntax: status, enable, disable");
-			break;
-		case "loop status":
-			if (JSON.stringify(webserver.restartQueue) == "true")
-				console.log("Loop is enabled");
-			else
-				console.log("Loop is disabled");
-			break;
-		case "loop enable":
-			if (JSON.stringify(webserver.restartQueue) == "true")
-				console.log("Loop is already enabled!");
-			else {
-				webserver.restartQueue = true
-				console.log("Enabled Loop");
+			if (splitCmd[1] = "status") {
+				if (JSON.stringify(webserver.restartQueue) == "true")
+					msg(DiscordOrigin, discordMsg, "Loop", "Loop is enabled");
+				else
+					msg(DiscordOrigin, discordMsg, "Loop", "Loop is disabled");
+				break;
 			}
-			break;
-		case "loop disable":
-			if (JSON.stringify(webserver.restartQueue) == "false")
-				console.log("Loop is already disabled!");
-			else {
-				webserver.restartQueue = false
-				console.log("Disabled Loop");
+			else if (splitCmd[1] = "enable") {
+				if (JSON.stringify(webserver.restartQueue) == "true")
+					msg(DiscordOrigin, discordMsg, "Loop", "Loop is already enabled!");
+				else {
+					webserver.restartQueue = true
+					msg(DiscordOrigin, discordMsg, "Loop", "Enabled Loop");
+				}
+				break;
 			}
+			else if (splitCmd[1] = "disable") {
+				if (JSON.stringify(webserver.restartQueue) == "false")
+					msg(DiscordOrigin, discordMsg, "Loop", "Loop is already disabled!");
+				else {
+					webserver.restartQueue = false
+					msg(DiscordOrigin, discordMsg, "Loop", "Disabled Loop");
+				}
+				break;
+			}
+			msg(DiscordOrigin, discordMsg, "Syntax", "Syntax: status, enable, disable");
 			break;
 
 		case "start":
