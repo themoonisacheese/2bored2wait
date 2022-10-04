@@ -463,7 +463,7 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 				}
 				break;
 			}
-			if (splitCmd[1] = "disable") {
+			else if (splitCmd[1] = "disable") {
 				if (JSON.stringify(webserver.restartQueue) == "false")
 					msg(DiscordOrigin, discordMsg, "Loop", "Loop is already disabled!");
 				else {
