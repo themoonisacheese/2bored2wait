@@ -101,7 +101,7 @@ const askForSecrets = async () => {
 		dc = new Client({
 			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]
 		});
-		dc.login(discordBotToken??config.get('BotToken')).catch(() => {
+		dc.login(discordBotToken ?? config.get('BotToken')).catch(() => {
 			console.warn("There was an error when trying to log in using the provided Discord bot token. If you didn't enter a token this message will go away the next time you run this program!"); //handle wrong tokens gracefully
 		});
 		dc.on('ready', () => {
@@ -236,6 +236,13 @@ function join() {
 	webserver.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers
 	activity("Starting the queue...");
+	client.once("login", (data, meta) => {
+		if (!config.get("minecraftserver.onlinemode")) {
+			playerIcon = `https://mc-heads.net/avatar/Steve/64.png`
+		} else {
+			playerIcon = `https://mc-heads.net/avatar/${client.username}/64.png`
+		}
+	})
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "playerlist_header":
@@ -405,7 +412,7 @@ function round(number) {
 }
 
 function activity(string) {
-	dc?.user ?.setActivity(string);
+	dc?.user?.setActivity(string);
 }
 
 //the discordBot part starts here.
@@ -430,20 +437,21 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 			break;
 		case "stats":
 			try {
-			if (conn.bot.health == undefined && conn.bot.food == undefined){
-			console.log("Unknown.")
-			break;}
-			else
-			{if (conn.bot.health == 0)
-			console.log("Health: DEAD");
-			else
-			console.log("Health: " + Math.ceil(conn.bot.health)/2 + "/10");
-			if (conn.bot.food == 0)
-			console.log("Hunger: STARVING");
-			else
-			console.log("Hunger: " + conn.bot.food/2 + "/10");}
-			} catch (err)
-			{console.log(`Start 2B2W first with "Start".`)}
+				if (conn.bot.health == undefined && conn.bot.food == undefined) {
+					console.log("Unknown.")
+					break;
+				}
+				else {
+					if (conn.bot.health == 0)
+						console.log("Health: DEAD");
+					else
+						console.log("Health: " + Math.ceil(conn.bot.health) / 2 + "/10");
+					if (conn.bot.food == 0)
+						console.log("Hunger: STARVING");
+					else
+						console.log("Hunger: " + conn.bot.food / 2 + "/10");
+				}
+			} catch (err) { console.log(`Start 2B2W first with "Start".`) }
 			break;
 
 		case "url":
@@ -560,8 +568,8 @@ function sendDiscordMsg(channel, title, content) {
 	const MessageEmbed = {
 		color: 3447003,
 		author: {
-			name: dc.user.username,
-			icon_url: dc.user.avatarURL
+			name: client.username,
+			icon_url: playerIcon
 		},
 		fields: [{
 			name: title,
@@ -647,13 +655,13 @@ function getWaitTime(queueLength, queuePos) {
 process.on('uncaughtException', err => {
 	const boxen = require("boxen")
 	console.error(err);
-	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, {title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center'}));	
+	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, { title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center' }));
 	console.log('Press any key to exit');
 	process.stdin.setRawMode(true);
 	process.stdin.resume();
-	process.stdin.on('data', process.exit.bind(process, 0));		
+	process.stdin.on('data', process.exit.bind(process, 0));
 });
-  
+
 module.exports = {
 	startQueue: function () {
 		startQueuing();
