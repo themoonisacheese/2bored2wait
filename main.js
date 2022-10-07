@@ -245,6 +245,13 @@ function join() {
 	webserver.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers
 	activity("Starting the queue...");
+	client.once("login", (data, meta) => {
+		if (!config.get("minecraftserver.onlinemode")) {
+			playerIcon = `https://mc-heads.net/avatar/Steve/64.png`
+		} else {
+			playerIcon = `https://mc-heads.net/avatar/${client.username}/64.png`
+		}
+	})
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
 		switch (meta.name) {
 			case "playerlist_header":
@@ -614,8 +621,8 @@ function sendDiscordMsg(channel, title, content) {
 	const MessageEmbed = {
 		color: 3447003,
 		author: {
-			name: dc.user.username,
-			icon_url: dc.user.avatarURL
+			name: client.username,
+			icon_url: playerIcon
 		},
 		fields: [{
 			name: title,
