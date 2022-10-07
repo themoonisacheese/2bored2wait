@@ -442,42 +442,30 @@ function userInput(cmd, DiscordOrigin, discordMsg, channel) {
 	switch (cmd) {
 		case "help":
 		case "commands":
-			console.log(" help: Lists available commands.");
-			console.log(" start 14:00: Start queue at 2pm.");
-			console.log(" play 8:00: Tries to calculate the right time to join so you can play at 8:00am.");
-			console.log(" start: Starts the queue.");
-			console.log(" loop: Restarts the queue if you are not connect at the end of it");
-			console.log(" loop status: Lets you know if you have reconnect on or off.")
-			console.log(" update: Sends an update to the current channel with your position and ETA.");
-			console.log(" url: displays the github url");
-			console.log(" stop: Stops the queue.");
-			console.log(" exit or quit: Exits the application.");
-			console.log(" stats: Displays your health and hunger.");
-			console.log(" whitelist add [username]: Adds user to whitelist for this session.");
-			console.log(" whitelist remove [username]: Removes user from whitelist for this session.");
-			console.log(" whitelist list: Lists all whitelisted users.");
+			msg(DiscordOrigin, discordMsg, "Help", " help: Lists available commands.\n start 14:00: Start queue at 2pm.\n play 8:00: Tries to calculate the right time to join so you can play at 8:00am.\n start: Starts the queue.\n loop: Restarts the queue if you are not connect at the end of it,\n loop status: Lets you know if you have reconnect on or off.\n update: Sends an update to the current channel with your position and ETA.\n url: displays the github url.\n stop: Stops the queue.\n exit or quit: Exits the application.\n stats: Displays your health and hunger.");
 			break;
+		case "status":
 		case "stats":
 			try {
 				if (conn.bot.health == undefined && conn.bot.food == undefined) {
-					console.log("Unknown.")
+					msg(DiscordOrigin, discordMsg, "Status", "Unknown.")
 					break;
 				}
 				else {
 					if (conn.bot.health == 0)
-						console.log("Health: DEAD");
+						msg(DiscordOrigin, discordMsg, "Status", "Health: DEAD");
 					else
-						console.log("Health: " + Math.ceil(conn.bot.health) / 2 + "/10");
+						msg(DiscordOrigin, discordMsg, "Status", "Health: " + Math.ceil(conn.bot.health) / 2 + "/10");
 					if (conn.bot.food == 0)
-						console.log("Hunger: STARVING");
+						msg(DiscordOrigin, discordMsg, "Status", "Hunger: STARVING");
 					else
-						console.log("Hunger: " + conn.bot.food / 2 + "/10");
+						msg(DiscordOrigin, discordMsg, "Status", "Hunger: " + conn.bot.food / 2 + "/10");
 				}
-			} catch (err) { console.log(`Start 2B2W first with "Start".`) }
+			} catch (err) { msg(DiscordOrigin, discordMsg, "Error", `Start 2B2W first with "Start".`) }
 			break;
 
 		case "url":
-			console.log("https://github.com/themoonisacheese/2bored2wait");
+			msg(DiscordOrigin, discordMsg, "URL", "https://github.com/themoonisacheese/2bored2wait");
 			break;
 
 		case "loop":
@@ -613,8 +601,16 @@ function stopMsg(discordOrigin, discordMsg, stoppedThing) {
 }
 
 function msg(discordOrigin, msg, title, content) {
-	if (discordOrigin) sendDiscordMsg(msg.channel, title, content);
-	else console.log(content);
+	if (discordOrigin) {
+		sendDiscordMsg(msg.channel, title, content);
+	} else {
+		var eachLine = content.split('\n');
+		for (var i = 0, l = eachLine.length; i < l; i++) {
+			if (eachLine[i].length != 0) {
+				console.log(`${eachLine[i]}`);
+			}
+		}
+	}
 }
 
 function sendDiscordMsg(channel, title, content) {
