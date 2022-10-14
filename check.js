@@ -128,14 +128,12 @@ if (config.updatemessage === false || config.updatemessage == "n") {
                 }
                 fs.writeFileSync(path.join(config_dir, "local.json"), DEFAULT_CONFIG);
                 process.exit(0);
-                break;
             case 'dl':
             case 'download':
             case 'show':
                 require('open')(html_url);
                 console.log(html_url)
                 process.exit(0);
-                break;
             default:
                 console.log("Invalid response.");
                 question();
@@ -150,6 +148,7 @@ function start() {
     if (config.version === conVer) {
         console.log("Please wait...");
         rl.close();
+        require('./deploy-commands.js');
         require('./main.js');
     } else {
         console.log("It appears your default.json is outdated! Should I update it? (This wil cause anything you have changed in default.json to disappear! Instead make changes to local.json if you want to keep them!)")

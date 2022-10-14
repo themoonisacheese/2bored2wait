@@ -21,7 +21,6 @@ const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
-const GUILD_ID = "309336867168321536"
 var guild;
 var config;
 // This dummy var is a workaround to allow binaries
@@ -36,6 +35,7 @@ try {
 		process.exit(1);
 	}
 }
+const GUILD_ID = config.guildId
 var mc_username;
 var mc_password;
 var updatemessage;
