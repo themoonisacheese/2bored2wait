@@ -34,7 +34,6 @@ try {
 	}
 }
 var mc_username;
-var mc_password;
 var updatemessage;
 var discordBotToken;
 var savelogin;
@@ -60,18 +59,10 @@ const askForSecrets = async () => {
 		if (err.code != "ENOENT") throw err;
 	}
 	let canSave = false;
-	if (!(config.has("username") && config.has("mcPassword") && config.has("updatemessage"))) {
+	if (!(config.has("username") && config.has("updatemessage"))) {
 		canSave = true;
-		accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
-		if (accountType == "mojang") {
-			mc_username = await promisedQuestion("Email: ");
-			mc_password = await promisedQuestion("Password: ");
-		} else {
-			mc_username = await promisedQuestion("Email: ");
-			mc_password = ""
-		}
+		mc_username = await promisedQuestion("Email: ");
 		localConf.accountType = accountType;
-		localConf.mcPassword = mc_password;
 		localConf.username = mc_username;
 		updatemessage = await promisedQuestion("Update Messages? Y or N [Y]: ");
 		localConf.updatemessage = updatemessage;
@@ -131,7 +122,6 @@ const askForSecrets = async () => {
 if (!config.get("minecraftserver.onlinemode")) cmdInput();
 else {
 	mc_username = config.username;
-	mc_password = config.mcPassword;
 	launcherPath = config.profilesFolder;
 	accountType = config.get("accountType");
 	discordBotToken = config.BotToken
@@ -204,7 +194,6 @@ function startQueuing() {
 	doing = "auth";
 	if (config.get("minecraftserver.onlinemode")) {
 		options.username = mc_username;
-		options.password = mc_password;
 		options.profilesFolder = launcherPath;
 		options.auth = accountType;
 	} else {
@@ -257,7 +246,7 @@ function join() {
 						webserver.finTime = new Date((new Date()).getTime() + ETAmin * 60000);
 						if (config.get("userStatus")) {
 							//set the Discord Activity
-							const name = displayEmail?options.username:client.username;
+							const name = displayEmail ? options.username : client.username;
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + name);
 						} else {
 							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
@@ -309,7 +298,7 @@ function join() {
 		stop();
 		if (!stoppedByPlayer) {
 			log(`Connection reset by 2b2t server. Reconnecting...`);
-			if (!config.has("MCpassword") && !config.has("password")) log("If this ^^ message shows up repeatedly, it is likely a problem with your token being invalidated. Please start minecraft manually or use credential authentication instead.");
+			// if (!config.has("MCpassword") && !config.has("password")) log("If this ^^ message shows up repeatedly, it is likely a problem with your token being invalidated. Please start minecraft manually or use credential authentication instead.");
 		}
 		if (config.reconnect.onError) setTimeout(reconnect, 30000);
 	}
@@ -413,20 +402,21 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			break;
 		case "stats":
 			try {
-			if (conn.bot.health == undefined && conn.bot.food == undefined){
-			console.log("Unknown.")
-			break;}
-			else
-			{if (conn.bot.health == 0)
-			console.log("Health: DEAD");
-			else
-			console.log("Health: " + Math.ceil(conn.bot.health)/2 + "/10");
-			if (conn.bot.food == 0)
-			console.log("Hunger: STARVING");
-			else
-			console.log("Hunger: " + conn.bot.food/2 + "/10");}
-			} catch (err)
-			{console.log(`Start 2B2W first with "Start".`)}
+				if (conn.bot.health == undefined && conn.bot.food == undefined) {
+					console.log("Unknown.")
+					break;
+				}
+				else {
+					if (conn.bot.health == 0)
+						console.log("Health: DEAD");
+					else
+						console.log("Health: " + Math.ceil(conn.bot.health) / 2 + "/10");
+					if (conn.bot.food == 0)
+						console.log("Hunger: STARVING");
+					else
+						console.log("Hunger: " + conn.bot.food / 2 + "/10");
+				}
+			} catch (err) { console.log(`Start 2B2W first with "Start".`) }
 			break;
 
 		case "url":
@@ -629,13 +619,13 @@ function getWaitTime(queueLength, queuePos) {
 process.on('uncaughtException', err => {
 	const boxen = require("boxen")
 	console.error(err);
-	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, {title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center'}));	
+	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, { title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center' }));
 	console.log('Press any key to exit');
 	process.stdin.setRawMode(true);
 	process.stdin.resume();
-	process.stdin.on('data', process.exit.bind(process, 0));		
+	process.stdin.on('data', process.exit.bind(process, 0));
 });
-  
+
 module.exports = {
 	startQueue: startQueuing,
 	filterPacketAndSend: filterPacketAndSend,
