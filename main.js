@@ -21,7 +21,7 @@ const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
-var config;
+let config;
 // This dummy var is a workaround to allow binaries
 // const configPath = path.join(process.cwd(), './config/default.json');
 // const data = fs.readFileSync(configPath);
@@ -33,12 +33,12 @@ try {
 		process.exit(1);
 	}
 }
-var mc_username;
-var mc_password;
-var updatemessage;
-var discordBotToken;
-var savelogin;
-var accountType;
+let mc_username;
+let mc_password;
+let updatemessage;
+let discordBotToken;
+let savelogin;
+let accountType;
 let launcherPath;
 let c = 150;
 let finishedQueue = false
@@ -138,12 +138,12 @@ else {
 	askForSecrets();
 }
 
-var stoppedByPlayer = false;
-var timedStart;
+let stoppedByPlayer = false;
+let timedStart;
 let dcUser; // discord user that controls the bot
-var starttimestring;
-var options;
-var doing;
+let starttimestring;
+let options;
+let doing;
 let interval = {};
 let queueStartPlace;
 let queueStartTime;
@@ -220,7 +220,7 @@ function startQueuing() {
 function join() {
 	let lastQueuePlace = "None";
 	let notisend = false;
-	var PositionError = false;
+	let PositionError = false;
 	let displayEmail = config.get("displayEmail")
 
 	doing = "queue"
@@ -274,6 +274,8 @@ function join() {
 				if (finishedQueue === false) { // we can know if we're about to finish the queue by reading the chat message
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 					let chatMessage = JSON.parse(data.message).text;
+					if (chatMessage !== '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
+					console.log("2B2T says: " + chatMessage);
 					if (chatMessage == "Connected to the server.") {
 						if (config.get("expandQueueData")) {
 							queueData.place.push(queueStartPlace);
@@ -330,7 +332,7 @@ function join() {
 			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
 			return;
 		}
-		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
+		newProxyClient.on('packet', (meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
 		newProxyClient.on("end", () => {
@@ -555,11 +557,13 @@ function sendDiscordMsg(channel, title, content) {
 			text: "Author: MrGeorgen"
 		}
 	}
+	let dc_chat = false;
+	if (dc_chat == true) {
 	channel.send({
 		embeds: [MessageEmbed]
 	}).catch(() => {
 		console.warn(`There was a permission error! Please make sure your bot has perms to talk.`); //handle wrong tokens gracefully
-	});
+	})};
 }
 
 function timeStringtoDateTime(time) {
@@ -630,10 +634,7 @@ process.on('uncaughtException', err => {
 	const boxen = require("boxen")
 	console.error(err);
 	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, {title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center'}));	
-	console.log('Press any key to exit');
-	process.stdin.setRawMode(true);
-	process.stdin.resume();
-	process.stdin.on('data', process.exit.bind(process, 0));		
+	process.exit(0);	
 });
   
 module.exports = {
