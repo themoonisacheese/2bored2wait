@@ -556,7 +556,7 @@ function sendDiscordMsg(channel, title, content) {
 			icon_url: dc.user.avatarURL,
 			text: "Author: MrGeorgen"
 		}
-	if (config.dc_chat == true) {
+	if (config.get("dc_chat")) {
 	channel.send({
 		embeds: [MessageEmbed]
 	}).catch(() => {
