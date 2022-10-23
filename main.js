@@ -1,6 +1,7 @@
 // imports
 const fs = require('fs');
 const mc = require('minecraft-protocol'); // to handle minecraft login session
+const fetch = require('node-fetch');
 
 // someone decided to use webserver as a variable to store other data, ok.
 const webserver = require('./webserver/webserver.js'); // to serve the webserver
@@ -14,7 +15,6 @@ const {
 const {
 	DateTime
 } = require("luxon");
-const https = require("https");
 const everpolate = require("everpolate");
 const mcproxy = require("@rob9315/mcproxy");
 const antiafk = require("mineflayer-antiafk");
@@ -569,32 +569,24 @@ function timeStringtoDateTime(time) {
 }
 
 function calcTime(msg) {
-	https.get('https://2b2t.io/api/queue', function (res) {
-		doing = "calcTime"
-		interval.calc = setInterval(function () {
-			https.get("https://2b2t.io/api/queue", (resp) => {
-				let data = '';
-				resp.on('data', (chunk) => {
-					data += chunk;
-				});
-				resp.on("end", () => {
-					data = JSON.parse(data);
-					let queueLength = data[0][1];
-					let playTime = timeStringtoDateTime(msg);
-					let waitTime = getWaitTime(queueLength, 0);
-					if (playTime.toSeconds() - DateTime.local().toSeconds() < waitTime) {
-						startQueuing();
-						clearInterval(interval.calc);
-						console.log(waitTime);
-					}
-				});
-			}).on("error", (err) => {
-				log(err)
-			});
-		}, 60000);
-	}).on('error', function (e) {
-		console.log(`2b2t.io is currently offline. Please try again later to use the "play" command.`)
-	});
+    doing = "calcTime"
+    const playTime = timeStringtoDateTime(msg).toSeconds();
+    function request() {
+        fetch('https://2b2t.io/api/queue').catch(() => {
+            console.log(`2b2t.io is currently offline. Please try again later to use the "play" command.`)
+            clearInterval(interval.calc);
+        }).then((res) => res.json()).then((data) => {
+            const queueLength = data[0][1];
+            const waitTime = getWaitTime(queueLength, 0);
+            if (playTime - DateTime.local().toSeconds() < waitTime) {
+                startQueuing();
+                clearInterval(interval.calc);
+                console.log("Wait time:", waitTime);
+            }
+        })
+    }
+    interval.calc = setInterval(request, 60000);
+    request();
 }
 
 
