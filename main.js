@@ -332,7 +332,7 @@ function join() {
 			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
 			return;
 		}
-		newProxyClient.on('packet', (meta, rawData) => { // redirect everything we do to 2b2t
+		newProxyClient.on('packet', (_, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
 		newProxyClient.on("end", () => {
