@@ -3,8 +3,14 @@ const fs = require('fs');
 const mc = require('minecraft-protocol'); // to handle minecraft login session
 const fetch = require('node-fetch');
 
-// someone decided to use webserver as a variable to store other data, ok.
-const webserver = require('./webserver/webserver.js'); // to serve the webserver
+const { WebServer } = require("./webserver/webserver.js");
+const status = { // data previously stored inside the websocket module export...
+	ETA: "None", //ETA
+	queuePlace: "None", //our place in queue
+	finTime: "Never", //time queueing will finish
+	isInQueue: false, //are we in queue?
+	restartQueue: false, //when at the end of the queue, restart if no client is connected?
+}
 const opn = require('open'); //to open a browser window
 const {
 	Client,
@@ -137,14 +143,16 @@ var doing;
 let interval = {};
 let queueStartPlace;
 let queueStartTime;
-webserver.restartQueue = config.get("reconnect.notConnectedQueueEnd");
-webserver.onstart(startQueuing);
-webserver.onstop(stopQueing);
+status.restartQueue = config.get("reconnect.notConnectedQueueEnd");
 if (config.get("webserver")) {
-	let webPort = config.get("ports.web");
-	webserver.createServer(webPort, config.get("address.web")); // create the webserver
-	webserver.password = config.password
-	if (config.get("openBrowserOnStart")) opn('http://localhost:' + webPort); //open a browser window
+	const port = config.get("ports.web");
+	const webserver = new WebServer(port, config.get("address.web")); // create the webserver
+	webserver.password = config.password;
+	webserver.state = status;
+	webserver.on("start", startQueuing);
+	webserver.on("stop", stopQueing);
+	webserver.on("togglerestart", () => status.restartQueue = !status.restartQueue);
+	if (config.get("openBrowserOnStart")) opn('http://localhost:' + port); //open a browser window
 }
 // lets
 let proxyClient; // a reference to the client that is the actual minecraft game
@@ -160,7 +168,7 @@ options = {
 
 function startAntiAntiAFK() {
 	if (!config.has("antiAntiAFK.enabled") || !config.get("antiAntiAFK.enabled")) return;
-	if (proxyClient != null || !webserver.isInQueue || !finishedQueue) return;
+	if (proxyClient != null || !status.isInQueue || !finishedQueue) return;
 	conn.bot.afk.start();
 }
 
@@ -173,10 +181,10 @@ function cmdInput() {
 
 // function to disconnect from the server
 function stop() {
-	webserver.isInQueue = false;
+	status.isInQueue = false;
 	finishedQueue = false
-	webserver.queuePlace = "None";
-	webserver.ETA = "None";
+	status.queuePlace = "None";
+	status.ETA = "None";
 	if (client) {
 		client.end(); // disconnect
 	}
@@ -213,7 +221,7 @@ function join() {
 	let displayEmail = config.get("displayEmail")
 
 	doing = "queue"
-	webserver.isInQueue = true;
+	status.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers
 	activity("Starting the queue...");
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
@@ -231,7 +239,7 @@ function join() {
 						}
 					}
 					if (positioninqueue !== "None") positioninqueue = Number(positioninqueue);
-					webserver.queuePlace = positioninqueue; // update info on the web page
+					status.queuePlace = positioninqueue; // update info on the web page
 					if (lastQueuePlace === "None" && positioninqueue !== "None") {
 						queueStartPlace = positioninqueue;
 						queueStartTime = DateTime.local();
@@ -241,18 +249,18 @@ function join() {
 						let timepassed = getWaitTime(queueStartPlace, positioninqueue);
 						let ETAmin = (totalWaitTime - timepassed) / 60;
 						server.favicon = config.has("favicon") ? config.get("favicon") : fs.readFileSync("favicon.png").toString("base64");
-						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
-						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
-						webserver.finTime = new Date((new Date()).getTime() + ETAmin * 60000);
+						server.motd = `Place in queue: ${status.queuePlace} ETA: ${status.ETA}`; // set the MOTD because why not
+						status.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
+						status.finTime = new Date((new Date()).getTime() + ETAmin * 60000);
 						if (config.get("userStatus")) {
 							//set the Discord Activity
 							const name = displayEmail ? options.username : client.username;
-							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + name);
+							logActivity("P: " + positioninqueue + " E: " + status.ETA + " - " + name);
 						} else {
-							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
+							logActivity("P: " + positioninqueue + " E: " + status.ETA);
 						}
 						if (config.get("notification.enabled") && positioninqueue <= config.get("notification.queuePlace") && !notisend && config.discordBot && dcUser != null) {
-							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
+							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + status.queuePlace);
 							notisend = true;
 						}
 					}
@@ -273,14 +281,14 @@ function join() {
 								log(err);
 							});
 						}
-						if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
+						if (status.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
 							stop();
 							reconnect();
 						} else {
 							finishedQueue = true;
 							startAntiAntiAFK();
-							webserver.queuePlace = "FINISHED";
-							webserver.ETA = "NOW";
+							status.queuePlace = "FINISHED";
+							status.ETA = "NOW";
 							logActivity("Queue is finished");
 						}
 					}
@@ -427,24 +435,24 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			console.log("Syntax: status, enable, disable");
 			break;
 		case "loop status":
-			if (webserver.restartQueue)
+			if (status.restartQueue)
 				console.log("Loop is enabled");
 			else
 				console.log("Loop is disabled");
 			break;
 		case "loop enable":
-			if (webserver.restartQueue)
+			if (status.restartQueue)
 				console.log("Loop is already enabled!");
 			else {
-				webserver.restartQueue = true
+				status.restartQueue = true
 				console.log("Enabled Loop");
 			}
 			break;
 		case "loop disable":
-			if (!webserver.restartQueue)
+			if (!status.restartQueue)
 				console.log("Loop is already disabled!");
 			else {
-				webserver.restartQueue = false
+				status.restartQueue = false
 				console.log("Disabled Loop");
 			}
 			break;
@@ -461,8 +469,8 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 		case "update":
 			switch (doing) {
 				case "queue":
-					msg(DiscordOrigin, discordMsg, "Reconnecting", `Position: ${webserver.queuePlace} \n Estimated time until login: ${webserver.ETA}`);
-					console.log("Position: " + webserver.queuePlace + "  Estimated time until login: " + webserver.ETA);
+					msg(DiscordOrigin, discordMsg, "Reconnecting", `Position: ${status.queuePlace} \n Estimated time until login: ${status.ETA}`);
+					console.log("Position: " + status.queuePlace + "  Estimated time until login: " + status.ETA);
 					break;
 				case "timedStart":
 					msg(DiscordOrigin, discordMsg, "Timer", "Timer is set to " + starttimestring);
@@ -569,24 +577,24 @@ function timeStringtoDateTime(time) {
 }
 
 function calcTime(msg) {
-    doing = "calcTime"
-    const playTime = timeStringtoDateTime(msg).toSeconds();
-    function request() {
-        fetch('https://2b2t.io/api/queue').catch(() => {
-            console.log(`2b2t.io is currently offline. Please try again later to use the "play" command.`)
-            clearInterval(interval.calc);
-        }).then((res) => res.json()).then((data) => {
-            const queueLength = data[0][1];
-            const waitTime = getWaitTime(queueLength, 0);
-            if (playTime - DateTime.local().toSeconds() < waitTime) {
-                startQueuing();
-                clearInterval(interval.calc);
-                console.log("Wait time:", waitTime);
-            }
-        })
-    }
-    interval.calc = setInterval(request, 60000);
-    request();
+	doing = "calcTime"
+	const playTime = timeStringtoDateTime(msg).toSeconds();
+	function request() {
+		fetch('https://2b2t.io/api/queue').catch(() => {
+			console.log(`2b2t.io is currently offline. Please try again later to use the "play" command.`)
+			clearInterval(interval.calc);
+		}).then((res) => res.json()).then((data) => {
+			const queueLength = data[0][1];
+			const waitTime = getWaitTime(queueLength, 0);
+			if (playTime - DateTime.local().toSeconds() < waitTime) {
+				startQueuing();
+				clearInterval(interval.calc);
+				console.log("Wait time:", waitTime);
+			}
+		})
+	}
+	interval.calc = setInterval(request, 60000);
+	request();
 }
 
 

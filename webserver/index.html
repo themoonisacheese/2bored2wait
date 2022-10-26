@@ -32,8 +32,8 @@
                             var place = "None"
                         }        
                         const response = JSON.parse(this.responseText);
-                        document.getElementsByClassName("place")[0].innerHTML = response.place;
-                        document.title = "2Bored2Wait - " + response.place;
+                        document.getElementsByClassName("place")[0].innerHTML = response.queuePlace;
+                        document.title = "2Bored2Wait - " + response.queuePlace;
                         document.getElementsByClassName("ETA")[0].innerHTML = response.ETA;
                         if (response.finTime != "Never") {
                             const date = (new Date(response.finTime)).toLocaleTimeString();
