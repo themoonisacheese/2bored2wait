@@ -1107,9 +1107,9 @@ lowercase-keys@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/lowercase-keys/-/lowercase-keys-2.0.0.tgz"
 
-luxon@^2.0.1:
-  version "2.4.0"
-  resolved "https://registry.npmjs.org/luxon/-/luxon-2.4.0.tgz"
+luxon@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-3.0.4.tgz#d179e4e9f05e092241e7044f64aaa54796b03929"
 
 macaddress@^0.5.1:
   version "0.5.2"
@@ -1169,13 +1169,9 @@ minecraft-data@^2.119.1, minecraft-data@^2.93.0:
   version "2.221.0"
   resolved "https://registry.npmjs.org/minecraft-data/-/minecraft-data-2.221.0.tgz"
 
-minecraft-data@^3:
-  version "3.12.0"
-  resolved "https://registry.yarnpkg.com/minecraft-data/-/minecraft-data-3.12.0.tgz#69899568a3cd2837c7f320f27c9bb4906e24fddc"
-
-minecraft-data@^3.0.0:
-  version "3.2.0"
-  resolved "https://registry.npmjs.org/minecraft-data/-/minecraft-data-3.2.0.tgz"
+minecraft-data@^3, minecraft-data@^3.0.0:
+  version "3.15.3"
+  resolved "https://registry.yarnpkg.com/minecraft-data/-/minecraft-data-3.15.3.tgz#c322f92793011431c9868edae53882f5dd03d787"
 
 minecraft-folder-path@^1.2.0:
   version "1.2.0"

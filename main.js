@@ -1,16 +1,9 @@
 // imports
 const fs = require('fs');
 const mc = require('minecraft-protocol'); // to handle minecraft login session
-const fetch = require('node-fetch');
 
-const { WebServer } = require("./webserver/webserver.js");
-const status = { // data previously stored inside the websocket module export...
-	ETA: "None", //ETA
-	queuePlace: "None", //our place in queue
-	finTime: "Never", //time queueing will finish
-	isInQueue: false, //are we in queue?
-	restartQueue: false, //when at the end of the queue, restart if no client is connected?
-}
+// someone decided to use webserver as a variable to store other data, ok.
+const webserver = require('./webserver/webserver.js'); // to serve the webserver
 const opn = require('open'); //to open a browser window
 const {
 	Client,
@@ -21,6 +14,7 @@ const {
 const {
 	DateTime
 } = require("luxon");
+const https = require("https");
 const everpolate = require("everpolate");
 const mcproxy = require("@rob9315/mcproxy");
 const antiafk = require("mineflayer-antiafk");
@@ -40,6 +34,7 @@ try {
 	}
 }
 var mc_username;
+var mc_password;
 var updatemessage;
 var discordBotToken;
 var savelogin;
@@ -65,10 +60,18 @@ const askForSecrets = async () => {
 		if (err.code != "ENOENT") throw err;
 	}
 	let canSave = false;
-	if (!(config.has("username") && config.has("updatemessage"))) {
+	if (!(config.has("username") && config.has("mcPassword") && config.has("updatemessage"))) {
 		canSave = true;
-		mc_username = await promisedQuestion("Email: ");
+		accountType = ((await promisedQuestion("Account type, mojang (1) or microsoft (2) [1]: ")) === "2" ? "microsoft" : "mojang");
+		if (accountType == "mojang") {
+			mc_username = await promisedQuestion("Email: ");
+			mc_password = await promisedQuestion("Password: ");
+		} else {
+			mc_username = await promisedQuestion("Email: ");
+			mc_password = ""
+		}
 		localConf.accountType = accountType;
+		localConf.mcPassword = mc_password;
 		localConf.username = mc_username;
 		updatemessage = await promisedQuestion("Update Messages? Y or N [Y]: ");
 		localConf.updatemessage = updatemessage;
@@ -128,6 +131,7 @@ const askForSecrets = async () => {
 if (!config.get("minecraftserver.onlinemode")) cmdInput();
 else {
 	mc_username = config.username;
+	mc_password = config.mcPassword;
 	launcherPath = config.profilesFolder;
 	accountType = config.get("accountType");
 	discordBotToken = config.BotToken
@@ -143,16 +147,14 @@ var doing;
 let interval = {};
 let queueStartPlace;
 let queueStartTime;
-status.restartQueue = config.get("reconnect.notConnectedQueueEnd");
+webserver.restartQueue = config.get("reconnect.notConnectedQueueEnd");
+webserver.onstart(startQueuing);
+webserver.onstop(stopQueing);
 if (config.get("webserver")) {
-	const port = config.get("ports.web");
-	const webserver = new WebServer(port, config.get("address.web")); // create the webserver
-	webserver.password = config.password;
-	webserver.state = status;
-	webserver.on("start", startQueuing);
-	webserver.on("stop", stopQueing);
-	webserver.on("togglerestart", () => status.restartQueue = !status.restartQueue);
-	if (config.get("openBrowserOnStart")) opn('http://localhost:' + port); //open a browser window
+	let webPort = config.get("ports.web");
+	webserver.createServer(webPort, config.get("address.web")); // create the webserver
+	webserver.password = config.password
+	if (config.get("openBrowserOnStart")) opn('http://localhost:' + webPort); //open a browser window
 }
 // lets
 let proxyClient; // a reference to the client that is the actual minecraft game
@@ -168,7 +170,7 @@ options = {
 
 function startAntiAntiAFK() {
 	if (!config.has("antiAntiAFK.enabled") || !config.get("antiAntiAFK.enabled")) return;
-	if (proxyClient != null || !status.isInQueue || !finishedQueue) return;
+	if (proxyClient != null || !webserver.isInQueue || !finishedQueue) return;
 	conn.bot.afk.start();
 }
 
@@ -181,10 +183,10 @@ function cmdInput() {
 
 // function to disconnect from the server
 function stop() {
-	status.isInQueue = false;
+	webserver.isInQueue = false;
 	finishedQueue = false
-	status.queuePlace = "None";
-	status.ETA = "None";
+	webserver.queuePlace = "None";
+	webserver.ETA = "None";
 	if (client) {
 		client.end(); // disconnect
 	}
@@ -202,6 +204,7 @@ function startQueuing() {
 	doing = "auth";
 	if (config.get("minecraftserver.onlinemode")) {
 		options.username = mc_username;
+		options.password = mc_password;
 		options.profilesFolder = launcherPath;
 		options.auth = accountType;
 	} else {
@@ -221,7 +224,7 @@ function join() {
 	let displayEmail = config.get("displayEmail")
 
 	doing = "queue"
-	status.isInQueue = true;
+	webserver.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers
 	activity("Starting the queue...");
 	client.on("packet", (data, meta) => { // each time 2b2t sends a packet
@@ -239,7 +242,7 @@ function join() {
 						}
 					}
 					if (positioninqueue !== "None") positioninqueue = Number(positioninqueue);
-					status.queuePlace = positioninqueue; // update info on the web page
+					webserver.queuePlace = positioninqueue; // update info on the web page
 					if (lastQueuePlace === "None" && positioninqueue !== "None") {
 						queueStartPlace = positioninqueue;
 						queueStartTime = DateTime.local();
@@ -249,18 +252,18 @@ function join() {
 						let timepassed = getWaitTime(queueStartPlace, positioninqueue);
 						let ETAmin = (totalWaitTime - timepassed) / 60;
 						server.favicon = config.has("favicon") ? config.get("favicon") : fs.readFileSync("favicon.png").toString("base64");
-						server.motd = `Place in queue: ${status.queuePlace} ETA: ${status.ETA}`; // set the MOTD because why not
-						status.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
-						status.finTime = new Date((new Date()).getTime() + ETAmin * 60000);
+						server.motd = `Place in queue: ${webserver.queuePlace} ETA: ${webserver.ETA}`; // set the MOTD because why not
+						webserver.ETA = Math.floor(ETAmin / 60) + "h " + Math.floor(ETAmin % 60) + "m";
+						webserver.finTime = new Date((new Date()).getTime() + ETAmin * 60000);
 						if (config.get("userStatus")) {
 							//set the Discord Activity
-							const name = displayEmail ? options.username : client.username;
-							logActivity("P: " + positioninqueue + " E: " + status.ETA + " - " + name);
+							const name = displayEmail?options.username:client.username;
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA + " - " + name);
 						} else {
-							logActivity("P: " + positioninqueue + " E: " + status.ETA);
+							logActivity("P: " + positioninqueue + " E: " + webserver.ETA);
 						}
 						if (config.get("notification.enabled") && positioninqueue <= config.get("notification.queuePlace") && !notisend && config.discordBot && dcUser != null) {
-							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + status.queuePlace);
+							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
 					}
@@ -281,14 +284,14 @@ function join() {
 								log(err);
 							});
 						}
-						if (status.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
+						if (webserver.restartQueue && proxyClient == null) { //if we have no client connected and we should restart
 							stop();
 							reconnect();
 						} else {
 							finishedQueue = true;
 							startAntiAntiAFK();
-							status.queuePlace = "FINISHED";
-							status.ETA = "NOW";
+							webserver.queuePlace = "FINISHED";
+							webserver.ETA = "NOW";
 							logActivity("Queue is finished");
 						}
 					}
@@ -306,7 +309,7 @@ function join() {
 		stop();
 		if (!stoppedByPlayer) {
 			log(`Connection reset by 2b2t server. Reconnecting...`);
-			// if (!config.has("MCpassword") && !config.has("password")) log("If this ^^ message shows up repeatedly, it is likely a problem with your token being invalidated. Please start minecraft manually or use credential authentication instead.");
+			if (!config.has("MCpassword") && !config.has("password")) log("If this ^^ message shows up repeatedly, it is likely a problem with your token being invalidated. Please start minecraft manually or use credential authentication instead.");
 		}
 		if (config.reconnect.onError) setTimeout(reconnect, 30000);
 	}
@@ -410,21 +413,20 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			break;
 		case "stats":
 			try {
-				if (conn.bot.health == undefined && conn.bot.food == undefined) {
-					console.log("Unknown.")
-					break;
-				}
-				else {
-					if (conn.bot.health == 0)
-						console.log("Health: DEAD");
-					else
-						console.log("Health: " + Math.ceil(conn.bot.health) / 2 + "/10");
-					if (conn.bot.food == 0)
-						console.log("Hunger: STARVING");
-					else
-						console.log("Hunger: " + conn.bot.food / 2 + "/10");
-				}
-			} catch (err) { console.log(`Start 2B2W first with "Start".`) }
+			if (conn.bot.health == undefined && conn.bot.food == undefined){
+			console.log("Unknown.")
+			break;}
+			else
+			{if (conn.bot.health == 0)
+			console.log("Health: DEAD");
+			else
+			console.log("Health: " + Math.ceil(conn.bot.health)/2 + "/10");
+			if (conn.bot.food == 0)
+			console.log("Hunger: STARVING");
+			else
+			console.log("Hunger: " + conn.bot.food/2 + "/10");}
+			} catch (err)
+			{console.log(`Start 2B2W first with "Start".`)}
 			break;
 
 		case "url":
@@ -435,24 +437,24 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 			console.log("Syntax: status, enable, disable");
 			break;
 		case "loop status":
-			if (status.restartQueue)
+			if (webserver.restartQueue)
 				console.log("Loop is enabled");
 			else
 				console.log("Loop is disabled");
 			break;
 		case "loop enable":
-			if (status.restartQueue)
+			if (webserver.restartQueue)
 				console.log("Loop is already enabled!");
 			else {
-				status.restartQueue = true
+				webserver.restartQueue = true
 				console.log("Enabled Loop");
 			}
 			break;
 		case "loop disable":
-			if (!status.restartQueue)
+			if (!webserver.restartQueue)
 				console.log("Loop is already disabled!");
 			else {
-				status.restartQueue = false
+				webserver.restartQueue = false
 				console.log("Disabled Loop");
 			}
 			break;
@@ -469,8 +471,8 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 		case "update":
 			switch (doing) {
 				case "queue":
-					msg(DiscordOrigin, discordMsg, "Reconnecting", `Position: ${status.queuePlace} \n Estimated time until login: ${status.ETA}`);
-					console.log("Position: " + status.queuePlace + "  Estimated time until login: " + status.ETA);
+					msg(DiscordOrigin, discordMsg, "Reconnecting", `Position: ${webserver.queuePlace} \n Estimated time until login: ${webserver.ETA}`);
+					console.log("Position: " + webserver.queuePlace + "  Estimated time until login: " + webserver.ETA);
 					break;
 				case "timedStart":
 					msg(DiscordOrigin, discordMsg, "Timer", "Timer is set to " + starttimestring);
@@ -577,24 +579,32 @@ function timeStringtoDateTime(time) {
 }
 
 function calcTime(msg) {
-	doing = "calcTime"
-	const playTime = timeStringtoDateTime(msg).toSeconds();
-	function request() {
-		fetch('https://2b2t.io/api/queue').catch(() => {
-			console.log(`2b2t.io is currently offline. Please try again later to use the "play" command.`)
-			clearInterval(interval.calc);
-		}).then((res) => res.json()).then((data) => {
-			const queueLength = data[0][1];
-			const waitTime = getWaitTime(queueLength, 0);
-			if (playTime - DateTime.local().toSeconds() < waitTime) {
-				startQueuing();
-				clearInterval(interval.calc);
-				console.log("Wait time:", waitTime);
-			}
-		})
-	}
-	interval.calc = setInterval(request, 60000);
-	request();
+	https.get('https://2b2t.io/api/queue', function (res) {
+		doing = "calcTime"
+		interval.calc = setInterval(function () {
+			https.get("https://2b2t.io/api/queue", (resp) => {
+				let data = '';
+				resp.on('data', (chunk) => {
+					data += chunk;
+				});
+				resp.on("end", () => {
+					data = JSON.parse(data);
+					let queueLength = data[0][1];
+					let playTime = timeStringtoDateTime(msg);
+					let waitTime = getWaitTime(queueLength, 0);
+					if (playTime.toSeconds() - DateTime.local().toSeconds() < waitTime) {
+						startQueuing();
+						clearInterval(interval.calc);
+						console.log(waitTime);
+					}
+				});
+			}).on("error", (err) => {
+				log(err)
+			});
+		}, 60000);
+	}).on('error', function (e) {
+		console.log(`2b2t.io is currently offline. Please try again later to use the "play" command.`)
+	});
 }
 
 
@@ -619,13 +629,13 @@ function getWaitTime(queueLength, queuePos) {
 process.on('uncaughtException', err => {
 	const boxen = require("boxen")
 	console.error(err);
-	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, { title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center' }));
+	console.log(boxen(`Something went wrong! Feel free to contact us on discord or github! \n\n Github: https://github.com/themoonisacheese/2bored2wait \n\n Discord: https://discord.next-gen.dev/`, {title: 'Something Is Wrong', titleAlignment: 'center', padding: 1, margin: 1, borderStyle: 'bold', borderColor: 'red', backgroundColor: 'red', align: 'center'}));	
 	console.log('Press any key to exit');
 	process.stdin.setRawMode(true);
 	process.stdin.resume();
-	process.stdin.on('data', process.exit.bind(process, 0));
+	process.stdin.on('data', process.exit.bind(process, 0));		
 });
-
+  
 module.exports = {
 	startQueue: startQueuing,
 	filterPacketAndSend: filterPacketAndSend,
