@@ -274,7 +274,7 @@ function join() {
 				if (finishedQueue === false) { // we can know if we're about to finish the queue by reading the chat message
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 					let chatMessage = JSON.parse(data.message).text;
-					if (chatMessage !== '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
+					if (chatMessage == 'Queued for server main.' || chatMessage == 'You are already queued to server main.')
 					console.log("2B2T says: " + chatMessage);
 					if (chatMessage == "Connected to the server.") {
 						if (config.get("expandQueueData")) {
