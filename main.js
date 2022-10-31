@@ -234,7 +234,7 @@ function join() {
 					let messageheader = data.header;
 					let positioninqueue = "None";
 					try {
-						positioninqueue = messageheader.split("bold")[3].split("\\n")[0].slice(15);
+						positioninqueue = messageheader.split("ue")[5].split("\\")[0].slice(9);
 					} catch (e) {
 						if (e instanceof TypeError && (PositionError !== true)) {
 							console.log("Reading position in queue from tab failed! Is the queue empty, or the server isn't 2b2t?");
