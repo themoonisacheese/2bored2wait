@@ -18,6 +18,7 @@ const DEFAULT_CONFIG = `{
     "version": "${conVer}",
     "accountType": "mojang", // set this to microsoft if you want to use a microsoft account
     "discordBot": true,
+    "dc_chat": false, // Can be disabled to stop the discord bot from speaking
     "webserver": true,
     "ports": {
         "minecraft": 25565, // port for the proxy server
