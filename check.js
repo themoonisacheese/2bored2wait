@@ -125,14 +125,12 @@ if (config.updatemessage === false || config.updatemessage == "n") {
                 }
                 fs.writeFileSync(path.join(config_dir, "local.json"), DEFAULT_CONFIG);
                 process.exit(0);
-                break;
             case 'dl':
             case 'download':
             case 'show':
                 require('open')(html_url);
                 console.log(html_url)
                 process.exit(0);
-                break;
             default:
                 console.log("Invalid response.");
                 question();
