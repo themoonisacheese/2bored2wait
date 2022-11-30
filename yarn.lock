@@ -59,14 +59,14 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@rob9315/mcproxy@^0.3":
-  version "0.3.1"
-  resolved "https://registry.npmjs.org/@rob9315/mcproxy/-/mcproxy-0.3.1.tgz"
+"@rob9315/mcproxy@^1.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rob9315/mcproxy/-/mcproxy-1.0.0.tgz#fb3e4d49ee6bc3f85f04070bf02c089a433c8e24"
   dependencies:
-    minecraft-data "^2.119.1"
+    minecraft-data "^3.0.0"
     minecraft-protocol "^1.32.0"
     mineflayer "^4.1.0"
-    prismarine-item "^1.11.2"
+    prismarine-item "^1.11.5"
     smart-buffer "^4.2.0"
 
 "@sapphire/async-queue@^1.3.1":
@@ -1165,7 +1165,7 @@ mimic-response@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/mimic-response/-/mimic-response-3.1.0.tgz"
 
-minecraft-data@^2.119.1, minecraft-data@^2.93.0:
+minecraft-data@^2.93.0:
   version "2.221.0"
   resolved "https://registry.npmjs.org/minecraft-data/-/minecraft-data-2.221.0.tgz"
 
