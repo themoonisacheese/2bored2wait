@@ -40,6 +40,6 @@
     "rss-parser": "^3.12.0"
   },
   "devDependencies": {
-    "nexe": "^4.0.0-beta.18"
+    "nexe": "^4.0.0-rc.2"
   }
 }

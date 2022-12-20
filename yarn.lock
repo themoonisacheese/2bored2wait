@@ -1132,9 +1132,9 @@ merge2@^1.3.0, merge2@^1.4.1:
   version "1.4.1"
   resolved "https://registry.npmjs.org/merge2/-/merge2-1.4.1.tgz"
 
-meriyah@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.npmjs.org/meriyah/-/meriyah-4.2.1.tgz"
+meriyah@^4.2.1, meriyah@^4.3.3:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/meriyah/-/meriyah-4.3.3.tgz#9640e829388918014e7834ee5706de3af2291e2e"
 
 micromatch@^4.0.4:
   version "4.0.5"
@@ -1282,9 +1282,9 @@ nearley@^2.19.5:
     railroad-diagrams "^1.0.0"
     randexp "0.4.6"
 
-nexe@^4.0.0-beta.18:
-  version "4.0.0-rc.1"
-  resolved "https://registry.npmjs.org/nexe/-/nexe-4.0.0-rc.1.tgz"
+nexe@^4.0.0-rc.2:
+  version "4.0.0-rc.2"
+  resolved "https://registry.yarnpkg.com/nexe/-/nexe-4.0.0-rc.2.tgz#5270e39bde0be2d04182b0aae88fd3ca563b2900"
   dependencies:
     "@calebboyd/semaphore" "^1.3.1"
     app-builder "^7.0.4"
@@ -1293,12 +1293,12 @@ nexe@^4.0.0-beta.18:
     download "^8.0.0"
     globby "^11.0.2"
     got "^11.8.2"
-    meriyah "^4.2.1"
+    meriyah "^4.3.3"
     minimist "^1.2.6"
     mkdirp "^1.0.4"
     multistream "^4.1.0"
     ora "^3.4.0"
-    resolve-dependencies "^6.0.7"
+    resolve-dependencies "^6.0.8"
     rimraf "^3.0.2"
 
 node-fetch@^2.6.1:
@@ -1640,9 +1640,9 @@ resolve-alpn@^1.0.0:
   version "1.2.1"
   resolved "https://registry.npmjs.org/resolve-alpn/-/resolve-alpn-1.2.1.tgz"
 
-resolve-dependencies@^6.0.7:
+resolve-dependencies@^6.0.8:
   version "6.0.8"
-  resolved "https://registry.npmjs.org/resolve-dependencies/-/resolve-dependencies-6.0.8.tgz"
+  resolved "https://registry.yarnpkg.com/resolve-dependencies/-/resolve-dependencies-6.0.8.tgz#ac75ec000581adf3aa553ee08c81eff5e0c2c6bc"
   dependencies:
     enhanced-resolve "^5.9.3"
     fast-glob "^3.2.11"
