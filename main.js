@@ -222,7 +222,7 @@ function join() {
 	let notisend = false;
 	let PositionError = false;
 	let displayEmail = config.get("displayEmail")
-
+	let notificationShown = false;
 	doing = "queue"
 	webserver.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers
@@ -266,6 +266,13 @@ function join() {
 							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
+						if (positioninqueue < 20 && !notificationShown){
+						notifier.notify({
+							title: 'Your queue is below 20!',
+							message: 'Your queue is below 20!',
+							sound: true,
+							wait: true});
+							notificationShown = true};
 					}
 					lastQueuePlace = positioninqueue;
 				}
