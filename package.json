@@ -37,7 +37,8 @@
     "node-json-minify": "^3.0.0",
     "open": "^8.0.7",
     "particles.js": "^2.0.0",
-    "rss-parser": "^3.12.0"
+    "rss-parser": "^3.12.0",
+    "node-notifier": "^10.0.1"
   },
   "devDependencies": {
     "nexe": "^4.0.0-beta.18"
