@@ -27,8 +27,12 @@
         "onlinemode": true,
         "username": "lol" // the username to use if onlinemode is false
     },
+    "desktopNotifications": { // sends a desktop notification if the place in the queue reaches the specified number
+        "enabled": true,
+        "threshold": 20
+    },
     "notification": { // sends a message via discord if the place in the queue reaches the specified number
-        "enabled": true, // you must send the bot a message once.
+        "enabled": false, // you must send the bot a message once.
         "queuePlace": 20
     },
     "antiAntiAFK": { 

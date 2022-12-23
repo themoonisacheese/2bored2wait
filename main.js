@@ -1,6 +1,7 @@
 // imports
 const fs = require('fs');
 const mc = require('minecraft-protocol'); // to handle minecraft login session
+const notifier = require('node-notifier'); // Required to send desktop notifications
 
 // someone decided to use webserver as a variable to store other data, ok.
 const webserver = require('./webserver/webserver.js'); // to serve the webserver
@@ -220,9 +221,10 @@ function startQueuing() {
 function join() {
 	let lastQueuePlace = "None";
 	let notisend = false;
-	let PositionError = false;
+	let positionError = false;
 	let displayEmail = config.get("displayEmail")
-	let notificationShown = false;
+	let notificationsEnabled = config.get("desktopNotifications.enabled");
+    const threshold = config.get("desktopNotifications.threshold");
 	doing = "queue"
 	webserver.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers
@@ -236,9 +238,9 @@ function join() {
 					try {
 						positioninqueue = messageheader.split("ue")[5].split("\\")[0].slice(9);
 					} catch (e) {
-						if (e instanceof TypeError && (PositionError !== true)) {
+						if (e instanceof TypeError && (positionError !== true)) {
 							console.log("Reading position in queue from tab failed! Is the queue empty, or the server isn't 2b2t?");
-							PositionError = true;
+							positionError = true;
 						}
 					}
 					if (positioninqueue !== "None") positioninqueue = Number(positioninqueue);
@@ -266,13 +268,13 @@ function join() {
 							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
-						if (positioninqueue < 20 && !notificationShown){
-						notifier.notify({
-							title: 'Your queue is below 20!',
-							message: 'Your queue is below 20!',
+						if (positioninqueue <= threshold && notificationsEnabled){
+						notifier.notify({// Send the notification
+                            title: 'Your queue is ' + threshold + '!',
+                            message: 'Your queue is ' + threshold + '!',
 							sound: true,
 							wait: true});
-							notificationShown = true};
+							notificationsEnabled = false};// The flag is set to false to prevent the notification from being shown again
 					}
 					lastQueuePlace = positioninqueue;
 				}
