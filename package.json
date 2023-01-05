@@ -30,7 +30,7 @@
     "config": "^3.3.8",
     "discord.js": "^13.7.0",
     "everpolate": "0.0.3",
-    "luxon": "^3.0.4",
+    "luxon": "^3.2.1",
     "minecraft-data": "^3",
     "minecraft-protocol": "^1.35.1",
     "mineflayer-antiafk": "^1.1.1",
