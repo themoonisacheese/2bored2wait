@@ -32,7 +32,7 @@
     "everpolate": "0.0.3",
     "luxon": "^3.0.4",
     "minecraft-data": "^3",
-    "minecraft-protocol": "^1.35.1",
+    "minecraft-protocol": "^1.40.3",
     "mineflayer-antiafk": "^1.1.1",
     "node-json-minify": "^3.0.0",
     "open": "^8.0.7",
