@@ -1,6 +1,7 @@
 // imports
 const fs = require('fs');
 const mc = require('minecraft-protocol'); // to handle minecraft login session
+const notifier = require('node-notifier'); // Required to send desktop notifications
 
 // someone decided to use webserver as a variable to store other data, ok.
 const webserver = require('./webserver/webserver.js'); // to serve the webserver
@@ -21,7 +22,7 @@ const antiafk = require("mineflayer-antiafk");
 const queueData = require("./queue.json");
 const util = require("./util");
 const save = "./saveid";
-var config;
+let config;
 // This dummy var is a workaround to allow binaries
 // const configPath = path.join(process.cwd(), './config/default.json');
 // const data = fs.readFileSync(configPath);
@@ -33,12 +34,12 @@ try {
 		process.exit(1);
 	}
 }
-var mc_username;
-var mc_password;
-var updatemessage;
-var discordBotToken;
-var savelogin;
-var accountType;
+let mc_username;
+let mc_password;
+let updatemessage;
+let discordBotToken;
+let savelogin;
+let accountType;
 let launcherPath;
 let c = 150;
 let finishedQueue = false
@@ -138,12 +139,12 @@ else {
 	askForSecrets();
 }
 
-var stoppedByPlayer = false;
-var timedStart;
+let stoppedByPlayer = false;
+let timedStart;
 let dcUser; // discord user that controls the bot
-var starttimestring;
-var options;
-var doing;
+let starttimestring;
+let options;
+let doing;
 let interval = {};
 let queueStartPlace;
 let queueStartTime;
@@ -220,9 +221,10 @@ function startQueuing() {
 function join() {
 	let lastQueuePlace = "None";
 	let notisend = false;
-	var PositionError = false;
+	let positionError = false;
 	let displayEmail = config.get("displayEmail")
-
+	let notificationsEnabled = config.get("desktopNotifications.enabled");
+    const threshold = config.get("desktopNotifications.threshold");
 	doing = "queue"
 	webserver.isInQueue = true;
 	startAntiAntiAFK(); //for non-2b2t servers
@@ -234,11 +236,11 @@ function join() {
 					let messageheader = data.header;
 					let positioninqueue = "None";
 					try {
-						positioninqueue = JSON.parse(messageheader)['extra'][2]['extra'][0]['text'].replace(/\D/g, '');
+						positioninqueue = messageheader.split("ue")[2].split("\\")[0].slice(9);
 					} catch (e) {
-						if (e instanceof TypeError && (PositionError !== true)) {
+						if (e instanceof TypeError && (positionError !== true)) {
 							console.log("Reading position in queue from tab failed! Is the queue empty, or the server isn't 2b2t?");
-							PositionError = true;
+							positionError = true;
 						}
 					}
 					if (positioninqueue !== "None") positioninqueue = Number(positioninqueue);
@@ -266,6 +268,13 @@ function join() {
 							sendDiscordMsg(dcUser, "Queue", "The queue is almost finished. You are in Position: " + webserver.queuePlace);
 							notisend = true;
 						}
+						if (positioninqueue <= threshold && notificationsEnabled){
+						notifier.notify({// Send the notification
+                            title: 'Your queue is ' + threshold + '!',
+                            message: 'Your queue is ' + threshold + '!',
+							sound: true,
+							wait: true});
+							notificationsEnabled = false};// The flag is set to false to prevent the notification from being shown again
 					}
 					lastQueuePlace = positioninqueue;
 				}
@@ -274,6 +283,8 @@ function join() {
 				if (finishedQueue === false) { // we can know if we're about to finish the queue by reading the chat message
 					// we need to know if we finished the queue otherwise we crash when we're done, because the queue info is no longer in packets the server sends us.
 					let chatMessage = JSON.parse(data.message).text;
+					if (chatMessage == 'Queued for server main.' || chatMessage == 'You are already queued to server main.')
+					console.log("2B2T says: " + chatMessage);
 					if (chatMessage == "Connected to the server.") {
 						if (config.get("expandQueueData")) {
 							queueData.place.push(queueStartPlace);
@@ -330,7 +341,7 @@ function join() {
 			newProxyClient.end("not whitelisted!\nYou need to use the same account as 2b2w or turn the whitelist off");
 			return;
 		}
-		newProxyClient.on('packet', (data, meta, rawData) => { // redirect everything we do to 2b2t
+		newProxyClient.on('packet', (_, meta, rawData) => { // redirect everything we do to 2b2t
 			filterPacketAndSend(rawData, meta, client);
 		});
 		newProxyClient.on("end", () => {
@@ -555,11 +566,12 @@ function sendDiscordMsg(channel, title, content) {
 			text: "Author: MrGeorgen"
 		}
 	}
+	if (config.get("dc_chat")) {
 	channel.send({
 		embeds: [MessageEmbed]
 	}).catch(() => {
 		console.warn(`There was a permission error! Please make sure your bot has perms to talk.`); //handle wrong tokens gracefully
-	});
+	})};
 }
 
 function timeStringtoDateTime(time) {
@@ -633,7 +645,7 @@ process.on('uncaughtException', err => {
 	console.log('Press any key to exit');
 	process.stdin.setRawMode(true);
 	process.stdin.resume();
-	process.stdin.on('data', process.exit.bind(process, 0));		
+	process.stdin.on('data', process.exit.bind(process, 0));
 });
   
 module.exports = {

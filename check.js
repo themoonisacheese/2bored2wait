@@ -18,6 +18,7 @@ const DEFAULT_CONFIG = `{
     "version": "${conVer}",
     "accountType": "mojang", // set this to microsoft if you want to use a microsoft account
     "discordBot": true,
+    "dc_chat": true, // Can be disabled to stop the discord bot from speaking
     "webserver": true,
     "ports": {
         "minecraft": 25565, // port for the proxy server
@@ -42,8 +43,12 @@ const DEFAULT_CONFIG = `{
         "onlinemode": true,
         "username": "lol" // the username to use if onlinemode is false
     },
+    "desktopNotifications": { // sends a desktop notification if the place in the queue reaches the specified number
+        "enabled": true,
+        "threshold": 20
+    },
     "notification": { // sends a message via discord if the place in the queue reaches the specified number
-        "enabled": true, // you must send the bot a message once.
+        "enabled": false, // you must send the bot a message once.
         "queuePlace": 20
     },
     "antiAntiAFK": { 
@@ -124,14 +129,12 @@ if (config.updatemessage === false || config.updatemessage == "n") {
                 }
                 fs.writeFileSync(path.join(config_dir, "local.json"), DEFAULT_CONFIG);
                 process.exit(0);
-                break;
             case 'dl':
             case 'download':
             case 'show':
                 require('open')(html_url);
                 console.log(html_url)
                 process.exit(0);
-                break;
             default:
                 console.log("Invalid response.");
                 question();
