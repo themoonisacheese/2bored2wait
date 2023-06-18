@@ -9,8 +9,12 @@ WORKDIR "/srv/app"
 
 COPY . "/srv/app"
 
+# remove comments from config/default.json
+
+RUN sed -i 's/\/\/.*$//' config/default.json
+
 # install requirements
-RUN npm install
+RUN npm install --omit=dev
 
 # exposing 8080 (webui), 25566 (mc proxy)
 EXPOSE 8080/tcp
