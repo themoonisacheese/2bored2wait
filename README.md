@@ -161,7 +161,7 @@ Try updating 2bored2wait, run `npm update` (if you are using the source code), a
 Make a bug report [here](https://github.com/themoonisacheese/2bored2wait/issues). Feel free to ask questions or add feature requests as well.
 
 ## Addons
-- [Auto-Update](https://github.com/KozmikCode/2b2t-auto-update) Allows you to have auto updates!
+~~[Auto-Update](https://github.com/KozmikCode/2b2t-auto-update) Allows you to have auto updates!~~ REMOVED DUE TO 404 
    
 <!-- CONTRIBUTING -->
 
