@@ -71,7 +71,7 @@ Please obtain all required items
 ### Video installation
 
 Click the picture or link bellow to watch!   
-[![Click Me To Watch!](https://img.youtube.com/vi/3kCKnwuiHak/0.jpg)](https://youtu.be/3kCKnwuiHak)
+~~ [![Click Me To Watch!](https://img.youtube.com/vi/3kCKnwuiHak/0.jpg)](https://youtu.be/3kCKnwuiHak) ~~ Video removed by owner.
   
    
 https://youtu.be/3kCKnwuiHak
