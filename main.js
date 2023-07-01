@@ -482,7 +482,7 @@ function userInput(cmd, DiscordOrigin, discordMsg) {
 		case "update":
 			switch (doing) {
 				case "queue":
-					msg(DiscordOrigin, discordMsg, "Reconnecting", `Position: ${webserver.queuePlace} \n Estimated time until login: ${webserver.ETA}`);
+					msg(DiscordOrigin, discordMsg, "Queue stats", `Position: ${webserver.queuePlace} \n Estimated time until login: ${webserver.ETA}`);
 					console.log("Position: " + webserver.queuePlace + "  Estimated time until login: " + webserver.ETA);
 					break;
 				case "timedStart":
