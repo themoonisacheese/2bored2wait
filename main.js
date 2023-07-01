@@ -563,7 +563,7 @@ function sendDiscordMsg(channel, title, content) {
 		timestamp: new Date(),
 		footer: {
 			icon_url: dc.user.avatarURL,
-			text: "Author: MrGeorgen"
+			text: "2b2tplayer's proxy"
 		}
 	}
 	if (config.get("dc_chat")) {
