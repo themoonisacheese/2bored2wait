@@ -1,0 +1,36 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - '-c'
+      - docker login --username=$$USERNAME --password=$$PASSWORD
+    entrypoint: bash
+    secretEnv:
+      - USERNAME
+      - PASSWORD
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - '-c'
+      - docker buildx create --use
+    entrypoint: bash
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - '-c'
+      - 'sed -i ''s#//.*$##'' config/default.json'
+    entrypoint: bash
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - '-c'
+      - >-
+        docker buildx build -t $$USERNAME/2bored2wait
+        --platform=linux/amd64,linux/arm64 --push .
+    entrypoint: bash
+    secretEnv:
+      - USERNAME
+options:
+  logging: CLOUD_LOGGING_ONLY
+availableSecrets:
+  secretManager:
+    - versionName: 'projects/${PROJECT_ID}/secrets/docker-password/versions/2'
+      env: PASSWORD
+    - versionName: 'projects/${PROJECT_ID}/secrets/docker-username/versions/1'
+      env: USERNAME
