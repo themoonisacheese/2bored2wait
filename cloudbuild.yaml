@@ -22,7 +22,7 @@ steps:
       - '-c'
       - >-
         docker buildx build -t $$USERNAME/2bored2wait
-        --platform=${_PLATFORM} --push .
+        --platform=${_PLATFORM} ${_ARGS} --push .
     entrypoint: bash
     secretEnv:
       - USERNAME
