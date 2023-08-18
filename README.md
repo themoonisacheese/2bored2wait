@@ -16,6 +16,8 @@
 
 A proxy to wait out 2b2t.org's way too long queue. Includes a small webserver a REST-like API for external control
 
+# 2Bored2Wait is not updated to 1.19. There are currently no plans to update it, but you are welcome to submit pull requests.
+
 [Report Bug](https://github.com/themoonisacheese/2bored2wait/issues) | [Request Feature](https://github.com/themoonisacheese/2bored2wait/issues)
 
 </div>
